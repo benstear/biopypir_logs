@@ -29,10 +29,12 @@ jobs:
       uses: actions/checkout@v2     
       with:
         repository: benstear/biopypir_logs #/.github/workflows/{{env.PACKAGE}}_helper.sh 
-        path: biopypir_logs/.github/workflows/scedar_helper.sh 
         clean: false
+        #path: biopypir_logs/.github/workflows/scedar_helper.sh 
+
         
-    - run: pwd; ls -a; echo '#########'; cd biopypir_logs; ls -a
+    - run: brew install tree; tree
+    #pwd; ls -a; echo '#########'; cd biopypir_logs; ls -a; echo '#########'; cd .github/workflows
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
