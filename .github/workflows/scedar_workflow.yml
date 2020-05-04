@@ -35,7 +35,7 @@ jobs:
         
     - run:  |
         pwd; ls -a; echo '#########'; 
-        cd biopypir_logs/.github/workflows; ls
+        cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -60,8 +60,8 @@ jobs:
     - name: LINT
       id: linter
       run: |
-          chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
-          "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
+          chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
+          ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
