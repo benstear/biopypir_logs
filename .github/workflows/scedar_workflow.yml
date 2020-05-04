@@ -1,0 +1,171 @@
+---
+name: BIOPYPIR-APPROVED
+on: 
+  schedule:
+    - cron: '0 0 * * 0' 
+  push: # remove when youre done testing workflow
+jobs:
+  biopypir_testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6,3.7] 
+        os: [macOS-latest, ubuntu-latest] 
+    env: 
+      WORKSPACE: ${{ github.workspace }} # /home/runner/work/scedar/scedar
+      REPO: ${{ github.repository }}
+      RUN_ID: ${{ github.run_id }}
+    steps:
+    - name: Create cache file
+      run: mkdir check-SHA; echo ${{ github.sha }} > github-sha.txt; cat github-sha.txt
+    #===============================================#
+    - name: Check SHA
+      id: check_sha
+      uses: actions/cache@v1
+      with:
+        path: check-SHA
+        key: check-SHA-${{ github.sha }}
+    #===============================================#
+    - name: Some subsequent steps
+      if: steps.check_sha.outputs.cache-hit != 'true'
+      run: echo "Cache hit found...Execute the subsequent steps" #; exit 1 # no way to exit nicely?
+    #===============================================#
+    - name: STEP 1. Check-Out Repo 
+      uses: actions/checkout@v2     
+      with:
+        repository: benstear/scedar
+    #===============================================#
+    - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}   
+    #- name: check license
+    #  if: startsWith(matrix.os, 'ubuntu')
+    #  uses: benstear/validate-license-action
+    #  with:
+    #    args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
+    #===============================================#
+    - name: INSTALL dependencies
+      run: |
+        pip install --upgrade pip setuptools wheel
+        pip install --no-binary :all: nmslib
+        pip install .
+        pip install pylint
+        pip install pytest
+        pip install pytest-cov
+        pip install pytest-mpl
+        
+    #===============================================#
+    - name: LINT
+      id: linter
+      run: |
+          chmod +x .github/workflows/biopypir_helper.sh
+          .github/workflows/biopypir_helper.sh  "LINT"  "${{github.repository}}"
+    #===============================================#
+    - name: BUILD
+      id: builder
+      run: .github/workflows/biopypir_helper.sh  "BUILD"
+    #===============================================#
+    - name: PYTEST
+      id: local
+      run: .github/workflows/biopypir_helper.sh "TEST" ${{github.repository}}; 
+   #===============================================#
+    - name: PIP deployment test 
+      uses: BSFishy/pip-action@v1
+      with:
+        packages: scedar
+    #===============================================#
+    - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
+      continue-on-error: true
+      run: |
+        .github/workflows/biopypir_helper.sh  "GATHER" "${{github.repository}}" \
+        "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
+        "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True"
+   #===============================================#
+    - name: UPLOAD artifact
+      uses: actions/upload-artifact@v2-preview
+      with:  
+        name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
+        path: biopypir-*.json
+    
+  job2:
+      needs: [biopypir_testing] 
+      if: always()
+      runs-on: [ubuntu-latest]
+      steps:
+        - name: Check-Out Repo 
+          uses: actions/checkout@v2 
+        #===============================================# 
+        - name: Download artifact
+          uses: actions/download-artifact@v2-preview 
+          with: # version2 automatically downloads all artifacts in path
+            path: parallel_runs/
+        - name: list artifacts
+          run: |
+            pwd; ls; cd parallel_runs; ls -a
+        #===============================================#
+        - name: EVALUATE jobs
+          run:  |
+              chmod +x .github/workflows/biopypir_helper.sh
+              .github/workflows/biopypir_helper.sh  "EVAL" "${{github.repository}}" "${{github.run_id}}"
+        - uses: geekyeggo/delete-artifact@v1
+          with:
+            name: "biopypir-*"
+            #biopypir-ubuntu-latest-py3.6
+            #biopypir-ubuntu-latest-py3.7
+            #biopypir-macOS-latest-py3.6
+            #biopypir-macOS-latest-py3.7
+
+        - run: echo $final.json
+        
+        #- name: Commit 
+        #  env:
+        #    API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #  run: |
+        #      git config --global user.email "bjs385@drexel.edu"    
+        #      git config --global user.name "benstear"
+        #      echo "Sending json log to biopypir_logs/logs"
+        #      git clone --depth=1 https://$API_TOKEN_GITHUB@github.com/benstear/biopypir_logs.git 
+        #      mv final.json biopypir_logs
+        #      cd biopypir_logs
+        #      git add final.json
+        #      git commit -m 'commit first json log'
+        #      git push
+
+            
+            
+            
+          # clone, delete files in the clone, and copy (new) files over
+          # this handles file deletions, additions, and changes seamlessly
+          #git clone --depth 1 https://$API_TOKEN_GITHUB@github.com/$GITHUB_USERNAME/$NAME.git $CLONE_DIR &> /dev/null
+          #cd $CLONE_DIR
+          #find . | grep -v ".git" | grep -v "^\.*$" | xargs rm -rf # delete all files (to handle deletions in monorepo)
+          #cp -r $BASE/$folder/. .
+
+            #mkdir temp_git
+            #cd temp_git
+            #git init   #  add .git folder and initialize 
+            #git remote add origin  https://github.com/benstear/biopypir_logs.git # connect to a repo
+            #git pull origin master # pull repo to local 
+
+            
+        #=============================================# 
+        #- name: UPLOAD final json artifact
+        #  uses: actions/upload-artifact@v2-preview
+        #  with:  
+        #    name: final.json
+        #    path: final.json
+        #===============================================#
+        #- name: Global webhook
+        #  if: always() 
+        #  uses: muinmomin/webhook-action@v1.0.0
+        #  with:
+        #    url: ${{ secrets.WEBHOOK_URL }}
+        #    data: final.json   
+        #- name: Webhook
+        #  uses: joelwmale/webhook-action@master
+        #  env:
+        #    WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        #    data: final.json
