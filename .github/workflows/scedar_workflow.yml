@@ -35,7 +35,7 @@ jobs:
         
     - run:  |
         pwd; ls -a; echo '#########'; 
-        cd biopypir_logs.github/workflows; ls
+        cd biopypir_logs/.github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
