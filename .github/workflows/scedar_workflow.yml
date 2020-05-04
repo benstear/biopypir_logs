@@ -23,7 +23,7 @@ jobs:
       with:
         repository: benstear/${{ env.PACKAGE }}
         
-    - run: pwd; ls
+    - run: pwd; ls -a; 
     
     - name: checkout biopypir_logs repo
       uses: actions/checkout@v2     
@@ -32,7 +32,7 @@ jobs:
         path: biopypir_logs/.github/workflows/scedar_helper.sh 
         clean: false
         
-    - run: pwd; ls
+    - run: pwd; ls -a; echo '#########'; cd biopypir_logs; ls -a
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -58,8 +58,8 @@ jobs:
     - name: LINT
       id: linter
       run: |
-          chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-          ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
+          chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
+          "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
