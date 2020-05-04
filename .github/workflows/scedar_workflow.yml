@@ -57,6 +57,7 @@ jobs:
         pip install pytest-mpl
       #pip install .
     #===============================================#
+      
     - name: LINT
       id: linter
       run: |
