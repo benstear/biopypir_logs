@@ -32,7 +32,7 @@ jobs:
     - run:  |
         pwd; ls -a;
     - run: cd biopypir_logs; ls -a;
-    - run: cat biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh;
+    - run: cat "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh";
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
@@ -59,20 +59,20 @@ jobs:
     - name: LINT
       id: linter
       run: |
-          chmod +x biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh
-          biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "LINT"  "${{ env.PACKAGE }}"
+          chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
+          "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
       run: |
         pwd; ls -a;
-        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "BUILD"
+        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
     #===============================================#
     - name: PYTEST
       id: local
       run: |
         pwd;
-        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh "TEST" ${{github.repository}}; 
+        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
@@ -82,7 +82,7 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "GATHER" "${{github.repository}}" \
+        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "GATHER" "${{github.repository}}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True"
    #===============================================#
