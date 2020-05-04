@@ -26,12 +26,14 @@ jobs:
     - name: checkout biopypir_logs repo
       uses: actions/checkout@v2     
       with:
-        path: biopypir_logs/.github/workflows/{{env.PACKAGE}}_helper.sh 
+        path: biopypir_logs
         clean: false
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
     - run:  |
         pwd; ls -a;
+        
     - run: cd biopypir_logs; ls -a;
+      
     - run: cat "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh";
     #cd .github/workflows; ls
     #===============================================#
