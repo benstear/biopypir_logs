@@ -57,23 +57,20 @@ jobs:
     - name: LINT
       id: linter
       run: |
-          chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-          ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
+          chmod +x biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh
+          biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
       run: |
         pwd; ls -a;
-        ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
-        
+        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "BUILD"
     #===============================================#
     - name: PYTEST
       id: local
       run: |
         pwd;
-        cd .. ;
-        pwd;
-        ".github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
+        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
@@ -83,7 +80,7 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "GATHER" "${{github.repository}}" \
+        biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh  "GATHER" "${{github.repository}}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True"
    #===============================================#
@@ -113,8 +110,8 @@ jobs:
         #===============================================#
         - name: EVALUATE jobs
           run:  |
-              chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
+              chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
+              "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: 
