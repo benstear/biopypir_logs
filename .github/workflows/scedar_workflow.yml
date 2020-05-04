@@ -65,11 +65,11 @@ jobs:
     #===============================================#
     - name: BUILD
       id: builder
-      run: .github/workflows/biopypir_helper.sh  "BUILD"
+      run: ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
     #===============================================#
     - name: PYTEST
       id: local
-      run: .github/workflows/biopypir_helper.sh "TEST" ${{github.repository}}; 
+      run: ".github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
@@ -79,7 +79,7 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        .github/workflows/biopypir_helper.sh  "GATHER" "${{github.repository}}" \
+        ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "GATHER" "${{github.repository}}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True"
    #===============================================#
@@ -107,15 +107,15 @@ jobs:
         #===============================================#
         - name: EVALUATE jobs
           run:  |
-              chmod +x .github/workflows/biopypir_helper.sh
-              .github/workflows/biopypir_helper.sh  "EVAL" "${{github.repository}}" "${{github.run_id}}"
+              chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
+              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" "${{github.repository}}" "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
-            name: "biopypir-*"
-            #biopypir-ubuntu-latest-py3.6
-            #biopypir-ubuntu-latest-py3.7
-            #biopypir-macOS-latest-py3.6
-            #biopypir-macOS-latest-py3.7
+            name: 
+            biopypir-ubuntu-latest-py3.6
+            biopypir-ubuntu-latest-py3.7
+            biopypir-macOS-latest-py3.6
+            biopypir-macOS-latest-py3.7
 
         - run: echo $final.json
         
