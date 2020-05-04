@@ -114,8 +114,8 @@ jobs:
         #===============================================#
         - name: EVALUATE jobs
           run:  |
-              chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
-              "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
+              chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
+              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: 
