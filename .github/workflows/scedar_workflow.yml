@@ -36,6 +36,12 @@ jobs:
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
+    - run: pwd; ls
+    - name: checkout biopypir_logs repo
+      uses: actions/checkout@v2     
+      with:
+        repository: benstear/biopypir_logs/.github/workflows/{{env.PACKAGE}}_helper.sh 
+    - run: ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
