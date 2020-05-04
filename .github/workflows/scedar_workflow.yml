@@ -84,7 +84,7 @@ jobs:
       run: |
         "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "GATHER" "${{github.repository}}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
-        "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True"
+        "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True" "True"
    #===============================================#
     - name: UPLOAD artifact
       uses: actions/upload-artifact@v2-preview
