@@ -31,6 +31,8 @@ jobs:
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
     - run:  |
         pwd; ls -a;
+    - run: cd biopypir_logs; ls -a;
+    - run: echo 'another cd'; cd biopypir_logs; ls -a;
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
