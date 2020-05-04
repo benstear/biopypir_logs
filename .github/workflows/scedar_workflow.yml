@@ -67,13 +67,11 @@ jobs:
     - name: BUILD
       id: builder
       run: |
-        pwd; ls -a;
         "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
     #===============================================#
     - name: PYTEST
       id: local
       run: |
-        pwd;
         "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
@@ -110,7 +108,7 @@ jobs:
             path: parallel_runs/
         - name: list artifacts
           run: |
-            pwd; ls;
+            pwd; ls -R;
         #===============================================#
         - name: EVALUATE jobs
           run:  |
@@ -124,8 +122,14 @@ jobs:
               biopypir-macOS-latest-py3.6
               biopypir-macOS-latest-py3.7
 
-        - run: echo $final.json
-        
+        - run: echo final.json
+        #=============================================# 
+        - name: UPLOAD final json artifact
+          uses: actions/upload-artifact@v2-preview
+          with:  
+            name: API.json
+            path: API.json
+        #===============================================#
         #- name: Commit 
         #  env:
         #    API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
@@ -141,9 +145,6 @@ jobs:
         #      git commit -m 'commit first json log'
         #      git push
 
-            
-            
-            
           # clone, delete files in the clone, and copy (new) files over
           # this handles file deletions, additions, and changes seamlessly
           #git clone --depth 1 https://$API_TOKEN_GITHUB@github.com/$GITHUB_USERNAME/$NAME.git $CLONE_DIR &> /dev/null
@@ -156,14 +157,12 @@ jobs:
             #git init   #  add .git folder and initialize 
             #git remote add origin  https://github.com/benstear/biopypir_logs.git # connect to a repo
             #git pull origin master # pull repo to local 
-
-            
         #=============================================# 
-        #- name: UPLOAD final json artifact
-        #  uses: actions/upload-artifact@v2-preview
-        #  with:  
-        #    name: final.json
-        #    path: final.json
+        - name: UPLOAD final json artifact
+          uses: actions/upload-artifact@v2-preview
+          with:  
+            name: API.json
+            path: API.json
         #===============================================#
         #- name: Global webhook
         #  if: always() 
