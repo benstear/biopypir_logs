@@ -28,9 +28,7 @@ elif [ "$1" = "BUILD" ]; then
   
 elif [ "$1" = "GATHER" ]; then
    
-   jq -n --arg repo $2 \
-         --arg pyversion $3 \
-         --arg os $4 \
+   jq -n --arg repo $2 --arg pyversion $3 --arg os $4 \
          --arg run_id $5  \
          --arg pylintscore $6 \
          --arg pytestscore $7 \
@@ -46,9 +44,8 @@ elif [ "$1" = "GATHER" ]; then
               PIP           :  "\($pip)"
           }' > biopypir-"$4"-py"$3".json
           
-  echo "biopypir file: " 
-  cat $(biopypir-"$4"-py"$3".json)
-  #2> gather_errors.txt  
+  echo "biopypir file: \n" 
+  cat biopypir-"$4"-py"$3".json
   
 elif [ "$1" = "EVAL" ]; then
   
