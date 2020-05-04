@@ -18,21 +18,17 @@ jobs:
       RUN_ID: ${{ github.run_id }}
       PACKAGE: scedar
     steps:
-    - name: STEP 1. Check-Out Repo 
+    - name: checkout scedar repo 
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
-        
     - run: pwd; ls -a; 
-    
     - name: checkout biopypir_logs repo
       uses: actions/checkout@v2     
       with:
-        repository: benstear/biopypir_logs #/.github/workflows/{{env.PACKAGE}}_helper.sh 
+        repository: main #/.github/workflows/{{env.PACKAGE}}_helper.sh 
         clean: false
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
-
-        
     - run:  |
         pwd; ls -a;
     #cd .github/workflows; ls
