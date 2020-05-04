@@ -67,14 +67,16 @@ jobs:
     - name: BUILD
       id: builder
       run: |
-        pwd
+        pwd; ls -a;
         ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
         
     #===============================================#
     - name: PYTEST
       id: local
       run: |
-        pwd
+        pwd;
+        cd .. ;
+        pwd;
         ".github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
