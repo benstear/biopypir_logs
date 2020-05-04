@@ -14,7 +14,8 @@ elif [ "$1" = "TEST" ]; then    # "tests/"
   pytest_cov=$(pytest "tests/" -ra --mpl-generate-path=tests/baseline_images \
   --color=yes --cov-config .coveragerc --cov-branch --cov="scedar" \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
-  awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
+  awk -F"\t" '/TOTAL/ {print $0}' )   
+  #| grep -o '[^ ]*%') 
   echo $pytest_cov
   pytestscore=${pytest_cov%\%}
   echo "::set-output name=pytest_score::$pytestscore"
@@ -46,9 +47,10 @@ elif [ "$1" = "GATHER" ]; then
               PIP           :  "\($pip)"
           }' > biopypir-"$4"-py"$3".json
           
-    echo "biopypir file: " 
-    cat '$(biopypir-"$4"-py"$3".json)'
+  echo "biopypir file: " 
+  cat $(biopypir-"$4"-py"$3".json)
   #2> gather_errors.txt  
+  
 elif [ "$1" = "EVAL" ]; then
   
   # GET job workflow information w API
@@ -87,7 +89,7 @@ elif [ "$1" = "EVAL" ]; then
   echo "Linux array: ${linux_arr[*]}"
   echo "Mac array: ${mac_arr[*]}"
   
-  date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}
+  date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo $date_slice
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
   for file in "$(pwd)/parallel_runs"/*/*; do
