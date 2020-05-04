@@ -34,8 +34,8 @@ jobs:
 
         
     - run:  |
-        pwd; ls -a; echo '#########'; 
-        cd .github/workflows; ls
+        pwd; ls -a;
+    #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -67,12 +67,14 @@ jobs:
     - name: BUILD
       id: builder
       run: |
+        pwd
         ".github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
         
     #===============================================#
     - name: PYTEST
       id: local
       run: |
+        pwd
         ".github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
@@ -109,7 +111,7 @@ jobs:
             path: parallel_runs/
         - name: list artifacts
           run: |
-            pwd; ls; cd parallel_runs; ls -a
+            pwd; ls;
         #===============================================#
         - name: EVALUATE jobs
           run:  |
