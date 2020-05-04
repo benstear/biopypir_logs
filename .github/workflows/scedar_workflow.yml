@@ -97,6 +97,8 @@ jobs:
       needs: [biopypir_testing] 
       if: always()
       runs-on: [ubuntu-latest]
+      env:
+        PACKAGE: scedar
       steps:
         - name: Check-Out Repo 
           uses: actions/checkout@v2 
@@ -112,7 +114,7 @@ jobs:
         - name: EVALUATE jobs
           run:  |
               chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" "${{github.repository}}" "${{github.run_id}}"
+              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: 
