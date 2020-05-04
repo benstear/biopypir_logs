@@ -32,7 +32,7 @@ jobs:
     - run:  |
         pwd; ls -a;
     - run: cd biopypir_logs; ls -a;
-    - run: echo 'another cd'; cd biopypir_logs; ls -a;
+    - run: cat biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh;
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
