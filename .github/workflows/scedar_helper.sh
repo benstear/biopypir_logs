@@ -14,8 +14,7 @@ elif [ "$1" = "TEST" ]; then    # "tests/"
   pytest_cov=$(pytest "tests/" -ra --mpl-generate-path=tests/baseline_images \
   --color=yes --cov-config .coveragerc --cov-branch --cov="scedar" \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
-  awk -F"\t" '/TOTAL/ {print $0}' )   
-  #| grep -o '[^ ]*%') 
+  awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
   echo $pytest_cov
   pytestscore=${pytest_cov%\%}
   echo "::set-output name=pytest_score::$pytestscore"
