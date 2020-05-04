@@ -15,6 +15,7 @@ elif [ "$1" = "TEST" ]; then    # "tests/"
   --color=yes --cov-config .coveragerc --cov-branch --cov="scedar" \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
   awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
+  echo $pytest_cov
   pytestscore=${pytest_cov%\%}
   echo "::set-output name=pytest_score::$pytestscore"
   echo $pytestscore
@@ -45,8 +46,8 @@ elif [ "$1" = "GATHER" ]; then
               PIP           :  "\($pip)"
           }' > biopypir-"$4"-py"$3".json
           
-    echo "biopypir file:"
-    echo $(biopypir-"$4"-py"$3".json)
+    echo "biopypir file: " 
+    cat '$(biopypir-"$4"-py"$3".json)'
   #2> gather_errors.txt  
 elif [ "$1" = "EVAL" ]; then
   
@@ -113,8 +114,6 @@ elif [ "$1" = "EVAL" ]; then
               Ubuntu        : $linux,
               Mac          : $mac }' ) > scores.json
                
-
-  
   #mkdir just_runs
   #find /parallel_runs -type f -exec mv --backup=numbered -t /just_runs {} +
   #ls just_runs
