@@ -18,30 +18,21 @@ jobs:
       RUN_ID: ${{ github.run_id }}
       PACKAGE: scedar
     steps:
-    - name: Create cache file
-      run: mkdir check-SHA; echo ${{ github.sha }} > github-sha.txt; cat github-sha.txt
-    #===============================================#
-    - name: Check SHA
-      id: check_sha
-      uses: actions/cache@v1
-      with:
-        path: check-SHA
-        key: check-SHA-${{ github.sha }}
-    #===============================================#
-    - name: Some subsequent steps
-      if: steps.check_sha.outputs.cache-hit != 'true'
-      run: echo "Cache hit found...Execute the subsequent steps" #; exit 1 # no way to exit nicely?
-    #===============================================#
     - name: STEP 1. Check-Out Repo 
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
+        
     - run: pwd; ls
+    
     - name: checkout biopypir_logs repo
       uses: actions/checkout@v2     
       with:
         repository: benstear/biopypir_logs #/.github/workflows/{{env.PACKAGE}}_helper.sh 
-    - run: ls
+        path: biopypir_logs/.github/workflows/scedar_helper.sh 
+        clean: false
+        
+    - run: pwd; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
