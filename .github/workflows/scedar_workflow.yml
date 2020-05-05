@@ -31,11 +31,8 @@ jobs:
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
     #- run: pwd; ls -a;
     - run: |
-        curl -L https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh > biopypir_utils.sh
-    #curl -L https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/
-    #- run: cd biopypir_logs; ls -a;
-      
-    #- run: cat "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh";
+        curl -L -o biopypir_utils.sh https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh       
+    - run: ls -aR
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
