@@ -31,8 +31,9 @@ jobs:
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
     #- run: pwd; ls -a;
     - run: |
-        curl -L -o biopypir_utils.sh https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh       
-    - run: cat biopypir_utils.sh
+        curl -L -o biopypir_utils.sh 
+        "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+    #- run: cat biopypir_utils.sh
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
@@ -60,7 +61,7 @@ jobs:
       id: linter
       run: |
         chmod +x biopypir_utils.sh
-        ./biopypir_utils.sh "LINT"  "${{ env.PACKAGE }}"
+        ./biopypir_utils.sh "LINT" "${{ env.PACKAGE }}"
       #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
       #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
@@ -72,7 +73,7 @@ jobs:
     - name: PYTEST
       id: local
       run: |
-        ./biopypir_utils.sh "TEST" ${{github.repository}}; 
+        ./biopypir_utils.sh "TEST" ${{ env.PACKAGE }}; 
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
@@ -82,7 +83,7 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        "${{ env.PACKAGE }}"  "GATHER" "${{github.repository}}" \
+       ./biopypir_utils.sh "GATHER" ${{ env.PACKAGE }}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True" "True"
    #===============================================#
@@ -113,7 +114,7 @@ jobs:
         - name: EVALUATE jobs
           run:  |
               chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" "${{ github.repository }}" "${{github.run_id}}"
+              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: |
@@ -124,11 +125,13 @@ jobs:
 
         - run: echo final.json
         #=============================================# 
-        - name: UPLOAD final json artifact
-          uses: actions/upload-artifact@v2-preview
-          with:  
-            name: API.json
-            path: API.json
+        #- name: UPLOAD final json artifact
+        #  uses: actions/upload-artifact@v2-preview
+        #  with:  
+        #    name: API.json
+        #    path: API.json
+            
+        
         #===============================================#
         #- name: Commit 
         #  env:
