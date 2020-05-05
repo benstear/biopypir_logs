@@ -66,7 +66,6 @@ elif [ "$1" = "EVAL" ]; then
     
      if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
       #&&  [[ ! "${step_status[@]}" =~ "skipped" ]] ; then
-        
         # Get job name,  ie (3.6, ubuntu-latest) current each parallel job
         name=$(cat API.json |  jq ".jobs[$i].name" | cut -d "(" -f2 | cut -d ")" -f1)
         
