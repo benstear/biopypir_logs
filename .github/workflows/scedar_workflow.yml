@@ -32,7 +32,7 @@ jobs:
     #- run: pwd; ls -a;
     - run: |
         curl -L -o biopypir_utils.sh https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh       
-    - run: ls -aR
+    - run: cat biopypir_utils.sh
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
@@ -60,29 +60,29 @@ jobs:
       id: linter
       run: |
         chmod +x biopypir_utils.sh
-        biopypir_utils.sh "LINT"  "${{ env.PACKAGE }}"
+        ./biopypir_utils.sh "LINT"  "${{ env.PACKAGE }}"
       #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
       #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
       run: |
-        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "BUILD"
+        ./biopypir_utils.sh  "BUILD"
     #===============================================#
     - name: PYTEST
       id: local
       run: |
-        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh" "TEST" ${{github.repository}}; 
+        ./biopypir_utils.sh "TEST" ${{github.repository}}; 
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
       with:
-        packages: scedar
+        packages: "${{ env.PACKAGE }}"
     #===============================================#
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "GATHER" "${{github.repository}}" \
+        "${{ env.PACKAGE }}"  "GATHER" "${{github.repository}}" \
         "${{matrix.python-version}}" "${{matrix.os}}" "${{github.run_id}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" "True" "True"
    #===============================================#
