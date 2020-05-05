@@ -44,7 +44,7 @@ elif [ "$1" = "GATHER" ]; then
               PIP           :  "\($pip)"
           }' > biopypir-"$4"-py"$3".json
           
-  echo "biopypir file: \n" 
+  echo "biopypir file: \\n" 
   cat biopypir-"$4"-py"$3".json
   
 elif [ "$1" = "EVAL" ]; then
@@ -53,9 +53,9 @@ elif [ "$1" = "EVAL" ]; then
   (curl -X GET -s https://api.github.com/repos/"$2"/actions/runs/"$3"/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
-  
+  echo 'raw job count: $job_count'
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so - 2
-  echo "jobcount: $j (0 - indexed)"
+  echo "adjusted jobcount: $j (0 - indexed)"
   
   linux_array=()
   mac_array=()
@@ -174,5 +174,7 @@ elif [ "$1" = "EVAL" ]; then
   #"name": "scedar",
   #"full_name": "TaylorResearchLab/scedar",
   # .downloads_url
+  # docs
+  # sizs xkb
 fi 
 
