@@ -23,17 +23,19 @@ jobs:
       with:
         repository: benstear/${{ env.PACKAGE }}
     - run: pwd; ls -a; 
-    - name: checkout biopypir_logs repo
-      uses: actions/checkout@v2     
-      with:
-        path: biopypir_logs
-        clean: false
+    #- name: checkout biopypir_logs repo
+    #  uses: actions/checkout@v2     
+    #  with:
+    #    path: biopypir_logs
+    #    clean: false
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
-    - run: pwd; ls -a;
-        
-    - run: cd biopypir_logs; ls -a;
+    #- run: pwd; ls -a;
+    - run: |
+        curl -L https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh > biopypir_utils.sh
+    #curl -L https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/
+    #- run: cd biopypir_logs; ls -a;
       
-    - run: cat "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh";
+    #- run: cat "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh";
     #cd .github/workflows; ls
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
@@ -60,8 +62,10 @@ jobs:
     - name: LINT
       id: linter
       run: |
-          chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
-          "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
+        chmod +x utils.sh
+        biopypir_utils.sh "LINT"  "${{ env.PACKAGE }}"
+      #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
+      #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
@@ -156,12 +160,6 @@ jobs:
             #git init   #  add .git folder and initialize 
             #git remote add origin  https://github.com/benstear/biopypir_logs.git # connect to a repo
             #git pull origin master # pull repo to local 
-        #=============================================# 
-        - name: UPLOAD final json artifact
-          uses: actions/upload-artifact@v2-preview
-          with:  
-            name: API.json
-            path: API.json
         #===============================================#
         #- name: Global webhook
         #  if: always() 
