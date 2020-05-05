@@ -79,8 +79,10 @@ jobs:
       uses: actions/upload-artifact@v2-preview
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
-        path: biopypir-*
-    
+        path: |
+          biopypir-*.json
+          biopypir_utils.sh
+        
   job2:
       needs: [biopypir_testing] 
       if: always()
@@ -113,7 +115,7 @@ jobs:
         #      biopypir-macOS-latest-py3.6
         #      biopypir-macOS-latest-py3.7
 
-        - run: echo final.json
+        - run: cat final.json
         #=============================================# 
         #- name: UPLOAD final json artifact
         #  uses: actions/upload-artifact@v2-preview
