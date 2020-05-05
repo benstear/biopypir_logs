@@ -92,7 +92,7 @@ elif [ "$1" = "EVAL" ]; then
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
-    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score="${pytest_score:1:2}"
+    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=(echo "$pytest_score" | tr -d '"')
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
 
