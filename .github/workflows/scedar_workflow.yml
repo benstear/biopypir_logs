@@ -106,7 +106,7 @@ jobs:
         - name: EVALUATE jobs
           run:  |
               chmod +x "biopypir_utils.sh"
-              ./biopypir_utils.sh "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
+              ./biopypir_utils.sh "EVAL" benstear/${{ env.PACKAGE }} "${{github.run_id}}"
         #- uses: geekyeggo/delete-artifact@v1
         #  with:
         #    name: |
