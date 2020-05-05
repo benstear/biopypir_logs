@@ -127,17 +127,13 @@ elif [ "$1" = "EVAL" ]; then
   #echo '------artifacts name and id--------'
   #curl -X GET -s "https://api.github.com/repos/benstear/scedar/actions/runs/90141152/artifacts" | jq ".id" > art.json
   #cat art.json
-  
   #echo '-----artifact IDs------'
-
   #URL="https://api.github.com/repos/benstear/scedar/actions/artifacts"
   #echo $(curl -X GET $URL |jq '.artifacts[].id') > art_ids.txt
   #cat art_ids.txt
-  
   #echo '----delete artifacts-----'
   #curl -X DELETE -u "admin:$secrets.GITHUB_TOKEN" "https://api.github.com/repos/benstear/scedar/actions/artifacts/*"
   #echo "done"
-  
   
   #curl -X POST -H "Content-Type: application/json" --data @final.json http://587f4908.ngrok.io/biopypir
   # ================= GET BADGE STATUS ======================== #
@@ -151,10 +147,32 @@ elif [ "$1" = "EVAL" ]; then
    
   #if [[ "$LICENSE" ]] && [[ "$TESTS" ]] && [[ "$BUILD" ]] && \
   #   [[ "$((COVERAGE_SCORE))" -gt 40 ]] ; then badge='BRONZE' fi
-  
   #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   
+  elif [ "$1" = "STATS" ]; then
+  
+  curl -o repostats.json https://api.github.com/repos/TaylorResearchLab/scedar # make sure using different API versions doesnt change field names
+  
+  # Get Repository statistics
+  date_created=$(cat repostats.json | jq ".created_at")
+  last_commit=$(cat repostats.json | jq ".pushed_at") 
+  
+  forks=$(cat repostats.json | jq ".forks")
+  watchers=$(cat repostats.json | jq ".subscribers_count")
+  stars=$(cat repostats.json | jq ".stargazers_count")
+  contributors=$(cat repostats.json | jq ".contributors_url")  # url only, must get count
+  
+  homepage_url=$(cat repostats.json | jq ".homepage") # no homepage = ""
+  
+  has_wiki=$(cat repostats.json | jq ".has_wiki") 
+  open_issues_count=$(cat repostats.json | jq ".open_issues_count")
+  has_downloads=$(cat repostats.json | jq ".has_downloads")
+  
+  echo $forks $watchers $stars
+  #"name": "scedar",
+  #"full_name": "TaylorResearchLab/scedar",
+  # .downloads_url
 fi 
 
