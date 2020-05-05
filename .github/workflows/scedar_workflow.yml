@@ -29,8 +29,7 @@ jobs:
         path: biopypir_logs
         clean: false
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
-    - run:  |
-        pwd; ls -a;
+    - run: pwd; ls -a;
         
     - run: cd biopypir_logs; ls -a;
       
