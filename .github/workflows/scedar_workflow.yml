@@ -116,7 +116,7 @@ jobs:
               ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" "${{ github.repository }}" "${{github.run_id}}"
         - uses: geekyeggo/delete-artifact@v1
           with:
-            name: 
+            name: |
               biopypir-ubuntu-latest-py3.6
               biopypir-ubuntu-latest-py3.7
               biopypir-macOS-latest-py3.6
