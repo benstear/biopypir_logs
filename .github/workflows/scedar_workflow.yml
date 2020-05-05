@@ -107,21 +107,22 @@ jobs:
           run:  |
               chmod +x "biopypir_utils.sh"
               ./biopypir_utils.sh "EVAL" benstear/${{ env.PACKAGE }} "${{github.run_id}}"
-        #- uses: geekyeggo/delete-artifact@v1
-        #  with:
-        #    name: |
-        #      biopypir-ubuntu-latest-py3.6
-        #      biopypir-ubuntu-latest-py3.7
-        #      biopypir-macOS-latest-py3.6
-        #      biopypir-macOS-latest-py3.7
+        - uses: geekyeggo/delete-artifact@v1
+          with:
+            name: |
+              biopypir-ubuntu-latest-py3.6
+              biopypir-ubuntu-latest-py3.7
+              biopypir-macOS-latest-py3.6
+              biopypir-macOS-latest-py3.7
 
         - run: cat final.json
         #=============================================# 
-        #- name: UPLOAD final json artifact
-        #  uses: actions/upload-artifact@v2-preview
-        #  with:  
-        #    name: API.json
-        #    path: API.json
+        - name: UPLOAD final json artifact
+          uses: actions/upload-artifact@v2-preview
+          with:  
+            name: API.json
+            path: API.json
+        
         - name: STATS
           run: ./biopypir_utils.sh "STATS"
         
