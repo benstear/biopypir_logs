@@ -8,13 +8,13 @@ jobs:
   biopypir_testing:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      #fail-fast: false
       matrix:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
     env: 
       WORKSPACE: ${{ github.workspace }} # /home/runner/work/scedar/scedar
-      REPO: ${{ github.repository }}
+      REPO: ${{ github.repository }}    # benstear/biopypir_logs, prob dont need this anymore
       RUN_ID: ${{ github.run_id }}
       PACKAGE: scedar
     steps:
@@ -31,7 +31,7 @@ jobs:
         #path: biopypir_logs/.github/workflows/scedar_helper.sh 
     #- run: pwd; ls -a;
     - run: |
-        curl -L -o biopypir_utils.sh 
+        curl -L -o biopypir_utils.sh \
         "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
     #- run: cat biopypir_utils.sh
     #cd .github/workflows; ls
@@ -54,7 +54,7 @@ jobs:
         pip install pytest
         pip install pytest-cov
         pip install pytest-mpl
-      #pip install .
+        pip install .
     #===============================================#
       
     - name: LINT
