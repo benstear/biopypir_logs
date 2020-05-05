@@ -22,19 +22,9 @@ jobs:
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
-    - run: pwd; ls -a; 
-    #- name: checkout biopypir_logs repo
-    #  uses: actions/checkout@v2     
-    #  with:
-    #    path: biopypir_logs
-    #    clean: false
-        #path: biopypir_logs/.github/workflows/scedar_helper.sh 
-    #- run: pwd; ls -a;
     - run: |
-        curl -L -o biopypir_utils.sh \
-        "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
-    #- run: cat biopypir_utils.sh
-    #cd .github/workflows; ls
+        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+        chmod +x biopypir_utils.sh
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -59,9 +49,7 @@ jobs:
       
     - name: LINT
       id: linter
-      run: |
-        chmod +x biopypir_utils.sh
-        ./biopypir_utils.sh "LINT" "${{ env.PACKAGE }}"
+      run: ./biopypir_utils.sh "LINT" "${{ env.PACKAGE }}"
       #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
       #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
@@ -91,7 +79,7 @@ jobs:
       uses: actions/upload-artifact@v2-preview
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
-        path: biopypir-*.json
+        path: biopypir-*
     
   job2:
       needs: [biopypir_testing] 
@@ -110,18 +98,20 @@ jobs:
         - name: list artifacts
           run: |
             pwd; ls -R;
+            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+            chmod +x biopypir_utils.sh
         #===============================================#
         - name: EVALUATE jobs
           run:  |
-              chmod +x ".github/workflows/${{ env.PACKAGE }}_helper.sh"
-              ".github/workflows/${{ env.PACKAGE }}_helper.sh" "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
-        - uses: geekyeggo/delete-artifact@v1
-          with:
-            name: |
-              biopypir-ubuntu-latest-py3.6
-              biopypir-ubuntu-latest-py3.7
-              biopypir-macOS-latest-py3.6
-              biopypir-macOS-latest-py3.7
+              chmod +x "biopypir_utils.sh"
+              ./biopypir_utils.sh "EVAL" ${{ env.PACKAGE }} "${{github.run_id}}"
+        #- uses: geekyeggo/delete-artifact@v1
+        #  with:
+        #    name: |
+        #      biopypir-ubuntu-latest-py3.6
+        #      biopypir-ubuntu-latest-py3.7
+        #      biopypir-macOS-latest-py3.6
+        #      biopypir-macOS-latest-py3.7
 
         - run: echo final.json
         #=============================================# 
@@ -130,7 +120,8 @@ jobs:
         #  with:  
         #    name: API.json
         #    path: API.json
-            
+        - name: STATS
+          run: ./biopypir_utils.sh "STATS"
         
         #===============================================#
         #- name: Commit 
