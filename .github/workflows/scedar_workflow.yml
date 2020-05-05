@@ -62,7 +62,7 @@ jobs:
     - name: LINT
       id: linter
       run: |
-        chmod +x utils.sh
+        chmod +x biopypir_utils.sh
         biopypir_utils.sh "LINT"  "${{ env.PACKAGE }}"
       #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
       #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
