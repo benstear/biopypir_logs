@@ -7,8 +7,9 @@ if [  "$1" = "LINT" ]; then
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
-  echo "::set-env name=env_pylint-score::$pylintscore"
-  printenv
+  echo "::set-env name=env_pylint_score::$pylintscore"
+  echo %env_pylint_score%
+  #printenv
 
 elif [ "$1" = "TEST" ]; then    # "tests/"
 
