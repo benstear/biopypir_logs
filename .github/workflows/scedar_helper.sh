@@ -127,12 +127,10 @@ elif [ "$1" = "EVAL" ]; then
               Ubuntu        : $linux,
               Mac          : $mac }' ) > scores.json
                
-  #mkdir just_runs
-  #find /parallel_runs -type f -exec mv --backup=numbered -t /just_runs {} +
-  #ls just_runs
-  cat scores.json
+
+  #cat scores.json
   a=$(ls parallel_runs/ | head -1)
-  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add > final.json
+  echo $(cat scores.json) $(cat parallel_runs/$(ls parallel_runs/ | head -1)/biopypir-*.json) | jq -s add > final.json
   
   cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
@@ -149,9 +147,7 @@ elif [ "$1" = "EVAL" ]; then
   #echo '----delete artifacts-----'
   #curl -X DELETE -u "admin:$secrets.GITHUB_TOKEN" "https://api.github.com/repos/benstear/scedar/actions/artifacts/*"
   #echo "done"
-  
-  #curl -X POST -H "Content-Type: application/json" --data @final.json http://587f4908.ngrok.io/biopypir
-  # ================= GET BADGE STATUS ======================== #
+   # ================= GET BADGE STATUS ======================== #
   
    #LICENSE=$(cat final.json | jq ".License_check")
    #TESTS=$(cat final.json | jq ".Pytest_status")
@@ -168,32 +164,18 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-  #curl https://api.github.com/repos/TaylorResearchLab/scedar 
   curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-    
-    cat stats.json
-
+      
+      echo $(cat stats.json) $(cat final.json) | jq -s add > payload.json
+      
+      cat payload.json
+  #cat stats.json
   # Get Repository statistics
-  #date_created=$(cat repostats.json | jq ".created_at")
-  #last_commit=$(cat repostats.json | jq ".pushed_at") 
-  #forks=$(cat repostats.json | jq ".forks")
-  #watchers=$(cat repostats.json | jq ".subscribers_count")
-  #stars=$(cat repostats.json | jq ".stargazers_count")
-  #contributors=$(cat repostats.json | jq ".contributors_url")  # url only, must get count
-  # homepage_url=$(cat repostats.json | jq ".homepage") # no homepage = ""
-  #has_wiki=$(cat repostats.json | jq ".has_wiki") 
-  #open_issues_count=$(cat repostats.json | jq ".open_issues_count")
-  #has_downloads=$(cat repostats.json | jq ".has_downloads")
-  #echo $forks $watchers $stars
-  #"name": "scedar",
-  #"full_name": "TaylorResearchLab/scedar",
-  # .downloads_url
-  # docs
   # sizs xkb
 fi 
 
