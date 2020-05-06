@@ -50,13 +50,12 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-  echo $2
-  echo $3
-  # GET job workflow information w API
-  (curl -X GET -s https://api.github.com/repos/"$2"/actions/runs/"$3"/jobs) > API.json
+
+  # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
+  (curl -X GET -s https://api.github.com/repos/$REPO/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
-  echo 'raw job count: $job_count'
+  echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so - 2
   echo "adjusted jobcount: $j (0 - indexed)"
   
@@ -94,14 +93,14 @@ elif [ "$1" = "EVAL" ]; then
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
-    echo $pylint_score
-    echo "pylint_score length = ${#pylint_score}"
+    #echo $pylint_score
+    #echo "pylint_score length = ${#pylint_score}"
     
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
-    echo $pytest_score
-    echo "pytest_score length = ${#pytest_score}"
+    #echo $pytest_score
+    #echo "pytest_score length = ${#pytest_score}"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
     
   done
@@ -116,9 +115,9 @@ elif [ "$1" = "EVAL" ]; then
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
           --arg date "$date_slice"  --arg linux "${linux_arr[*]}" --arg mac "${mac_arr[*]}" \
-           '{ Pylint_score  :  $lint_score,  
-              Pytest_score  :  $coverage_score,
-              Date          :  $date,
+           '{ Pylint_Score  :  $lint_score,  
+              Pytest_Coverage_Score  :  $coverage_score,
+              Current_Date          :  $date,
               Ubuntu        : $linux,
               Mac          : $mac }' ) > scores.json
                
@@ -163,24 +162,28 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-  curl https://api.github.com/repos/TaylorResearchLab/scedar 
-  
+  #curl https://api.github.com/repos/TaylorResearchLab/scedar 
+  curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \
+    "{Owner_Repo: .full_name, Package: .name, Description: .description,
+    date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+    .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
+    homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
+    has_downloads: .has_downloads}" > stats.json
+    
+    cat stats.json
+
   # Get Repository statistics
-  date_created=$(cat repostats.json | jq ".created_at")
-  last_commit=$(cat repostats.json | jq ".pushed_at") 
-  
-  forks=$(cat repostats.json | jq ".forks")
-  watchers=$(cat repostats.json | jq ".subscribers_count")
-  stars=$(cat repostats.json | jq ".stargazers_count")
-  contributors=$(cat repostats.json | jq ".contributors_url")  # url only, must get count
-  
-  homepage_url=$(cat repostats.json | jq ".homepage") # no homepage = ""
-  
-  has_wiki=$(cat repostats.json | jq ".has_wiki") 
-  open_issues_count=$(cat repostats.json | jq ".open_issues_count")
-  has_downloads=$(cat repostats.json | jq ".has_downloads")
-  
-  echo $forks $watchers $stars
+  #date_created=$(cat repostats.json | jq ".created_at")
+  #last_commit=$(cat repostats.json | jq ".pushed_at") 
+  #forks=$(cat repostats.json | jq ".forks")
+  #watchers=$(cat repostats.json | jq ".subscribers_count")
+  #stars=$(cat repostats.json | jq ".stargazers_count")
+  #contributors=$(cat repostats.json | jq ".contributors_url")  # url only, must get count
+  # homepage_url=$(cat repostats.json | jq ".homepage") # no homepage = ""
+  #has_wiki=$(cat repostats.json | jq ".has_wiki") 
+  #open_issues_count=$(cat repostats.json | jq ".open_issues_count")
+  #has_downloads=$(cat repostats.json | jq ".has_downloads")
+  #echo $forks $watchers $stars
   #"name": "scedar",
   #"full_name": "TaylorResearchLab/scedar",
   # .downloads_url
