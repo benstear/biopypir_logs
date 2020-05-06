@@ -7,6 +7,7 @@ if [  "$1" = "LINT" ]; then
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
+  printenv
 
 elif [ "$1" = "TEST" ]; then    # "tests/"
 
@@ -88,15 +89,19 @@ elif [ "$1" = "EVAL" ]; then
   
   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo $date_slice
   pylint_score_ave=0.00; pytest_score_ave=0.00
+  LC_ALL=C
   
-  for file in "$(pwd)/parallel_runs"/*/*; do
+  for file in "$(pwd)/parallel_runs"/*/*.json; do
+    
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
     echo $pylint_score
+    echo "pylint_score length = ${#pylint_score}"
     
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
     echo $pytest_score
+    echo "pytest_score length = ${#pytest_score}"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
     
   done
@@ -158,7 +163,7 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-  curl -o repostats.json https://api.github.com/repos/TaylorResearchLab/scedar # make sure using different API versions doesnt change field names
+  curl https://api.github.com/repos/TaylorResearchLab/scedar 
   
   # Get Repository statistics
   date_created=$(cat repostats.json | jq ".created_at")
