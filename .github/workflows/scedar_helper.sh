@@ -50,9 +50,15 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-
+  echo $REPO 
+  echo $GITHUB_RUN_ID
+  echo $RUN_ID
+  echo '-----------------'
+  echo $2
+  echo $3
+  
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
-  (curl -X GET -s https://api.github.com/repos/$REPO/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
+  (curl -X GET -s https://api.github.com/repos/$2/actions/runs/$3/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
   echo "raw job count: $job_count"
