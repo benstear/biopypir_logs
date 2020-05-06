@@ -50,12 +50,12 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-  echo $REPO 
-  echo $GITHUB_RUN_ID
-  echo $RUN_ID
+  echo %REPO% 
+  echo %GITHUB_RUN_ID%
+  echo %RUN_ID%
   echo '-----------------'
-  echo $2
-  echo $3
+  echo "$2"
+  echo "$3"
   
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
   (curl -X GET -s https://api.github.com/repos/$2/actions/runs/$3/jobs) > API.json
@@ -170,11 +170,11 @@ elif [ "$1" = "EVAL" ]; then
   
   #curl https://api.github.com/repos/TaylorResearchLab/scedar 
   curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \
-    "{Owner_Repo: .full_name, Package: .name, Description: .description,
-    date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
-    .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
-    homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
-    has_downloads: .has_downloads}" > stats.json
+      "{Owner_Repo: .full_name, Package: .name, Description: .description,
+      date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+      .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
+      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
+      has_downloads: .has_downloads}" > stats.json
     
     cat stats.json
 
