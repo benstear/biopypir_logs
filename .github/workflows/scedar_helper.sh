@@ -15,10 +15,10 @@ elif [ "$1" = "TEST" ]; then    # "tests/"
   --color=yes --cov-config .coveragerc --cov-branch --cov="scedar" \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
   awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
-  echo $pytest_cov
+  #echo $pytest_cov
   pytestscore=${pytest_cov%\%}
   echo "::set-output name=pytest_score::$pytestscore"
-  echo $pytestscore
+  echo "Pytest Coverage: $pytestscore"
 
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
@@ -49,6 +49,8 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
+  echo $2
+  echo $3
   # GET job workflow information w API
   (curl -X GET -s https://api.github.com/repos/"$2"/actions/runs/"$3"/jobs) > API.json
 
