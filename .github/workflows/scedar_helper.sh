@@ -7,6 +7,7 @@ if [  "$1" = "LINT" ]; then
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
+  echo "::set-env name=env_pylint-score::$pylintscore"
   printenv
 
 elif [ "$1" = "TEST" ]; then    # "tests/"
@@ -20,7 +21,7 @@ elif [ "$1" = "TEST" ]; then    # "tests/"
   pytestscore=${pytest_cov%\%}
   echo "::set-output name=pytest_score::$pytestscore"
   echo "Pytest Coverage: $pytestscore"
-
+  
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
   python setup.py build
@@ -29,24 +30,22 @@ elif [ "$1" = "BUILD" ]; then
   
 elif [ "$1" = "GATHER" ]; then
    
-   jq -n --arg repo $2 --arg pyversion $3 --arg os $4 \
-         --arg run_id $5  \
-         --arg pylintscore $6 \
-         --arg pytestscore $7 \
-         --arg license $8 \
-         --arg pip $9 \
-        '{    Github_Repo : "\($repo)",
+   jq -n  --arg pyversion $2 --arg os $3 \
+         --arg pylintscore $4 \
+         --arg pytestscore $5 \
+         --arg license $6 \
+         --arg pip $7 \
+        '{    
               Python_version : "\($pyversion)", 
               OS            : "\($os)",
-              Run_ID        : "\($run_id)",
               Pylint_score : "\($pylintscore)",
               Pytest_score :  "\($pytestscore)",
               License_check : "\($license)",
               PIP           :  "\($pip)"
-          }' > biopypir-"$4"-py"$3".json
+          }' > biopypir-"$3"-py"$2".json
           
   echo "biopypir file: \\n" 
-  cat biopypir-"$4"-py"$3".json
+  cat biopypir-"$3"-py"$2".json
   
 elif [ "$1" = "EVAL" ]; then
   
