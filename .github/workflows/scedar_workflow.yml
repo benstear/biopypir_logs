@@ -125,28 +125,27 @@ jobs:
         
         - name: STATS
           run: ./biopypir_utils.sh "STATS"
-        
+          
+        - run: ls -aR
         - name: GitHub Push
           uses: ad-m/github-push-action@v0.5.0
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
         
         #===============================================#
-        #- name: Commit 
-        #  env:
-        #    API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #  run: |
-        #      git config --global user.email "bjs385@drexel.edu"    
-        #      git config --global user.name "benstear"
-        #      echo "Sending json log to biopypir_logs/logs"
-        #      git clone --depth=1 https://$API_TOKEN_GITHUB@github.com/benstear/biopypir_logs.git 
-        #      mv final.json biopypir_logs
-        #      cd biopypir_logs
-        #      git add final.json
-        #      git commit -m 'commit first json log'
-        #      git push
-
+        - name: Commit 
+          env:
+            API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+              git config --global user.email "bjs385@drexel.edu"    
+              git config --global user.name "benstear"
+              echo "Sending json log to biopypir_logs/logs"
+              git clone --depth=1 https://github.com/benstear/biopypir_logs.git  
+              git add final.json
+              git commit -m 'commit first json log'
+              git push
+          #mv final.json biopypir_logs #cd biopypir_logs
           # clone, delete files in the clone, and copy (new) files over
           # this handles file deletions, additions, and changes seamlessly
           #git clone --depth 1 https://$API_TOKEN_GITHUB@github.com/$GITHUB_USERNAME/$NAME.git $CLONE_DIR &> /dev/null
