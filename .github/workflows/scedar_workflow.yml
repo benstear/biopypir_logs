@@ -12,6 +12,7 @@ jobs:
       matrix:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
+    
     env: 
       REPO: ${{ github.repository }}    # benstear/biopypir_logs, prob dont need this anymore
       RUN_ID: ${{ github.run_id }}
