@@ -40,7 +40,6 @@ jobs:
     #  uses: benstear/validate-license-action
     #  with:
     #    args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
-        
     #===============================================#
     - name: INSTALL dependencies
       run: |
@@ -52,12 +51,9 @@ jobs:
         pip install pytest-mpl
         pip install .
     #===============================================#
-      
     - name: LINT
       id: linter
       run: ./biopypir_utils.sh "LINT" "${{ env.PACKAGE }}"
-      #chmod +x "biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"
-      #"biopypir_logs/.github/workflows/${{ env.PACKAGE }}_helper.sh"  "LINT"  "${{ env.PACKAGE }}"
     #===============================================#
     - name: BUILD
       id: builder
