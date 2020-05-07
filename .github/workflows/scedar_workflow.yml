@@ -154,7 +154,7 @@ jobs:
               git pull https://github.com/benstear/biopypir_logs.git
               mv payload_${{github.run_id}}.json logs/
               git add logs/payload_${{github.run_id}}.json
-              git push -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
+              git commit -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
               
           #mv final.json biopypir_logs #cd biopypir_logs
           # clone, delete files in the clone, and copy (new) files over
