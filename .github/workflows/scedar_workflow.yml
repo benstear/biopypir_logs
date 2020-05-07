@@ -13,19 +13,23 @@ jobs:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
     env: 
-      WORKSPACE: ${{ github.workspace }} # /home/runner/work/scedar/scedar
       REPO: ${{ github.repository }}    # benstear/biopypir_logs, prob dont need this anymore
       RUN_ID: ${{ github.run_id }}
       PACKAGE: scedar
     steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    #===============================================#
     - name: checkout scedar repo 
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
+    #===============================================#
     - run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
-        chmod +x biopypir_utils.sh
-        printenv
+        chmod +x biopypir_utils.sh  
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -81,9 +85,8 @@ jobs:
       uses: actions/upload-artifact@v2-preview
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
-        path: |
-          biopypir-*.json
-          biopypir_utils.sh
+        path: biopypir-*.json
+
         
   job2:
       needs: [biopypir_testing] 
@@ -117,20 +120,20 @@ jobs:
 
         - run: cat final.json
         #=============================================# 
-        - name: UPLOAD final json artifact
-          uses: actions/upload-artifact@v2-preview
-          with:  
-            name: API.json
-            path: API.json
+        #- name: UPLOAD final json artifact
+        #  uses: actions/upload-artifact@v2-preview
+        #  with:  
+        #    name: API.json
+        #    path: API.json
         
         - name: STATS
           run: ./biopypir_utils.sh "STATS"
           
         - run: ls -aR
-        - name: GitHub Push
-          uses: ad-m/github-push-action@v0.5.0
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+        #- name: GitHub Push
+        #  uses: ad-m/github-push-action@v0.5.0
+        #  with:
+        #    github_token: ${{ secrets.GITHUB_TOKEN }}
         
         #===============================================#
         - name: Commit 
@@ -142,7 +145,7 @@ jobs:
               git config --global user.name "benstear"
               echo "Sending json log to biopypir_logs/logs"
               git clone --depth=1 https://github.com/benstear/biopypir_logs.git  
-              git add final.json
+              git add payload.json
               git commit -m 'commit first json log'
               git push
           #mv final.json biopypir_logs #cd biopypir_logs
