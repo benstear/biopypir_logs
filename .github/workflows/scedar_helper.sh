@@ -127,10 +127,13 @@ elif [ "$1" = "EVAL" ]; then
                
   a=$(ls parallel_runs/ | head -1)
   echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
-  
+  cat scores.json
+  echo'---------'
+  cat parallel_runs/$a/biopypir-*.json
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
-  echo  'final.json = '
-  cat final.json
+  
+  #echo  'final.json = '
+  #cat final.json
   
   #echo '------artifacts name and id--------'
   #curl -X GET -s "https://api.github.com/repos/benstear/scedar/actions/runs/90141152/artifacts" | jq ".id" > art.json
