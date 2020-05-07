@@ -142,7 +142,7 @@ jobs:
               git pull https://github.com/benstear/biopypir_logs.git
               mv payload_${{github.run_id}}.json logs/
               git add logs/payload_${{github.run_id}}.json
-              git commit -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
+              git push master # commit -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
           
           #rm scores.json stats.json final.json
           #mv final.json biopypir_logs #cd biopypir_logs
