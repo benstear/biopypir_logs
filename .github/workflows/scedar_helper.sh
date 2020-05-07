@@ -111,7 +111,7 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs["$k"].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
+   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
    
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" \
@@ -122,19 +122,17 @@ elif [ "$1" = "EVAL" ]; then
            '{ PYLINT_SCORE  :  $lint_score,  
               PYTEST_SCORE  :  $coverage_score,
               CURRENT_DATE   :  $date,
+              PIP           : "True"
+              LICENSE       : "True"
               UBUNTU       : $linux,
               MAC          : $mac }' ) > scores.json
                
-  a=$(ls parallel_runs/ | head -1)
-  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
-  cat scores.json
-  echo'---------'
-  cat parallel_runs/$a/biopypir-*.json
+  #a=$(ls parallel_runs/ | head -1)
+  #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
+  #cat scores.json
+  #cat parallel_runs/$a/biopypir-*.json
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
-  
-  #echo  'final.json = '
-  #cat final.json
-  
+
   #echo '------artifacts name and id--------'
   #curl -X GET -s "https://api.github.com/repos/benstear/scedar/actions/runs/90141152/artifacts" | jq ".id" > art.json
   #cat art.json
@@ -169,7 +167,7 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      echo $(cat stats.json) $(cat final.json) | jq -s add > payload_$GITHUB_RUN_ID.json
+      echo $(cat stats.json) $(cat scores.json) | jq -s add > payload_$GITHUB_RUN_ID.json
       
       #cat payload.json
   #cat stats.json
