@@ -12,7 +12,6 @@ jobs:
       matrix:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
-    
     env: 
       REPO: ${{ github.repository }}    # benstear/biopypir_logs, prob dont need this anymore
       RUN_ID: ${{ github.run_id }}
@@ -88,11 +87,11 @@ jobs:
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
-    - name: UPLOAD second artifact
-      uses: actions/upload-artifact@v2-preview
-      with:  
-        name: GITHUB_CONTEXT.json
-        path: GITHUB_CONTEXT.json
+    #- name: UPLOAD second artifact
+    #  uses: actions/upload-artifact@v2-preview
+    #  with:  
+    #    name: GITHUB_CONTEXT.json
+    #    path: GITHUB_CONTEXT.json
 
         
   job2:
