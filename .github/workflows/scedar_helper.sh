@@ -122,8 +122,8 @@ elif [ "$1" = "EVAL" ]; then
            '{ PYLINT_SCORE  :  $lint_score,  
               PYTEST_SCORE  :  $coverage_score,
               CURRENT_DATE   :  $date,
-              PIP           : "True"
-              LICENSE       : "True"
+              PIP           : "True",
+              LICENSE       : "True",
               UBUNTU       : $linux,
               MAC          : $mac }' ) > scores.json
                
