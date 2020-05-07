@@ -132,7 +132,8 @@ jobs:
         - name: Add & Commit
           uses: EndBug/add-and-commit@v4.1.0
           with:
-            add: payload_${{github.run_id}}.json
+            add: logs/payload_${{github.run_id}}.json
+            message: 'Commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         #===============================================#
