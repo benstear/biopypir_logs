@@ -8,8 +8,8 @@ if [  "$1" = "LINT" ]; then
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
   echo "::set-env name=env_pylint_score::$pylintscore"
-  echo %env_pylint_score%
-  #printenv
+  echo $env_pylint_score
+  printenv $env_pylint_score
 
 elif [ "$1" = "TEST" ]; then    # "tests/"
 
@@ -50,9 +50,9 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-  echo %REPO% 
-  echo %GITHUB_RUN_ID%
-  echo %RUN_ID%
+  echo $REPO
+  echo $GITHUB_RUN_ID
+  echo $RUN_ID
   echo '-----------------'
   echo "$2"
   echo "$3"
@@ -89,23 +89,20 @@ elif [ "$1" = "EVAL" ]; then
      fi
      #exit 1; echo "One or more steps were skipped or failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
-  echo "Linux array: ${linux_arr[*]}"
-  echo "Mac array: ${mac_arr[*]}"
-  
-  date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo $date_slice
+  echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
   pylint_score_ave=0.00; pytest_score_ave=0.00
-  LC_ALL=C
+
   
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
-    #echo $pylint_score
+    echo $pylint_score
     #echo "pylint_score length = ${#pylint_score}"
     
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
-    #echo $pytest_score
+    echo $pytest_score
     #echo "pytest_score length = ${#pytest_score}"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
     
@@ -115,8 +112,9 @@ elif [ "$1" = "EVAL" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")
    
-   echo "pytest final: $pytest_score_final"
-   echo "lint final: $pylint_score_final"
+   echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
+   
+   date=$(cat API.json | jq ".jobs[$k].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
    
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
@@ -130,7 +128,7 @@ elif [ "$1" = "EVAL" ]; then
 
   #cat scores.json
   a=$(ls parallel_runs/ | head -1)
-  echo $(cat scores.json) $(cat parallel_runs/$(ls parallel_runs/ | head -1)/biopypir-*.json) | jq -s add > final.json
+  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add > final.json
   
   cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
