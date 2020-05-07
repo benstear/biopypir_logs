@@ -3,7 +3,7 @@
 
 if [  "$1" = "LINT" ]; then
   
-  pylint scedar --exit-zero --reports=y >  pylint-report.txt
+  pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
@@ -11,11 +11,11 @@ if [  "$1" = "LINT" ]; then
   echo $env_pylint_score
   printenv $env_pylint_score
 
-elif [ "$1" = "TEST" ]; then    # "tests/"
+elif [ "$1" = "TEST" ]; then  
 
   echo "::set-output name=pytest_score::False"
   pytest_cov=$(pytest "tests/" -ra --mpl-generate-path=tests/baseline_images \
-  --color=yes --cov-config .coveragerc --cov-branch --cov="scedar" \
+  --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
   awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
   #echo $pytest_cov
@@ -50,15 +50,15 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-  echo $GITHUB_REPOSITORY
-  echo $GITHUB_RUN_ID
-  # echo $RUN_ID
+  #echo $GITHUB_REPOSITORY
+  #echo $GITHUB_RUN_ID
+  echo $PACKAGE
   echo '-----------------'
-  echo "$2"
-  echo "$3"
+  #echo "$2"
+  #echo "$3"
   
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
-  (curl -X GET -s https://api.github.com/repos/$2/actions/runs/$3/jobs) > API.json
+  (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
   echo "raw job count: $job_count"
@@ -96,14 +96,11 @@ elif [ "$1" = "EVAL" ]; then
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
-    echo $pylint_score
-    #echo "pylint_score length = ${#pylint_score}"
-    
+    #echo $pylint_score; #echo "pylint_score length = ${#pylint_score}"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
-    echo $pytest_score
-    #echo "pytest_score length = ${#pytest_score}"
+    #echo $pytest_score; #echo "pytest_score length = ${#pytest_score}"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
     
   done
@@ -122,18 +119,17 @@ elif [ "$1" = "EVAL" ]; then
           --arg date "$date_slice"  \
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
-           '{ Pylint_Score  :  $lint_score,  
-              Pytest_Coverage_Score  :  $coverage_score,
-              Current_Date          :  $date,
-              Ubuntu        : $linux,
-              Mac          : $mac }' ) > scores.json
+           '{ PYLINT_SCORE  :  $lint_score,  
+              PYTEST_SCORE  :  $coverage_score,
+              CURRENT_DATE   :  $date,
+              UBUNTU       : $linux,
+              MAC          : $mac }' ) > scores.json
                
   a=$(ls parallel_runs/ | head -1)
   echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
   
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
-
-  echo '-----edited final json------'
+  echo  'final.json = '
   cat final.json
   
   #echo '------artifacts name and id--------'
