@@ -111,7 +111,7 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
+   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo "DATE: $date"
    
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" \
@@ -168,6 +168,7 @@ elif [ "$1" = "EVAL" ]; then
       has_downloads: .has_downloads}" > stats.json
       
       echo $(cat stats.json) $(cat scores.json) | jq -s add > payload_$GITHUB_RUN_ID.json
+      mv payload_$GITHUB_RUN_ID.json logs/
       
       #cat payload.json
   #cat stats.json
