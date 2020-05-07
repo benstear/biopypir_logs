@@ -21,7 +21,7 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
-        echo ${{env.GITHUB_CONTEXT}} > GITHUB_CONTEXT.json
+        cat ${{env.GITHUB_CONTEXT}} > GITHUB_CONTEXT.json
         ls
         echo " run #: ${{github.run_number}}"
         echo " sha: ${{github.sha}}"
