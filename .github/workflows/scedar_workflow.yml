@@ -144,9 +144,10 @@ jobs:
               git config --global user.email "bjs385@drexel.edu"    
               git config --global user.name "benstear"
               echo "Sending json log to biopypir_logs/logs"
-              git clone --depth=1 https://github.com/benstear/biopypir_logs.git  
-              git add payload.json
-              git commit -m 'commit first json log'
+              git pull https://github.com/benstear/biopypir_logs.git
+              mv payload2.json logs/
+              git add logs/payload2.json
+              git pull -m 'commit ${{github.repository}} workflow log # $GITHUB_RUN_NUMBER'
               git push
           #mv final.json biopypir_logs #cd biopypir_logs
           # clone, delete files in the clone, and copy (new) files over
