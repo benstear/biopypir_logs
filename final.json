@@ -1,0 +1,11 @@
+{
+  "Pylint_Score": "7.25",
+  "Pytest_Coverage_Score": "57.00",
+  "Current_Date": "ull",
+  "Ubuntu": "3.6 3.7",
+  "Mac": "3.6 3.7",
+  "Pylint_score": "7.26",
+  "Pytest_score": "57",
+  "License_check": "True",
+  "PIP": "True"
+}
