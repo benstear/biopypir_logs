@@ -128,9 +128,9 @@ elif [ "$1" = "EVAL" ]; then
 
   #cat scores.json
   a=$(ls parallel_runs/ | head -1)
-  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add > final.json
+  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
   
-  cat final.json | jq 'del(.OS, .Python_version)'  > final.json
+  #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
   echo '-----edited final json------'
   cat final.json
