@@ -50,9 +50,9 @@ elif [ "$1" = "GATHER" ]; then
   
 elif [ "$1" = "EVAL" ]; then
   
-  echo $REPO
+  echo $GITHUB_REPOSITORY
   echo $GITHUB_RUN_ID
-  echo $RUN_ID
+  # echo $RUN_ID
   echo '-----------------'
   echo "$2"
   echo "$3"
@@ -114,19 +114,20 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[$k].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
+   date=$(cat API.json | jq ".jobs[${k}].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
    
    echo '-----------past finals------------------'
-   (jq -n --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
-          --arg date "$date_slice"  --arg linux "${linux_arr[*]}" --arg mac "${mac_arr[*]}" \
+   (jq -n --arg lint_score "$pylint_score_final" \
+          --arg coverage_score "$pytest_score_final" \
+          --arg date "$date_slice"  \
+          --arg linux "${linux_arr[*]}" \
+          --arg mac "${mac_arr[*]}" \
            '{ Pylint_Score  :  $lint_score,  
               Pytest_Coverage_Score  :  $coverage_score,
               Current_Date          :  $date,
               Ubuntu        : $linux,
               Mac          : $mac }' ) > scores.json
                
-
-  #cat scores.json
   a=$(ls parallel_runs/ | head -1)
   echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
   
@@ -171,7 +172,7 @@ elif [ "$1" = "EVAL" ]; then
       
       echo $(cat stats.json) $(cat final.json) | jq -s add > payload.json
       
-      cat payload.json
+      #cat payload.json
   #cat stats.json
   # Get Repository statistics
   # sizs xkb
