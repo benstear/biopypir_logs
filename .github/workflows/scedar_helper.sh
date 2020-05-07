@@ -52,8 +52,8 @@ elif [ "$1" = "EVAL" ]; then
   
   #echo $GITHUB_REPOSITORY
   #echo $GITHUB_RUN_ID
-  echo $PACKAGE
-  echo '-----------------'
+  #echo $PACKAGE
+  #echo '-----------------'
   #echo "$2"
   #echo "$3"
   
@@ -111,7 +111,7 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[${k}].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
+   date=$(cat API.json | jq ".jobs["$k"].completed_at"); date_slice=${date:1:10}; echo "DATE: $date_slice"
    
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" \
@@ -166,7 +166,7 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      echo $(cat stats.json) $(cat final.json) | jq -s add > payload.json
+      echo $(cat stats.json) $(cat final.json) | jq -s add > payload_$GITHUB_RUN_ID.json
       
       #cat payload.json
   #cat stats.json
