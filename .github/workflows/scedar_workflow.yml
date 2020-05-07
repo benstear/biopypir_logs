@@ -20,7 +20,11 @@ jobs:
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
+      run: |
+        echo "$GITHUB_CONTEXT" > GITHUB_CONTEXT.json
+        echo " run #: ${{github.run_number}}"
+        echo " sha: ${{github.sha}}"
+    
     #===============================================#
     - name: checkout scedar repo 
       uses: actions/checkout@v2     
@@ -82,6 +86,11 @@ jobs:
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
+    - name: UPLOAD second artifact
+      uses: actions/upload-artifact@v2-preview
+      with:  
+        name: GITHUB_CONTEXT.json
+        path: GITHUB_CONTEXT.json
 
         
   job2:
@@ -141,9 +150,9 @@ jobs:
               git config --global user.name "benstear"
               echo "Sending json log to biopypir_logs/logs"
               git pull https://github.com/benstear/biopypir_logs.git
-              mv payload2.json logs/
-              git add logs/payload2.json
-              git pull -m 'commit ${{github.repository}} workflow log # $GITHUB_RUN_NUMBER'
+              mv payload_${{github.run_id}}.json logs/
+              git add logs/payload_${{github.run_id}}.json
+              git pull -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
               git push
           #mv final.json biopypir_logs #cd biopypir_logs
           # clone, delete files in the clone, and copy (new) files over
