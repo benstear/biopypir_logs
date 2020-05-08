@@ -119,18 +119,19 @@ elif [ "$1" = "EVAL" ]; then
           --arg date "$date_slice"  \
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
-           '{ PYLINT_SCORE  :  $lint_score,  
-              PYTEST_SCORE  :  $coverage_score,
-              CURRENT_DATE   :  $date,
-              PIP           : "True",
-              LICENSE       : "True",
-              UBUNTU       : $linux,
-              MAC          : $mac }' ) > scores.json
+           '{ Pylint_score :  $lint_score,  
+              Pytest_score  :  $coverage_score,
+              Current_date   :  $date,
+              Pip           : "True",
+              License      : "True",
+              Linux       : $linux,
+              Mac        : $mac }' ) > scores.json
                
-  #a=$(ls parallel_runs/ | head -1)
+  a=$(ls parallel_runs/ | head -1)
   #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
-  #cat scores.json
-  #cat parallel_runs/$a/biopypir-*.json
+  cat scores.json
+  echo '----------'
+  cat parallel_runs/$a/biopypir-*.json
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
   #echo '------artifacts name and id--------'
