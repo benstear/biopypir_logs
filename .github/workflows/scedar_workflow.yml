@@ -15,11 +15,11 @@ jobs:
       PACKAGE: scedar #RUN_ID: ${{ github.run_id }}
       
     steps:
-    #- name: Dump GitHub context
-      #env:
-      #  GITHUB_CONTEXT: ${{ toJson(github) }}
-      #run: |
-      #  cat "$GITHUB_CONTEXT" > GITHUB_CONTEXT.json
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT" 
       #  ls
       #  echo " run #: ${{github.run_number}}"
       #  echo " sha: ${{github.sha}}"
