@@ -41,7 +41,7 @@ jobs:
     - name: check license
       id: license_step
       if: startsWith(matrix.os, 'ubuntu')
-      uses: benstear/validate-license-action@master
+      uses: benstear/js_action #uses: benstear/validate-license-action@master
       with:
         args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"  
     - name: get license 
