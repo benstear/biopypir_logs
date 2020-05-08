@@ -13,6 +13,7 @@ jobs:
         os: [macOS-latest, ubuntu-latest] 
     env:       
       PACKAGE: scedar #RUN_ID: ${{ github.run_id }}
+      
     steps:
     #- name: Dump GitHub context
       #env:
@@ -28,9 +29,11 @@ jobs:
       with:
         repository: benstear/${{ env.PACKAGE }}
     #===============================================#
-    - run: |
+    - name:  Get helper script
+      run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
         chmod +x biopypir_utils.sh  
+        echo ${{ github.run_id }}
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
