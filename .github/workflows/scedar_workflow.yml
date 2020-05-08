@@ -44,7 +44,9 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       uses: benstear/validate-license-action@master
       with:
-        args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
+        args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"  
+    - name: get license 
+      run:  echo "${{steps.license_step.outputs.java_output}}"
 
     #===============================================#
     - name: INSTALL dependencies
@@ -100,7 +102,7 @@ jobs:
       env:
         PACKAGE: scedar
       steps:
-        - name: Check-Out Repo 
+        - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
         #===============================================# 
         - name: Download artifact
@@ -114,7 +116,7 @@ jobs:
             chmod +x biopypir_utils.sh
         #===============================================#
         - name: EVALUATE jobs
-          run: ./biopypir_utils.sh "EVAL" "benstear/biopypir_logs" "${{github.run_id}}"
+          run: ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: |
