@@ -54,7 +54,7 @@ elif [ "$1" = "EVAL" ]; then
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
-  echo "raw job count: $job_count"
+  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so - 2
   echo "adjusted jobcount: $j (0 - indexed)"
   
@@ -67,24 +67,20 @@ elif [ "$1" = "EVAL" ]; then
     
      if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
       #&&  [[ ! "${step_status[@]}" =~ "skipped" ]] ; then
-        # Get job name,  ie (3.6, ubuntu-latest) current each parallel job
+        # Get job name,  ie (3.6, ubuntu-latest) of parallel job, split into OS string & py version string
         name=$(cat API.json |  jq ".jobs[$i].name" | cut -d "(" -f2 | cut -d ")" -f1)
-        
-        # Split $name into py version and OS  
-        api_pyvers=$(echo $name | cut -d "," -f1)
-        api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
+        api_pyvers=$(echo $name | cut -d "," -f1); api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
         
         # Add passing python versions to their respective OS array
         if [[ "$api_os"  =~  .*"ubuntu".* ]]; then linux_arr+=("$api_pyvers")
         elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers")
         fi
         
-     fi
-     #exit 1; echo "One or more steps were skipped or failed in job " $(cat API.json | jq ".jobs[$i].name")
+     fi  #exit 1; echo "One or more steps were skipped or failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
-  echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
+  
+  #echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
   pylint_score_ave=0.00; pytest_score_ave=0.00
-
   
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
@@ -98,7 +94,7 @@ elif [ "$1" = "EVAL" ]; then
     
   done
 
-   k="$(($j+1))"  # FIX
+   k="$(($j+1))" 
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")
    
@@ -163,14 +159,8 @@ elif [ "$1" = "EVAL" ]; then
       
       echo $(cat stats.json) $(cat scores.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
-      
-      #cat payload.json
-  #cat stats.json
-  # Get Repository statistics
   # sizs xkb
 fi 
-
-
 
 
 
