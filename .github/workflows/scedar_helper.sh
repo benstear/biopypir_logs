@@ -9,7 +9,7 @@ if [  "$1" = "LINT" ]; then
   echo "::set-output name=pylint-score::$pylintscore"
   echo "::set-env name=env_pylint_score::$pylintscore"
   echo $env_pylint_score
-  printenv $env_pylint_score
+  printenv 
 
 elif [ "$1" = "TEST" ]; then  
 
@@ -45,17 +45,10 @@ elif [ "$1" = "GATHER" ]; then
               PIP           :  "\($pip)"
           }' > biopypir-"$3"-py"$2".json
           
-  echo "biopypir file: \\n" 
-  cat biopypir-"$3"-py"$2".json
+  #echo "biopypir file: \\n" 
+  #cat biopypir-"$3"-py"$2".json
   
 elif [ "$1" = "EVAL" ]; then
-  
-  #echo $GITHUB_REPOSITORY
-  #echo $GITHUB_RUN_ID
-  #echo $PACKAGE
-  #echo '-----------------'
-  #echo "$2"
-  #echo "$3"
   
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
