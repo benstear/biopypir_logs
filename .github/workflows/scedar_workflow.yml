@@ -12,8 +12,7 @@ jobs:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
     env:       
-      PACKAGE: scedar #RUN_ID: ${{ github.run_id }}
-      
+      PACKAGE: scedar
     steps:
     - name: Dump GitHub context
       env:
