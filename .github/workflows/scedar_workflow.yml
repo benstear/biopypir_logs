@@ -40,10 +40,10 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}   
     - name: check license
-      if: startsWith(matrix.os, 'ubuntu')
-      uses: benstear/validate-license-action
-      with:
-        args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
+      #if: startsWith(matrix.os, 'ubuntu')
+      uses: bst/validate-license-action
+      #with:
+      #  args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
   
     #===============================================#
     - name: INSTALL dependencies
