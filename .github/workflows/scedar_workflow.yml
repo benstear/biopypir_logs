@@ -41,7 +41,7 @@ jobs:
         python-version: ${{ matrix.python-version }}   
     - name: check license
       #if: startsWith(matrix.os, 'ubuntu')
-      uses: bst/validate-license-action
+      uses: benstear/validate-license-action@master
       #with:
       #  args: "MIT,ISC,BSD"  #"Apache License 2.0, MIT, ISC"    
   
