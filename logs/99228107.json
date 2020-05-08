@@ -1,0 +1,22 @@
+{
+  "Owner_Repo": "TaylorResearchLab/scedar",
+  "Package": "scedar",
+  "Description": "Single-cell exploratory data analysis for RNA-Seq",
+  "date_created": "2018-03-17T05:22:56Z",
+  "last_commit": "2020-03-16T17:41:47Z",
+  "forks": 8,
+  "watchers": 5,
+  "stars": 20,
+  "contributors": "https://api.github.com/repos/TaylorResearchLab/scedar/contributors",
+  "homepage_url": "",
+  "has_wiki": true,
+  "open_issues": 0,
+  "has_downloads": true,
+  "PYLINT_SCORE": "7.26",
+  "PYTEST_SCORE": "57.00",
+  "CURRENT_DATE": "2020-05-08",
+  "PIP": "True",
+  "LICENSE": "True",
+  "UBUNTU": "3.6 3.7",
+  "MAC": "3.6 3.7"
+}
