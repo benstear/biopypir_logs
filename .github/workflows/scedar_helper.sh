@@ -31,7 +31,7 @@ elif [ "$1" = "GATHER" ]; then
    jq -n  --arg pyversion $2 \
           --arg os $3 \
           --arg pylintscore $4 \
-          --arg pytestscore $5 \ 
+          --arg pytestscore $5 
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
