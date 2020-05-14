@@ -3,13 +3,10 @@
 # This is a script 
 
 if [  "$1" = "LINT" ]; then
-  
   pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
-  echo "::set-env name=env_pylint_score::$pylintscore"
-  echo $env_pylint_score
   printenv 
 
 elif [ "$1" = "TEST" ]; then  
@@ -42,7 +39,8 @@ elif [ "$1" = "GATHER" ]; then
               Pylint_score : "\($pylintscore)",
               Pytest_score :  "\($pytestscore)",
               License_check : "\($license)",
-              PIP           :  "\($pip)"      }' > biopypir-"$3"-py"$2".json
+              PIP           :  "\($pip)"    
+                                          }' > biopypir-"$3"-py"$2".json
   #echo "biopypir file: \\n" 
   #cat biopypir-"$3"-py"$2".json
   
