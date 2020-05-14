@@ -86,7 +86,6 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-        echo "${{steps.linter.outputs.pylint-score}}"
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" \
         "${{steps.local.outputs.pytest_score}}" "True" "True"
