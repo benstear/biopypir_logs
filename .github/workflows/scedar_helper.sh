@@ -3,7 +3,7 @@
 # This is a script 
 
 if [  "$1" = "LINT" ]; then
-  pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt
+  pylint $PACKAGE --exit-zero --reports=y --ignore biopypir_utils.sh >  pylint-report.txt
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
@@ -81,11 +81,11 @@ elif [ "$1" = "EVAL" ]; then
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
-    echo $pylint_score; #echo "pylint_score length = ${#pylint_score}"
+    #echo $pylint_score; #echo "pylint_score length = ${#pylint_score}"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
-    echo $pytest_score; #echo "pytest_score length = ${#pytest_score}"
+    #echo $pytest_score; #echo "pytest_score length = ${#pytest_score}"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
     
   done
@@ -94,7 +94,7 @@ elif [ "$1" = "EVAL" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")
    
-   echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
+   #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
    date=$(cat API.json | jq ".jobs[0].completed_at")
    date_slice=${date:1:10}
@@ -106,7 +106,8 @@ elif [ "$1" = "EVAL" ]; then
           --arg date "$date_slice"  \
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
-          -- arg github_event "$GITHUB_EVENT_NAME" \
+          --arg github_event "$GITHUB_EVENT_NAME" \
+          --arg run_num  "$GITHUB_RUN_NUMBER"  \
            '{ Pylint_score :  $lint_score,  
               Pytest_score  :  $coverage_score,
               Current_date   :  $date,
@@ -114,7 +115,8 @@ elif [ "$1" = "EVAL" ]; then
               License      : "True",
               Linux       : $linux,
               Mac        : $mac,
-              Github_event_name: $github_event }'  > scores.json
+              Github_event_name: $github_event,
+              Github_run_number:  $run_num}'  > scores.json
                
   a=$(ls parallel_runs/ | head -1)
   #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
@@ -135,12 +137,12 @@ elif [ "$1" = "EVAL" ]; then
   #echo "done"
    # ================= GET BADGE STATUS ======================== #
   
-   #LICENSE=$(cat final.json | jq ".License_check")
-   #TESTS=$(cat final.json | jq ".Pytest_status")
-   #BUILD=$(cat final.json | jq ".Build_status")
-   #COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
-   #COVERAGE_SCORE="44"
-   #badge='NONE'
+   LICENSE=$(cat final.json | jq ".License_check")
+   TESTS=$(cat final.json | jq ".Pytest_status")
+   BUILD=$(cat final.json | jq ".Build_status")
+   COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
+   COVERAGE_SCORE="44"
+   badge='NONE'
    
   #if [[ "$LICENSE" ]] && [[ "$TESTS" ]] && [[ "$BUILD" ]] && \
   #   [[ "$((COVERAGE_SCORE))" -gt 40 ]] ; then badge='BRONZE' fi
