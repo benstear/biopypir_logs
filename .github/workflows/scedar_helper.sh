@@ -32,9 +32,9 @@ elif [ "$1" = "GATHER" ]; then
    
    jq -n  --arg pyversion $2 --arg os $3 \
          --arg pylintscore $4 \
-         --arg pytestscore $5 \
+         --arg pytestscore $5 \ 
          --arg license $6 \
-         --arg pip $7 \
+         --arg pip $6 \
         '{    
               Python_version : "\($pyversion)", 
               OS            : "\($os)",
@@ -54,8 +54,8 @@ elif [ "$1" = "EVAL" ]; then
 
   job_count=$(cat API.json |  jq ".total_count")
   #echo "raw job count: $job_count"
-  j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so - 2
-  echo "adjusted jobcount: $j (0 - indexed)"
+  j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
+  echo "adjusted jobcount: $j (0 indexed)"
   
   linux_array=()
   mac_array=()
@@ -161,51 +161,4 @@ elif [ "$1" = "EVAL" ]; then
   # sizs xkb
 fi 
 
-
-
-
-
-#### FROM  WORKFLOW #####
-
-
-       #===============================================#
-        #- name: Commit 
-        #  env:
-        #    API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #  run: |
-        #      git config --global user.email "bjs385@drexel.edu"    
-        #      git config --global user.name "benstear"
-        #      echo "Sending json log to biopypir_logs/logs"
-        #      git pull https://github.com/benstear/biopypir_logs.git
-        #      mv payload_${{github.run_id}}.json logs/
-        #      git add logs/payload_${{github.run_id}}.json
-        #      git push master # commit -m 'commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
-          
-          #rm scores.json stats.json final.json
-          #mv final.json biopypir_logs #cd biopypir_logs
-          # clone, delete files in the clone, and copy (new) files over
-          # this handles file deletions, additions, and changes seamlessly
-          #git clone --depth 1 https://$API_TOKEN_GITHUB@github.com/$GITHUB_USERNAME/$NAME.git $CLONE_DIR &> /dev/null
-          #cd $CLONE_DIR
-          #find . | grep -v ".git" | grep -v "^\.*$" | xargs rm -rf # delete all files (to handle deletions in monorepo)
-          #cp -r $BASE/$folder/. .
-
-            #mkdir temp_git
-            #cd temp_git
-            #git init   #  add .git folder and initialize 
-            #git remote add origin  https://github.com/benstear/biopypir_logs.git # connect to a repo
-            #git pull origin master # pull repo to local 
-        #===============================================#
-        #- name: Global webhook
-        #  if: always() 
-        #  uses: muinmomin/webhook-action@v1.0.0
-        #  with:
-        #    url: ${{ secrets.WEBHOOK_URL }}
-        #    data: final.json   
-        #- name: Webhook
-        #  uses: joelwmale/webhook-action@master
-        #  env:
-        #    WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        #    data: final.json
 
