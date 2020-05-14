@@ -31,7 +31,7 @@ elif [ "$1" = "GATHER" ]; then
    jq -n  --arg pyversion $2 \
           --arg os $3 \
           --arg pylintscore $4 \
-          --arg pytestscore $5 
+          --arg pytestscore $5 \
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
@@ -97,7 +97,7 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[-1].completed_at")
+   date=$(cat API.json | jq ".jobs[0].completed_at")
    date_slice=${date:1:10}
    echo "DATE: $date"
    
@@ -107,7 +107,7 @@ elif [ "$1" = "EVAL" ]; then
           --arg date "$date_slice"  \
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
-          -- arg github_event "$GITHUB_EVENT_NAME"
+          -- arg github_event "$GITHUB_EVENT_NAME" \
            '{ Pylint_score :  $lint_score,  
               Pytest_score  :  $coverage_score,
               Current_date   :  $date,
