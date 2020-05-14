@@ -14,16 +14,27 @@ jobs:
     env:       
       PACKAGE: scedar
     steps:
+    - name: Create cache file
+      run: mkdir check-SHA; echo ${{ github.sha }} > github-sha.txt; cat github-sha.txt
+    #===============================================#
+    - name: Check SHA
+      id: check_sha
+      uses: actions/cache@v1
+      with:
+        path: check-SHA
+        key: check-SHA-${{ github.sha }}
+    #===============================================#
+    - name: Some subsequent steps
+      if: steps.check_sha.outputs.cache-hit != 'true'
+      run: echo "Cache hit not found...Execute the subsequent steps" #; exit 1 # no way to exit nicely?
+    #===============================================#
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         echo "$GITHUB_CONTEXT" 
-      #  ls
-      #  echo " run #: ${{github.run_number}}"
-      #  echo " sha: ${{github.sha}}"
     #===============================================#
-    - name: checkout scedar repo 
+    - name: checkout ${{env.PACKAGE}} repo 
       uses: actions/checkout@v2     
       with:
         repository: benstear/${{ env.PACKAGE }}
@@ -44,8 +55,6 @@ jobs:
       uses: datreeio/validate-license-action@v1.0.0 
       with:
         args: "MIT,ISC,BSD" 
-    #- name: get license 
-    #  run:  echo "${{steps.license_step.outputs.license}}"
     #===============================================#
     - name: INSTALL dependencies
       run: |
@@ -77,8 +86,7 @@ jobs:
     - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
       continue-on-error: true
       run: |
-       ./biopypir_utils.sh "GATHER"  \
-        "${{matrix.python-version}}" "${{matrix.os}}" \
+       ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" "${{steps.local.outputs.pytest_score}}" \
         "True" "True"
    #===============================================#
@@ -87,11 +95,7 @@ jobs:
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
-    #- name: UPLOAD second artifact
-    #  uses: actions/upload-artifact@v2-preview
-    #  with:  
-    #    name: GITHUB_CONTEXT.json
-    #    path: GITHUB_CONTEXT.json
+      
   job2:
       needs: [run_tests] 
       if: always()
@@ -121,6 +125,7 @@ jobs:
               biopypir-ubuntu-latest-py3.7
               biopypir-macOS-latest-py3.6
               biopypir-macOS-latest-py3.7
+              
         - name: STATS
           run: ./biopypir_utils.sh "STATS"
           
@@ -129,8 +134,8 @@ jobs:
         - name: Add & Commit
           uses: EndBug/add-and-commit@v4.1.0
           with:
-            add: logs/${{github.run_id}}.json
-            message: 'Commit ${{env.PACKAGE}} workflow log # ${{github.run_id}}'
+            add: logs/${{github.run_id}}_*.json
+            message: 'Commit ${{env.PACKAGE}} workflow log # ${{github.run_number}}'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
  
