@@ -12,7 +12,7 @@ jobs:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] 
     env:       
-      PACKAGE: scedar
+      PACKAGE: manubot
     steps:
       
     - name: Create cache file
