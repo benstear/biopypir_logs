@@ -136,17 +136,17 @@ elif [ "$1" = "EVAL" ]; then
   #echo "done"
    # ================= GET BADGE STATUS ======================== #
   
-   LICENSE=$(cat final.json | jq ".License_check")
-   TESTS=$(cat final.json | jq ".Pytest_status")
-   BUILD=$(cat final.json | jq ".Build_status")
-   COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
-   COVERAGE_SCORE="44"
-   badge='NONE'
+   #LICENSE=$(cat final.json | jq ".License_check")
+   #TESTS=$(cat final.json | jq ".Pytest_status")
+   #BUILD=$(cat final.json | jq ".Build_status")
+   #COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
+   #COVERAGE_SCORE="44"
+   #badge='NONE'
    
-  if [[ "$LICENSE" ]] && [[ "$TESTS" ]] && [[ "$BUILD" ]] && \
-     [[ "$((COVERAGE_SCORE))" -gt 40 ]] ; then badge='BRONZE' fi
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+  #if [[ "$LICENSE" ]] && [[ "$TESTS" ]] && [[ "$BUILD" ]] && \
+  #   [[ "$((COVERAGE_SCORE))" -gt 40 ]] ; then badge='BRONZE' fi
+  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
+  #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
   
