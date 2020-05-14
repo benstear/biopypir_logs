@@ -32,15 +32,16 @@ elif [ "$1" = "GATHER" ]; then
           --arg os $3 \
           --arg pylintscore $4 \
           --arg pytestscore $5 \ 
-          --arg license $6 \
-          --arg pip $7 \
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
-              Pytest_score :  "\($pytestscore)",
-              License_check : "\($license)",
-              PIP           :  "\($pip)"    
-                                          }' > biopypir-"$3"-py"$2".json
+              Pytest_score :  "\($pytestscore)"
+                         }' > biopypir-"$3"-py"$2".json
+      # --arg license $6 \
+      # --arg pip $7 \
+      #    License_check : "\($license)",
+      #    PIP           :  "\($pip)"    
+                                         
   #echo "biopypir file: \\n" 
   #cat biopypir-"$3"-py"$2".json
   
