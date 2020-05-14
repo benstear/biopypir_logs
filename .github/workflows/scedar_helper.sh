@@ -35,8 +35,7 @@ elif [ "$1" = "GATHER" ]; then
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
-              Pytest_score :  "\($pytestscore)"
-                         }' > biopypir-"$3"-py"$2".json
+              Pytest_score :  "\($pytestscore)" }' > biopypir-"$3"-py"$2".json
       # --arg license $6 \
       # --arg pip $7 \
       #    License_check : "\($license)",
