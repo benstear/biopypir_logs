@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# This is a script 
 
 if [  "$1" = "LINT" ]; then
   
@@ -30,20 +31,18 @@ elif [ "$1" = "BUILD" ]; then
   
 elif [ "$1" = "GATHER" ]; then
    
-   jq -n  --arg pyversion $2 --arg os $3 \
-         --arg pylintscore $4 \
-         --arg pytestscore $5 \ 
-         --arg license $6 \
-         --arg pip $6 \
-        '{    
-              Python_version : "\($pyversion)", 
+   jq -n  --arg pyversion $2 \
+          --arg os $3 \
+          --arg pylintscore $4 \
+          --arg pytestscore $5 \ 
+          --arg license $6 \
+          --arg pip $7 \
+        '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
               Pytest_score :  "\($pytestscore)",
               License_check : "\($license)",
-              PIP           :  "\($pip)"
-          }' > biopypir-"$3"-py"$2".json
-          
+              PIP           :  "\($pip)"      }' > biopypir-"$3"-py"$2".json
   #echo "biopypir file: \\n" 
   #cat biopypir-"$3"-py"$2".json
   
@@ -75,7 +74,7 @@ elif [ "$1" = "EVAL" ]; then
         elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers")
         fi
         
-     fi  #exit 1; echo "One or more steps were skipped or failed in job " $(cat API.json | jq ".jobs[$i].name")
+     fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
   #echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
@@ -99,7 +98,8 @@ elif [ "$1" = "EVAL" ]; then
    
    echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo "DATE: $date"
+   date=$(cat API.json | jq ".jobs[-1].completed_at"); date_slice=${date:1:10}; echo "DATE: $date"
+   echo 'full date = $date'
    
    echo '-----------past finals------------------'
    (jq -n --arg lint_score "$pylint_score_final" \
@@ -113,7 +113,8 @@ elif [ "$1" = "EVAL" ]; then
               Pip           : "True",
               License      : "True",
               Linux       : $linux,
-              Mac        : $mac }' ) > scores.json
+              Mac        : $mac,
+              Github_event_name: $GITHUB_EVENT_NAME}' ) > scores.json
                
   a=$(ls parallel_runs/ | head -1)
   #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
@@ -149,7 +150,7 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-  curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \
+  curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \   # deal with owner/repo hardcode
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
