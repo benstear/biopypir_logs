@@ -13,6 +13,7 @@ jobs:
         os: [macOS-latest, ubuntu-latest] 
     env:       
       PACKAGE: manubot
+      tests_dir: ${{env.PACKAGE}}/tests
     steps:
       
     - name: Create cache file
@@ -46,9 +47,6 @@ jobs:
         "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
         chmod +x biopypir_utils.sh  
      # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
-
-        
-
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
