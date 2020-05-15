@@ -130,21 +130,28 @@ elif [ "$1" = "EVAL" ]; then
   elif [ "$1" = "STATS" ]; then
 
   
-  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" > repo.json
-  
-    owner_repo=$(cat repo.json | jq ".full_name")
-    package_name=$(cat repo.json | jq ".name")
-    description=$(cat repo.json | jq ".description")
-    created_at=$(cat repo.json | jq ".created_at")
-    last_commit=$(cat repo.json | jq ".pushed_at")  # ? 
-    forks=$(cat repo.json | jq ".forks")  
-    watchers=$(cat repo.json | jq ".subscribers_count")
-    stars=$(cat repo.json | jq ".stargazers_count")
-    homepage_url=$(cat repo.json | jq ".homepage")
-    has_wiki=$(cat repo.json | jq ".has_wiki")
-    open_issues=$(cat repo.json | jq ".open_issues_count")
-    has_downloads$(cat repo.json | jq ".has_downloads")
-    contributors=$(cat repo.json | jq ".contributors_url")      
+  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
+      Package: .name, Description: .description,
+      date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+      .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
+      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
+      has_downloads: .has_downloads}" > stats.json
+
+    #owner_repo=$(cat repo.json | jq ".full_name")
+    #package_name=$(cat repo.json | jq ".name")
+    #description=$(cat repo.json | jq ".description")
+    #created_at=$(cat repo.json | jq ".created_at")
+    #last_commit=$(cat repo.json | jq ".pushed_at")  # ? 
+    #forks=$(cat repo.json | jq ".forks")  
+    #watchers=$(cat repo.json | jq ".subscribers_count")
+    #stars=$(cat repo.json | jq ".stargazers_count")
+    #homepage_url=$(cat repo.json | jq ".homepage")
+    #has_wiki=$(cat repo.json | jq ".has_wiki")
+    #open_issues=$(cat repo.json | jq ".open_issues_count")
+    #has_downloads$(cat repo.json | jq ".has_downloads")
+    #contributors=$(cat repo.json | jq ".contributors_url")      
+    
+    #jq -n --arg owner_repo $owner_repo --arg package_name   
       
       #"{Owner_Repo: .full_name, Package: .name, Description: .description,
       #date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -152,8 +159,8 @@ elif [ "$1" = "EVAL" ]; then
       #homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       #has_downloads: .has_downloads}" > stats.json
       
-      #echo $(cat stats.json) $(cat scores.json) | jq -s add > $GITHUB_RUN_ID.json
-      #mv $GITHUB_RUN_ID.json logs/
+      echo $(cat stats.json) $(cat scores.json) | jq -s add > $GITHUB_RUN_ID.json
+      mv $GITHUB_RUN_ID.json logs/
       
   # sizs xkb
 fi 
