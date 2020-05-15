@@ -62,8 +62,8 @@ elif [ "$1" = "EVAL" ]; then
      step_status=$(cat API.json | jq ".jobs[$i].steps[].conclusion")
     
      if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
-      #&&  [[ ! "${step_status[@]}" =~ "skipped" ]] ; then
-        # Get job name,  ie (3.6, ubuntu-latest) of parallel job, split into OS string & py version string
+       
+       # Get job name,  ie (3.6, ubuntu-latest) of parallel job, split into OS string & py version string
         name=$(cat API.json |  jq ".jobs[$i].name" | cut -d "(" -f2 | cut -d ")" -f1)
         api_pyvers=$(echo $name | cut -d "," -f1); api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
         
@@ -71,10 +71,8 @@ elif [ "$1" = "EVAL" ]; then
         if [[ "$api_os"  =~  .*"ubuntu".* ]]; then linux_arr+=("$api_pyvers")
         elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers")
         fi
-        
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
-  
   #echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
@@ -95,50 +93,48 @@ elif [ "$1" = "EVAL" ]; then
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at")
-   date_slice=${date:1:10}
-   echo "DATE: $date"
+   date=$(cat API.json | jq ".jobs[0].completed_at");date_slice=${date:1:10}
    
    echo '-----------past finals------------------'
-   jq -n --arg lint_score "$pylint_score_final" \
-          --arg coverage_score "$pytest_score_final" \
-          --arg date "$date_slice"  \
+   jq -n --arg date "$date_slice"  \
+         --arg lint_score "$pylint_score_final" \
+          --arg coverage_score "$pytest_score_final" \ 
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
           --arg github_event "$GITHUB_EVENT_NAME" \
-           '{ Pylint_score  :  $lint_score,  
+           '{ Date          :  $date,
+              Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
-              Date          :  $date,
               Pip           : "True",
               License       : "True",
+              Build         : "True",
               Linux         : $linux,
               Mac           : $mac,
               Github_event_name: $github_event }'  > scores.json
                
   a=$(ls parallel_runs/ | head -1)
-  #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
-  cat scores.json
-  echo '----------'
-  cat parallel_runs/$a/biopypir-*.json
+  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
+  #cat scores.json
+  #echo '----------'
+  #cat parallel_runs/$a/biopypir-*.json
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
    # ================= GET BADGE STATUS ======================== #
-   LICENSE=$(cat final.json | jq ".License_check")
-   TESTS=$(cat final.json | jq ".Pytest_status")
-   BUILD=$(cat final.json | jq ".Build_status")
+   LICENSE=$(cat final.json | jq ".License")
+   BUILD=$(cat final.json | jq ".Build")
+   LINT_SCORE=$(cat fina;.json | jq ".Pylint_score")
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
-   COVERAGE_SCORE="44"
    badge='NONE'
    
-  #if [[ "$LICENSE" ]] && [[ "$TESTS" ]] && [[ "$BUILD" ]] && \
+  #if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && \
   #   [[ "$((COVERAGE_SCORE))" -gt 40 ]] ; then badge='BRONZE' fi
   #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
-  echo $USER
+  echo $REPO_OWNER
   echo $PACKAGE
-  curl https://api.github.com/repos/"$USER"/"$PACKAGE" | jq \   
+  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq \   
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
