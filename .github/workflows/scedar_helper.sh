@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is a script 
+# This script was written to help the biopypir github actions workflow   
 
 if [  "$1" = "LINT" ]; then
   pylint $PACKAGE --exit-zero --reports=y --ignore biopypir_utils.sh >  pylint-report.txt
@@ -136,8 +136,9 @@ elif [ "$1" = "EVAL" ]; then
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
-  
-  curl https://api.github.com/repos/$USER/$PACKAGE | jq \   # deal with owner/repo hardcode
+  echo $USER
+  echo $PACKAGE
+  curl https://api.github.com/repos/"$USER"/"$PACKAGE" | jq \   
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
