@@ -12,7 +12,7 @@ if [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
 
   echo "::set-output name=pytest_score::False"
-  pytest_cov=$(pytest "tests/" -ra --mpl-generate-path=tests/baseline_images \
+  pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
   --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
   --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
   awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
