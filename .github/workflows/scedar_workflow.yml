@@ -14,6 +14,7 @@ jobs:
     env:       
       PACKAGE: manubot
       tests_dir: manubot/tests
+      USER: cgreene
     steps:
       
     - name: Create cache file
@@ -113,11 +114,13 @@ jobs:
           uses: actions/download-artifact@v2-preview 
           with: # version2 automatically downloads all artifacts in path
             path: parallel_runs/
-        - name: list artifacts
+        
+        - name: cURL helper script
           run: |
             pwd; ls -R;
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
             chmod +x biopypir_utils.sh
+            
         #===============================================#
         - name: EVALUATE jobs
           run: ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
@@ -137,7 +140,7 @@ jobs:
           uses: EndBug/add-and-commit@v4.1.0
           with:
             add: logs/${{github.run_id}}.json
-            message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}'
+            message: 'Commit ${{env.PACKAGE}} workflow, Biopypir run # ${{github.run_number}}'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
  
