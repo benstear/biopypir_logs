@@ -96,12 +96,8 @@ elif [ "$1" = "EVAL" ]; then
    date=$(cat API.json | jq ".jobs[0].completed_at");date_slice=${date:1:10}
    
    echo '-----------past finals------------------'
-   jq -n --arg date "$date_slice"  \
-         --arg lint_score "$pylint_score_final" \
-          --arg coverage_score "$pytest_score_final" \ 
-          --arg linux "${linux_arr[*]}" \
-          --arg mac "${mac_arr[*]}" \
-          --arg github_event "$GITHUB_EVENT_NAME" \
+   jq -n --arg date "$date_slice" --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" 
+         --arg linux "${linux_arr[*]}" --arg mac "${mac_arr[*]}" --arg github_event "$GITHUB_EVENT_NAME" \
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -122,7 +118,7 @@ elif [ "$1" = "EVAL" ]; then
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat final.json | jq ".License")
    BUILD=$(cat final.json | jq ".Build")
-   LINT_SCORE=$(cat fina;.json | jq ".Pylint_score")
+   LINT_SCORE=$(cat final.json | jq ".Pylint_score")
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
@@ -132,8 +128,9 @@ elif [ "$1" = "EVAL" ]; then
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
-  echo $REPO_OWNER
-  echo $PACKAGE
+  echo "$REPO_OWNER"
+  echo "$PACKAGE"
+  
   curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq \   
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
