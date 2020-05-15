@@ -128,10 +128,9 @@ elif [ "$1" = "EVAL" ]; then
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
-  echo "$REPO_OWNER"
-  echo "$PACKAGE"
+
   
-  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq \   
+  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq | \   
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
