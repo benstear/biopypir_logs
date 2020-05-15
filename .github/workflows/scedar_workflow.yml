@@ -117,9 +117,10 @@ jobs:
         - name: cURL helper script
           run: |
             pwd; ls -R;
-            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
-            chmod +x biopypir_utils.sh
-            
+            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
+            chmod +x biopypir_utils.sh 
+        # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+           
         #===============================================#
         - name: EVALUATE jobs
           run: ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
