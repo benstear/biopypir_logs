@@ -1,5 +1,4 @@
 #### FROM  WORKFLOW #####
-
        #===============================================#
         #- name: Commit 
         #  env:
@@ -40,4 +39,16 @@
         #  env:
         #    WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         #    data: final.json
+        
+#### FROM HELPER SCRIPT #################
 
+  #echo '------artifacts name and id--------'
+  #curl -X GET -s "https://api.github.com/repos/benstear/scedar/actions/runs/90141152/artifacts" | jq ".id" > art.json
+  #cat art.json
+  #echo '-----artifact IDs------'
+  #URL="https://api.github.com/repos/benstear/scedar/actions/artifacts"
+  #echo $(curl -X GET $URL |jq '.artifacts[].id') > art_ids.txt
+  #cat art_ids.txt
+  #echo '----delete artifacts-----'
+  #curl -X DELETE -u "admin:$secrets.GITHUB_TOKEN" "https://api.github.com/repos/benstear/scedar/actions/artifacts/*"
+  #echo "done"
