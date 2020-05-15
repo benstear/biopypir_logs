@@ -13,7 +13,7 @@ jobs:
         os: [macOS-latest, ubuntu-latest] 
     env:       
       PACKAGE: manubot
-      tests_dir: ${{env.PACKAGE}}/tests
+      tests_dir: manubot/tests
     steps:
       
     - name: Create cache file
