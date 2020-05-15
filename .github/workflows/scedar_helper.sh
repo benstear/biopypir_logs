@@ -92,8 +92,7 @@ elif [ "$1" = "EVAL" ]; then
 
    k="$(($j+1))" 
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
-   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")
-   
+   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
    date=$(cat API.json | jq ".jobs[0].completed_at")
@@ -107,16 +106,14 @@ elif [ "$1" = "EVAL" ]; then
           --arg linux "${linux_arr[*]}" \
           --arg mac "${mac_arr[*]}" \
           --arg github_event "$GITHUB_EVENT_NAME" \
-          --arg run_num  "$GITHUB_RUN_NUMBER"  \
-           '{ Pylint_score :  $lint_score,  
+           '{ Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
-              Current_date   :  $date,
+              Date          :  $date,
               Pip           : "True",
-              License      : "True",
-              Linux       : $linux,
-              Mac        : $mac,
-              Github_event_name: $github_event,
-              Github_run_number:  $run_num}'  > scores.json
+              License       : "True",
+              Linux         : $linux,
+              Mac           : $mac,
+              Github_event_name: $github_event }'  > scores.json
                
   a=$(ls parallel_runs/ | head -1)
   #echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
@@ -125,18 +122,7 @@ elif [ "$1" = "EVAL" ]; then
   cat parallel_runs/$a/biopypir-*.json
   #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
 
-  #echo '------artifacts name and id--------'
-  #curl -X GET -s "https://api.github.com/repos/benstear/scedar/actions/runs/90141152/artifacts" | jq ".id" > art.json
-  #cat art.json
-  #echo '-----artifact IDs------'
-  #URL="https://api.github.com/repos/benstear/scedar/actions/artifacts"
-  #echo $(curl -X GET $URL |jq '.artifacts[].id') > art_ids.txt
-  #cat art_ids.txt
-  #echo '----delete artifacts-----'
-  #curl -X DELETE -u "admin:$secrets.GITHUB_TOKEN" "https://api.github.com/repos/benstear/scedar/actions/artifacts/*"
-  #echo "done"
    # ================= GET BADGE STATUS ======================== #
-  
    LICENSE=$(cat final.json | jq ".License_check")
    TESTS=$(cat final.json | jq ".Pytest_status")
    BUILD=$(cat final.json | jq ".Build_status")
@@ -151,7 +137,7 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-  curl https://api.github.com/repos/TaylorResearchLab/scedar | jq \   # deal with owner/repo hardcode
+  curl https://api.github.com/repos/$USER/$PACKAGE | jq \   # deal with owner/repo hardcode
       "{Owner_Repo: .full_name, Package: .name, Description: .description,
       date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
