@@ -59,9 +59,10 @@ elif [ "$1" = "EVAL" ]; then
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
   echo "adjusted jobcount: $j (0 indexed)"
   
-  linux_array=()
-  mac_array=()
-
+  linux_array=(); linux_vs=()
+  mac_array=();  mac_vs=()
+  windows_array=(); windows_vs=()
+  
   for ((i=0;i<=$j;i++)); do 
      job_status=$(cat API.json | jq ".jobs[$i].conclusion")
      step_status=$(cat API.json | jq ".jobs[$i].steps[].conclusion")
@@ -70,14 +71,17 @@ elif [ "$1" = "EVAL" ]; then
        
        # Get job name,  ie (3.6, ubuntu-latest) of parallel job, split into OS string & py version string
         name=$(cat API.json |  jq ".jobs[$i].name" | cut -d "(" -f2 | cut -d ")" -f1)
-        api_pyvers=$(echo $name | cut -d "," -f1); api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
+        api_pyvers=$(echo $name | cut -d "," -f1); 
+        api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
         
         # Add passing python versions to their respective OS array
-        if [[ "$api_os"  =~  .*"ubuntu".* ]]; then linux_arr+=("$api_pyvers")
-        elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers")
+        if [[ "$api_os"  =~  .*"ubuntu".* ]]; then linux_arr+=("$api_pyvers"); linux_vs+=("$api_os")
+        elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers"); mac_vs+=("$api_os")
+        elif [[ "$api_os"  =~  .*"windows".* ]]; then windows_arr+=("$api_pyvers"); windows_vs+=("$api_os")
         fi
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
+  
   #echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
@@ -101,8 +105,13 @@ elif [ "$1" = "EVAL" ]; then
    date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}
    
    echo '-----------past finals------------------'
-   jq -n --arg date "$date" --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}" --arg mac "${mac_arr[*]}" --arg github_event "$GITHUB_EVENT_NAME" \
+   jq -n --arg date "$date" \
+         --arg lint_score "$pylint_score_final" \
+         --arg coverage_score "$pytest_score_final" \
+         --arg linux "${linux_arr[*]}" --arg linux_v "${linux_vs[*]}" \
+         --arg mac "${mac_arr[*]}" --arg mac_v "${mac_vs[*]}" \
+         --arg windows "${windows_arr[*]}" --arg windows_v "${windows_vs[*]}" \
+         --arg github_event "$GITHUB_EVENT_NAME" \
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -111,14 +120,14 @@ elif [ "$1" = "EVAL" ]; then
               Build         : "True",
               Linux         : $linux,
               Mac           : $mac,
-              Github_event_name: $github_event }'  > scores.json
+              Windows       : $windows,
+              Linux_versions: $linux_v,
+              Mac_versions: $mac_v,
+              Windows_versions: $windows_v,
+              Github_event_name: $github_event }'  > scores_and_matrix.json
                
   a=$(ls parallel_runs/ | head -1)
-  echo $(cat scores.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
-  #cat scores.json
-  #echo '----------'
-  #cat parallel_runs/$a/biopypir-*.json
-  #cat final.json | jq 'del(.OS, .Python_version)'  > final.json
+  echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add | jq 'del(.OS, .Python_version)' > final.json
 
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat final.json | jq ".License")
