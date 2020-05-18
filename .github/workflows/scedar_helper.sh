@@ -93,10 +93,10 @@ elif [ "$1" = "EVAL" ]; then
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at");date_slice=${date:1:10}
+   date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}
    
    echo '-----------past finals------------------'
-   jq -n --arg date "$date_slice" --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
+   jq -n --arg date "$date" --arg lint_score "$pylint_score_final" --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg mac "${mac_arr[*]}" --arg github_event "$GITHUB_EVENT_NAME" \
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
