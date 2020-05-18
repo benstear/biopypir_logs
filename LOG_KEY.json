@@ -1,0 +1,26 @@
+{
+  "Owner_Repo": Owner and repo/package, (string), ex: "TaylorResearchLab/scedar"
+  "Package": Name of repo/package, (string), ex: "scedar"
+  "Description": Description of repo/package, (string), ex: "Single-cell exploratory data analysis for RNA-Seq"
+  "date_created": Date repo was created in ISO-8601 format, (string), ex:  "2018-03-02T14:33:49Z",
+  "last_commit": Date of last commit to repo in ISO-8601 format, (string) 
+  "forks": Number of forks repo has, (int)
+  "watchers": Number of github users watching repo, (int)
+  "stars": Number of stars repo has, (int)
+  "contributors": github API url for repo contributors, (string)
+  "homepage_url": "https://manubot.org",
+  "has_wiki": true,
+  "open_issues": 0,
+  "has_downloads": whether or not the package has any downloads, bool
+  "Date": date of the biopypir workflow run in ISO format, string
+  "Pylint_score": "8.10",
+  "Pytest_score": "15.00",
+  "Pip": "True",
+  "License": "True",
+  "Build": "True",
+  "Linux": Python versions that successfully passed all biopypir tests on a LINUX OS, array, ex: ["3.6" "3.7"] 
+  
+  get ubuntu
+  "Mac": Python versions that successfully passed all biopypir tests on a  MAC OS, array, ex.["3.6" "3.7"]
+  "Github_event_name": Event that triggered the biopypir workflow to run, should always be "scheduled", string
+}
