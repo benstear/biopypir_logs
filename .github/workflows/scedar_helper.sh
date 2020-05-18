@@ -3,6 +3,9 @@
 # This script was written to help the biopypir github actions workflow   
 
 if [  "$1" = "LINT" ]; then
+
+  #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]];
+  
   pylint $PACKAGE --exit-zero --reports=y --ignore biopypir_utils.sh >  pylint-report.txt
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
@@ -10,6 +13,8 @@ if [  "$1" = "LINT" ]; then
   printenv 
 
 elif [ "$1" = "TEST" ]; then  
+
+  #if test_suite = pytest:
 
   echo "::set-output name=pytest_score::False"
   pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
