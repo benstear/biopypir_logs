@@ -137,14 +137,16 @@ elif [ "$1" = "EVAL" ]; then
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
+   echo $COVERAGE
+   
   # switch order, if any passed, test_pass: TRUE, put in  failed os/vers run info?
   
-  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ "$((COVERAGE_SCORE))" -gt 40 ]]; 
-  then badge='BRONZE' 
-  fi
+  #if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ "$((COVERAGE_SCORE))" -gt 40 ]]; 
+  #then badge='BRONZE' 
+  #fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
+  #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   
   elif [ "$1" = "STATS" ]; then
 
