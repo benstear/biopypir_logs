@@ -8,9 +8,9 @@
   "watchers": Number of github users watching repo, (int)
   "stars": Number of stars repo has, (int)
   "contributors": github API url for repo contributors, (string)
-  "homepage_url": "https://manubot.org",
-  "has_wiki": true,
-  "open_issues": 0,
+  "homepage_url": url for repos homepage (string)
+  "has_wiki": if the repo has a wiki page (bool)
+  "open_issues": Number of open issues the repo has (int) 
   "has_downloads": whether or not the package has any downloads, bool
   "Date": date of the biopypir workflow run in ISO format, string
   "Pylint_score": "8.10",
@@ -18,9 +18,8 @@
   "Pip": "True",
   "License": "True",
   "Build": "True",
-  "Linux": Python versions that successfully passed all biopypir tests on a LINUX OS, array, ex: ["3.6" "3.7"] 
-  
-  get ubuntu
-  "Mac": Python versions that successfully passed all biopypir tests on a  MAC OS, array, ex.["3.6" "3.7"]
+  "Linux": Python versions that successfully passed all biopypir tests on a LINUX OS, (array), ex: ["3.6" "3.7"] 
+  "Mac": Python versions that successfully passed all biopypir tests on a  MAC OS, (array)
+  "Windows": Python versions that successfully passed all biopypir tests on a  windows OS, (array)
   "Github_event_name": Event that triggered the biopypir workflow to run, should always be "scheduled", string
 }
