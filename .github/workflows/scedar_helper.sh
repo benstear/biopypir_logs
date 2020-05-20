@@ -103,6 +103,7 @@ elif [ "$1" = "EVAL" ]; then
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
    date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}
+   echo $date
    
    jq -n --arg date "$date" \
          --arg lint_score "$pylint_score_final" \
@@ -137,11 +138,13 @@ elif [ "$1" = "EVAL" ]; then
    badge='NONE'
    
    echo $COVERAGE_SCORE
+   echo ${COVERAGE_SCORE:1:2}
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ $(COVERAGE_SCORE) -gt 40 ]]; then 
+  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ "$COVERAGE_SCORE" -gt 40 ]]; then 
     badge='BRONZE' 
+    echo $badge
   fi
   
   #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
@@ -162,5 +165,3 @@ elif [ "$1" = "EVAL" ]; then
       
   # sizs xkb
 fi 
-
-
