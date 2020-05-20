@@ -138,7 +138,8 @@ elif [ "$1" = "EVAL" ]; then
    badge='NONE'
    
    echo $COVERAGE_SCORE
-   echo ${COVERAGE_SCORE:1:2}
+   COVERAGE_SCORE=${COVERAGE_SCORE:1:2}
+   echo $COVERAGE_SCORE
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
