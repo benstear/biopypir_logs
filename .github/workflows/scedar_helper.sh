@@ -57,7 +57,7 @@ elif [ "$1" = "EVAL" ]; then
   job_count=$(cat API.json |  jq ".total_count")
   #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
-  echo "adjusted jobcount: $j (0 indexed)"
+  #echo "adjusted jobcount: $j (0 indexed)"
   
   linux_array=(); linux_vs=()
   mac_array=();  mac_vs=()
@@ -104,7 +104,6 @@ elif [ "$1" = "EVAL" ]; then
    
    date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}
    
-   echo '-----------past finals------------------'
    jq -n --arg date "$date" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
@@ -137,11 +136,11 @@ elif [ "$1" = "EVAL" ]; then
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
-   echo $COVERAGE
+   echo $COVERAGE_SCORE
    
-  # switch order, if any passed, test_pass: TRUE, put in  failed?
+  # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ "$((COVERAGE_SCORE))" -gt 40 ]]; then 
+  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ $(COVERAGE_SCORE) -gt 40 ]]; then 
     badge='BRONZE' 
   fi
   
