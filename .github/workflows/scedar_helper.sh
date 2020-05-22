@@ -149,14 +149,24 @@ elif [ "$1" = "EVAL" ]; then
    #echo "$temp"
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
+  # badge=null
+  # if basic requirements met: basic_req=1; badge='BRONZE'
+  
+  
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
-    badge='BRONZE'; echo $badge; Hex_color=1
+    badge='GOLD'; echo $badge; Hex_color=1
   elif  [ "$BUILD"  ]; then
     badge='SILVER'; echo $badge; Hex_color=5
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
+  #echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
+  
+  cat scores_and_matrix.json
+  echo '------------'
+  cat badge.json
+  
+  
   
   elif [ "$1" = "STATS" ]; then
 
