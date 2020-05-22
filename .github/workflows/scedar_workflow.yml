@@ -12,8 +12,8 @@ jobs:
         python-version: [3.6,3.7] 
         os: [macOS-latest, ubuntu-latest] #,windows-latest]
     env:       
-      PACKAGE: manubot
-      OWNER: cgreene
+      PACKAGE: scedar
+      OWNER: TaylorResearchLab
       tests_dir: manubot/tests
       ignore_tests: None
       ignore_lint: None
