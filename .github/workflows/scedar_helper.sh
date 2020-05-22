@@ -106,8 +106,7 @@ elif [ "$1" = "EVAL" ]; then
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}
-   echo $date
+   date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}; #echo $date
    
    jq -n --arg date "$date" \
          --arg lint_score "$pylint_score_final" \
@@ -141,12 +140,8 @@ elif [ "$1" = "EVAL" ]; then
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
-   echo $COVERAGE_SCORE
-   #COVERAGE_SCORE=${COVERAGE_SCORE:1:2}
-   #echo $COVERAGE_SCORE
    
-   sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"
-   
+   sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE" # Remove quotes from coverage score
    echo $COVERAGE_SCORE
    #temp="${opt%\"}"
    #temp="${temp#\"}"
@@ -154,7 +149,7 @@ elif [ "$1" = "EVAL" ]; then
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [[ "$LICENSE" ]] && [[ "$BUILD" ]] && [[ "$COVERAGE_SCORE" -gt 40 ]]; then 
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
     badge='BRONZE' 
     echo $badge
   fi
