@@ -142,14 +142,14 @@ elif [ "$1" = "EVAL" ]; then
    badge='NONE'
    
    
-   sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE" # Remove quotes from coverage score
+   COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes from coverage score
    echo $COVERAGE_SCORE
    #temp="${opt%\"}"
    #temp="${temp#\"}"
    #echo "$temp"
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "(($COVERAGE_SCORE))" -gt 40 ]; then 
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
     badge='BRONZE' 
     echo $badge
   fi
