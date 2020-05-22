@@ -150,8 +150,9 @@ elif [ "$1" = "EVAL" ]; then
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
-    badge='BRONZE' 
-    echo $badge
+    badge='BRONZE'; echo $badge; Hex_color=1
+  elif  [ "$BUILD"  ]; then
+    badge='SILVER'; echo $badge; Hex_color=5
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
