@@ -82,6 +82,7 @@ elif [ "$1" = "EVAL" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
+  # Remove duplicate OS versions from each list
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
@@ -148,8 +149,7 @@ elif [ "$1" = "EVAL" ]; then
    #echo "$temp"
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
-  
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "(($COVERAGE_SCORE))" -gt 40 ]; then 
     badge='BRONZE' 
     echo $badge
   fi
