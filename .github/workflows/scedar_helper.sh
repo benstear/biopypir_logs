@@ -82,6 +82,10 @@ elif [ "$1" = "EVAL" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
+  linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  
   #echo "Linux array: ${linux_arr[*]}"; echo "Mac array: ${mac_arr[*]}"
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
@@ -108,9 +112,9 @@ elif [ "$1" = "EVAL" ]; then
    jq -n --arg date "$date" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}" --arg linux_v "${linux_vs[*]}" \
-         --arg mac "${mac_arr[*]}" --arg mac_v "${mac_vs[*]}" \
-         --arg windows "${windows_arr[*]}" --arg windows_v "${windows_vs[*]}" \
+         --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
+         --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
+         --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
          --arg github_event "$GITHUB_EVENT_NAME" \
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
@@ -121,9 +125,9 @@ elif [ "$1" = "EVAL" ]; then
               Linux         : $linux,
               Mac           : $mac,
               Windows       : $windows,
-              Linux_versions: $linux_v,
-              Mac_versions: $mac_v,
-              Windows_versions: $windows_v,
+              Linux_versions: $linux_vers,
+              Mac_versions: $mac_vers,
+              Windows_versions: $windows_vers,
               Github_event_name: $github_event }'  > scores_and_matrix.json
                
   a=$(ls parallel_runs/ | head -1)
@@ -148,8 +152,8 @@ elif [ "$1" = "EVAL" ]; then
     echo $badge
   fi
   
-  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
+  echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
   
   elif [ "$1" = "STATS" ]; then
 
