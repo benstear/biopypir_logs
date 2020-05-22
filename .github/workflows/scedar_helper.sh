@@ -107,7 +107,8 @@ elif [ "$1" = "EVAL" ]; then
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}; #echo $date
+   date=$(cat API.json | jq ".jobs[0].completed_at") #;date_slice=${date:1:10}; 
+   echo $date
    
    jq -n --arg date "$date" \
          --arg lint_score "$pylint_score_final" \
@@ -137,6 +138,7 @@ elif [ "$1" = "EVAL" ]; then
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat final.json | jq ".License")
    BUILD=$(cat final.json | jq ".Build")
+   PIP=$(cat final.json | jq ".Pip")
    LINT_SCORE=$(cat final.json | jq ".Pylint_score")
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
@@ -149,24 +151,22 @@ elif [ "$1" = "EVAL" ]; then
    #echo "$temp"
    
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
-  # badge=null
-  # if basic requirements met: basic_req=1; badge='BRONZE'
   
-  
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$COVERAGE_SCORE" -gt 40 ]; then 
-    badge='GOLD'; echo $badge; Hex_color=1
-  elif  [ "$BUILD"  ]; then
-    badge='SILVER'; echo $badge; Hex_color=5
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP"]: badge='BRONZE'; Hex_color=1; else badge='null'; fi
+  if  [ "$LINT_SCORE" -gt 6 ] && [ "$COVERAGE_SCORE" -gt 40 ]; then badge='GOLD'; echo $badge; Hex_color=1
+  elif [ "$LINT_SCORE" -gt 3 ] && [ "$COVERAGE_SCORE" -gt 20 ] ; then badge='SILVER'; echo $badge; Hex_color=5
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  #echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
   
+  cat final.json
+  echo '------------'
   cat scores_and_matrix.json
   echo '------------'
   cat badge.json
   
-  
+  echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
+
   
   elif [ "$1" = "STATS" ]; then
 
