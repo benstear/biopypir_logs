@@ -156,8 +156,13 @@ elif [ "$1" = "EVAL" ]; then
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; 
   fi
   
-  if  [ $LINT_SCORE -gt 6 ] && [ $COVERAGE_SCORE -gt 40 ]; then badge='GOLD'; echo $badge; Hex_color=1
-  elif [ $LINT_SCORE -gt 3 ] && [ $COVERAGE_SCORE -gt 20 ] ; then badge='SILVER'; echo $badge; Hex_color=5
+  #(( $(echo "$num1 > $num2" |bc -l) ))
+  
+  
+  if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
+    badge='GOLD'; echo $badge; Hex_color=1
+  elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
+    badge='SILVER'; echo $badge; Hex_color=5
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
