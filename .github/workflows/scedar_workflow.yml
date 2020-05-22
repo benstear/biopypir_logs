@@ -159,7 +159,7 @@ jobs:
           uses: EndBug/add-and-commit@v4.1.0
           with:
             add: logs/${{github.run_id}}.json
-            message: 'Commit ${{env.PACKAGE}} workflow, Biopypir run # ${{github.run_number}}'
+            message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
  
