@@ -80,12 +80,12 @@ jobs:
     - name: INSTALL dependencies
       run: |
         pip install --upgrade pip setuptools wheel  
+        pip install --no-binary :all: nmslib
+        pip install .
         pip install pylint
         pip install pytest
         pip install pytest-cov
         pip install pytest-mpl
-      #pip install .
-      #pip install --no-binary :all: nmslib
     #===============================================#
     - name: LINT
       id: linter
