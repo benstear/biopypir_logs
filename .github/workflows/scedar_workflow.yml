@@ -122,8 +122,8 @@ jobs:
       if: always()
       runs-on: [ubuntu-latest]
       env:       
-        PACKAGE: manubot
-        REPO_OWNER: cgreene
+        PACKAGE: scedar
+        REPO_OWNER: TaylorResearchLab
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
