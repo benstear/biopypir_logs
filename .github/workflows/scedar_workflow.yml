@@ -57,7 +57,7 @@ jobs:
     - name: checkout ${{env.PACKAGE}} repo 
       uses: actions/checkout@v2     
       with:
-        repository: benstear/${{ env.PACKAGE }}
+        repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
     - name:  cURL helper script
       run: |
@@ -75,7 +75,7 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       uses: datreeio/validate-license-action@v1.0.0 
       with:
-        args: 'MIT,ISC,BSD'
+        args: MIT,ISC,BSD
     #===============================================#
     - name: INSTALL dependencies
       run: |
@@ -98,6 +98,11 @@ jobs:
     - name: PYTEST
       id: local
       run: ./biopypir_utils.sh "TEST"  
+    - name: pytest 2.0
+      run: |
+        pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
+        --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
+        --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/
    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
