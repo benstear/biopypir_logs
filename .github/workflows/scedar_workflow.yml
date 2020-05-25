@@ -84,6 +84,7 @@ jobs:
         pip install .
         pip install pylint
         pip install pytest
+        pip install coverage
         pip install pytest-cov
         pip install pytest-mpl
     #===============================================#
