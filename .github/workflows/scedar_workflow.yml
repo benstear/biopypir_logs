@@ -16,7 +16,7 @@ jobs:
     env:       
       PACKAGE: scedar
       OWNER: TaylorResearchLab
-      pytest: True
+      test_suite: "pytest"
       tests_dir: "tests/"
       ignore_tests: None
       ignore_lint: None
