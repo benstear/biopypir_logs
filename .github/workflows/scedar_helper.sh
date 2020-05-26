@@ -4,7 +4,7 @@
 
 if [  "$1" = "LINT" ]; then
 
-  #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]];
+  #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell
   
   pylint $PACKAGE --exit-zero --reports=y --ignore biopypir_utils.sh >  pylint-report.txt
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
@@ -14,17 +14,19 @@ if [  "$1" = "LINT" ]; then
 
 elif [ "$1" = "TEST" ]; then  
 
-  #if test_suite = pytest:
+  if test_suite = 'pytest'; then
 
-  echo "::set-output name=pytest_score::False"
-  pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
-  --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
-  --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
-  awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
-  pytestscore=${pytest_cov%\%}
-  echo "::set-output name=pytest_score::$pytestscore"
-  echo "Pytest Coverage: $pytestscore"
-  
+    echo "::set-output name=pytest_score::False"
+    pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
+    --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
+    --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
+    awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
+    pytestscore=${pytest_cov%\%}
+    echo "::set-output name=pytest_score::$pytestscore"
+    echo "Pytest Coverage: $pytestscore"
+  else  echo "::set-output name=pytest_score::null"
+  fi
+
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
   python setup.py build
@@ -95,16 +97,13 @@ elif [ "$1" = "EVAL" ]; then
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
-    
   done
 
    k="$(($j+1))" 
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
-   #echo "pytest final: $pytest_score_final"; echo "lint final: $pylint_score_final"
    
-   date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; 
-   #echo $date
+   date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; #echo $date
    
    jq -n --arg date "$date_slice" \
          --arg lint_score "$pylint_score_final" \
@@ -140,13 +139,12 @@ elif [ "$1" = "EVAL" ]; then
    badge='NONE'
    
    
-   COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes from coverage score
-   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE")
-   #echo $COVERAGE_SCORE
+   COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
+   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
    #temp="${opt%\"}"
    #temp="${temp#\"}"
    #echo "$temp"
-   echo $LINT_SCORE
+   #echo $LINT_SCORE
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; 
@@ -173,7 +171,7 @@ elif [ "$1" = "EVAL" ]; then
 
   
   elif [ "$1" = "STATS" ]; then
-
+  #date_slice=${date:1:10}
   
   curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description,
@@ -181,7 +179,13 @@ elif [ "$1" = "EVAL" ]; then
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-
+      
+      last_update=$(cat stats.json |  jq "last_commit")
+      created_at=$(cat stats.json |  jq "created_at")
+      
+      echo $created_at
+      
+      #cat stats.json | jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
       
