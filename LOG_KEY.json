@@ -1,25 +1,30 @@
-{
-  "Owner_Repo": Owner and repo/package, (string), ex: "TaylorResearchLab/scedar"
-  "Package": Name of repo/package, (string), ex: "scedar"
-  "Description": Description of repo/package, (string), ex: "Single-cell exploratory data analysis for RNA-Seq"
-  "date_created": Date repo was created in ISO-8601 format, (string), ex:  "2018-03-02T14:33:49Z",
-  "last_commit": Date of last commit to repo in ISO-8601 format, (string) 
-  "forks": Number of forks repo has, (int)
-  "watchers": Number of github users watching repo, (int)
-  "stars": Number of stars repo has, (int)
-  "contributors": github API url for repo contributors, (string)
-  "homepage_url": url for repos homepage (string)
-  "has_wiki": if the repo has a wiki page (bool)
-  "open_issues": Number of open issues the repo has (int) 
-  "has_downloads": whether or not the package has any downloads, bool
-  "Date": date of the biopypir workflow run in ISO format, string
-  "Pylint_score": "8.10",
-  "Pytest_score": "15.00",
-  "Pip": "True",
-  "License": "True",
-  "Build": "True",
-  "Linux": Python versions that successfully passed all biopypir tests on a LINUX OS, (array), ex: ["3.6" "3.7"] 
-  "Mac": Python versions that successfully passed all biopypir tests on a  MAC OS, (array)
-  "Windows": Python versions that successfully passed all biopypir tests on a  windows OS, (array)
-  "Github_event_name": Event that triggered the biopypir workflow to run, should always be "scheduled", string
+
+  "Owner_Repo": "Owner and package, (string)"
+  "Package": "Name of package, (string)"
+  "Description": "Description of repo/package, (string)"
+  "date_created": "Date repo was created in MM/DD/YYYY format, (string)"
+  "last_commit": "Date of last commit to repo in MM/DD/YYYY format, (string)"
+  "forks": "Number of forks repo has, (int)"
+  "watchers": "Number of github users watching repo, (int)"
+  "stars": "Number of stars repo has, (int)"
+  "contributors": "Github API url for repo contributors, (string)"
+  "homepage_url": "Url for repos homepage (string)"
+  "has_wiki": "If the repo has a wiki page (bool)"
+  "open_issues": "Number of open issues the repo has (int)" 
+  "has_downloads": "If the package has any downloads, (bool)"
+  "Date": "Date of the biopypir workflow run in MM/DD/YYYY format, (string)"
+  "Pylint_score": "Linting score from  pylint, 10.0 or lower, (float)"
+  "Pytest_score": "Pytest coverage score from pytest, 0 - 100.0, (float)"
+  "Pip": "If the package is successfully deployed to PIP, (bool)"
+  "License": "If the package has an OSI approved  license, (bool)"
+  "Build": "If the build test passed successfully, (bool)"
+  "Linux": "Python versions that successfully passed all biopypir tests on a Linux OS, (string array)"
+  "Mac": "Python versions that successfully passed all biopypir tests on a  Mac OS, (string array)"
+  "Windows": "Python versions that successfully passed all biopypir tests on a  Windows OS, (string array)"
+  "Linux_versions": "Specific Linux OS version(s), (string array)"
+  "Mac_versions": "Specific Mac OS version(s), (string array)"
+  "Windows_versions": "Specific Windows OS version(s), (string array)"
+  "Github_event_name": "Event that triggered the biopypir workflow to run, should always be 'scheduled', (string)"
+  "Badge": "Overall rating (gold, silver or bronze) based on results of all Biopypir tests, (string)"
+  "Color": "Color of badge, (hex number)"
 }
