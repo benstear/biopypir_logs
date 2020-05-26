@@ -164,7 +164,6 @@ elif [ "$1" = "EVAL" ]; then
 
   
   elif [ "$1" = "STATS" ]; then
-  #date_slice=${date:1:10}
   
   curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description,
@@ -178,15 +177,11 @@ elif [ "$1" = "EVAL" ]; then
      
       created_at=${created_at:1:10}; echo $created_at;
       last_update=${last_update:1:10}; echo $last_update; 
+                  
+      #jq '.foo.bar = "new value"' file.json
+      jq --arg update "$last_update" '.last_commit = $update' stats.json
       
-      jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-      
-      jq -n --arg  last_commit  "$last_update" '{last_updated : $last_update}' > update.json
-      cat update.json
-      
-      #cat stats.json | jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
-      
-  # sizs xkb
+
 fi 
