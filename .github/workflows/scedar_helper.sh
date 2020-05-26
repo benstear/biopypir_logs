@@ -14,8 +14,7 @@ if [  "$1" = "LINT" ]; then
 
 elif [ "$1" = "TEST" ]; then  
 
-  if test_suite = 'pytest'; then
-
+  if $test_suite = 'pytest'; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
     --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
@@ -139,21 +138,15 @@ elif [ "$1" = "EVAL" ]; then
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
-   
    COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
-   #temp="${opt%\"}"
-   #temp="${temp#\"}"
-   #echo "$temp"
-   #echo $LINT_SCORE
+   #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; 
   fi
   
   #(( $(echo "$num1 > $num2" |bc -l) ))
-  
-  
   if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
     badge='GOLD'; echo $badge; Hex_color=1
   elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
@@ -185,7 +178,7 @@ elif [ "$1" = "EVAL" ]; then
       created_at=$(cat stats.json |  jq ".created_at")
       
       echo $created_at
-      
+      echo $last_update
       #cat stats.json | jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
