@@ -18,12 +18,13 @@ elif [ "$1" = "TEST" ]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest $test_dir -ra --mpl-generate-path=tests/baseline_images \
     --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE \
-    --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ | \
+    | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     echo $pytest_cov
     pytestscore=${pytest_cov%\%}
     echo "::set-output name=pytest_score::$pytestscore"
     echo "Pytest Coverage: $pytestscore"
+    # --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ 
   else  echo "::set-output name=pytest_score::null"
   fi
 
@@ -175,7 +176,9 @@ elif [ "$1" = "EVAL" ]; then
       has_downloads: .has_downloads}" > stats.json
       
       last_update=$(cat stats.json |  jq ".last_commit")
-      created_at=$(cat stats.json |  jq ".created_at")
+      created_at=$(cat stats.json |  jq ".date_created")
+      
+      jq '.last_commit = $last_update' stats.json
       
       echo $created_at
       echo $last_update
