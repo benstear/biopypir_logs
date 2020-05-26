@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 0 * * 0' 
   push: # remove when youre done testing workflow
+    paths-ignore: 
+      - 'logs/**.json' 
 jobs:
   run_tests:
     runs-on: ${{ matrix.os }}
@@ -101,9 +103,7 @@ jobs:
       run: ./biopypir_utils.sh "TEST"  
     - name: pytest 2.0
       run: |
-        pwd
-        ls
-        pytest "tests" -ra  \
+        pytest "tests"  \
         --color=yes --cov-config .coveragerc --cov-branch  \
         --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/
      # --cov=$PACKAGE
