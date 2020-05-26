@@ -14,7 +14,7 @@ if [  "$1" = "LINT" ]; then
 
 elif [ "$1" = "TEST" ]; then  
 
-  if $test_suite = 'pytest'; then
+  if "$test_suite" = 'pytest'; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest tests/ -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
@@ -23,7 +23,7 @@ elif [ "$1" = "TEST" ]; then
     echo "::set-output name=pytest_score::$pytestscore"
     echo "Pytest Coverage: $pytestscore"
     # --mpl-generate-path=tests/baseline_images  --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ 
-  else  echo "::set-output name=pytest_score::null"
+  else  echo "::set-output name=pytest_score::null"; echo 'didnt run'
   fi
 
 elif [ "$1" = "BUILD" ]; then
