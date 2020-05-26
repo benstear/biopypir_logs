@@ -16,7 +16,7 @@ elif [ "$1" = "TEST" ]; then
 
   if $test_suite = 'pytest'; then
     echo "::set-output name=pytest_score::False"
-    pytest_cov=$(pytest $test_dir -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
+    pytest_cov=$(pytest "tests/" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     echo $pytest_cov
     pytestscore=${pytest_cov%\%}
@@ -176,10 +176,10 @@ elif [ "$1" = "EVAL" ]; then
       last_update=$(cat stats.json |  jq ".last_commit")
       created_at=$(cat stats.json |  jq ".date_created")
      
-      created_at={created_at:1:10}; echo $created_at;
+      created_at=${created_at:1:10}; echo $created_at;
       last_update=${last_update:1:10}; echo $last_update; 
       
-      jq '.last_commit = $last_update' stats.json
+      jq ".last_commit = $last_update" stats.json
       #cat stats.json | jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
