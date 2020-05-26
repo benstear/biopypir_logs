@@ -179,7 +179,7 @@ elif [ "$1" = "EVAL" ]; then
       last_update=${last_update:1:10}; echo $last_update; 
                   
       #jq '.foo.bar = "new value"' file.json
-      jq --arg update "$last_update" '.last_commit = $update' stats.json
+      jq --arg update "${last_update:1:10}" '.last_commit = $update' stats.json 
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
