@@ -180,8 +180,8 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      last_update=$(cat stats.json |  jq "last_commit")
-      created_at=$(cat stats.json |  jq "created_at")
+      last_update=$(cat stats.json |  jq ".last_commit")
+      created_at=$(cat stats.json |  jq ".created_at")
       
       echo $created_at
       
