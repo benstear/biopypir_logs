@@ -8,9 +8,13 @@ if [  "$1" = "LINT" ]; then
   
   #--disable=biopypir_utils.sh   --ignore biopypir_utils.sh
   
-  pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt 
-  pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
+ 
+  pylintscore=$(pylint $PACKAGE --exit-zero --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
+  
+  #pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt 
+  #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
+  #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
   echo $pylintscore
   #printenv 
