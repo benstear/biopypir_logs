@@ -98,10 +98,12 @@ elif [ "$1" = "EVAL" ]; then
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
+    echo "pytest_score = $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
-
+  echo "cumulative pytest score: $pytest_score_cum"
    k="$(($j+1))" 
+   echo ""k = $k
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
    
