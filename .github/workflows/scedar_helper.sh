@@ -25,8 +25,8 @@ elif [ "$1" = "TEST" ]; then
     echo "::set-output name=pytest_score::$pytestscore"
     echo "Pytest Coverage: $pytestscore"
     # --mpl-generate-path=tests/baseline_images  --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ 
-  #else  echo "::set-output name=pytest_score::null"; echo 'didnt run'
-  #fi
+  else  echo "::set-output name=pytest_score::null"; echo 'didnt run'
+  fi
 
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
