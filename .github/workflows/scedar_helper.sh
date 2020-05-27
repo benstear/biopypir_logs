@@ -4,9 +4,9 @@
 
 if [  "$1" = "LINT" ]; then
 
-  #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell
+  #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell     --ignore biopypir_utils.sh
   
-  pylint $PACKAGE --exit-zero --reports=y --ignore biopypir_utils.sh >  pylint-report.txt
+  pylint $PACKAGE --exit-zero --reports=y  --disable=biopypir_utils.sh >  pylint-report.txt 
   pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
