@@ -14,21 +14,17 @@ if [  "$1" = "LINT" ]; then
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
-  echo $pylintscore
-  #printenv 
+  echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  #echo "$test_suite"
+  
   if [[ "$test_suite" == 'pytest' ]]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest tests/ -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
-    echo $pytest_cov
     pytestscore=${pytest_cov%\%}
-    echo "::set-output name=pytest_score::$pytestscore"
-    echo "Pytest Coverage: $pytestscore"
-    # --mpl-generate-path=tests/baseline_images  --ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/ 
-  else  echo "::set-output name=pytest_score::null"; echo 'didnt run'
+    echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
+  else  echo "::set-output name=pytest_score::0"; echo 'pytest not enabled for this package'
   fi
 
 elif [ "$1" = "BUILD" ]; then
@@ -52,9 +48,6 @@ elif [ "$1" = "GATHER" ]; then
       #    License_check : "\($license)",
       #    PIP           :  "\($pip)"    
                                          
-  #echo "biopypir file: \\n" 
-  #cat biopypir-"$3"-py"$2".json
-  
 elif [ "$1" = "EVAL" ]; then
   
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
@@ -111,7 +104,9 @@ elif [ "$1" = "EVAL" ]; then
    # Calculate pylint and pytest scores average
    k="$(($j+1))" ; echo ""k = $k
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
-   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")        
+   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
+   
+   if [[ "$test_suite" == 'pytest' ]]; then pytest_score_final=null; fi
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; #echo $date
    
