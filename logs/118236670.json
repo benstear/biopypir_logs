@@ -1,0 +1,15 @@
+{
+  "Date": "2020-05-28",
+  "Pylint_score": "",
+  "Pytest_score": "",
+  "Pip": "True",
+  "License": "True",
+  "Build": "True",
+  "Linux": "",
+  "Mac": "",
+  "Windows": "",
+  "Linux_versions": "",
+  "Mac_versions": "",
+  "Windows_versions": "",
+  "Github_event_name": "push"
+}
