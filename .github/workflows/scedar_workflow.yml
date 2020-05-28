@@ -14,10 +14,10 @@ jobs:
         python-version: [3.6,3.7] 
         os: [ubuntu-latest] #,windows-latest, macOS-latest]
     env:       
-      PACKAGE: scedar
-      OWNER: TaylorResearchLab
-      test_suite: "pytest"
-      tests_dir: "tests/"
+      PACKAGE: desc  #scedar
+      OWNER: eleozzr #TaylorResearchLab
+      test_suite:  None #"pytest"
+      tests_dir:  None #"tests/"
       ignore_tests: None
       ignore_lint: None
     steps:
@@ -80,10 +80,10 @@ jobs:
     - name: PYTEST
       id: tester
       run: ./biopypir_utils.sh "TEST"  
-    - name: pytest 2.0
-      run: |
-        pytest "tests"  \
-        --color=yes --cov-config .coveragerc --cov-branch  
+    #- name: pytest 2.0
+    #  run: |
+    #    pytest "tests"  \
+    #    --color=yes --cov-config .coveragerc --cov-branch  
       #\
       #--ignore=tests/test_cluster/test_mirac_large_data.py --ignore=tests/test_eda/
       # --cov=$PACKAGE
@@ -116,11 +116,11 @@ jobs:
       
   job2:
       needs: [run_tests] 
-      if: always()
+      #if: always()
       runs-on: [ubuntu-latest]
       env:       
-        PACKAGE: scedar
-        REPO_OWNER: TaylorResearchLab
+        PACKAGE: desc #scedar
+        REPO_OWNER: eleozzr #TaylorResearchLab
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
