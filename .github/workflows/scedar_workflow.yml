@@ -136,10 +136,8 @@ jobs:
             path: parallel_runs/
         #===============================================#
         - name: check for any job success, and cURL helper script
-          if: success_check
           run: |
             ls -a
-            
             [ "$(ls -A /parallel_runs/)" ] && echo "Not Empty" || echo "No runs succeded, exiting..."; exit 1;
             echo "ALL JOBS FAILED"  > ${{github.run_number}}.json; mv ${{github.run_number}}.json logs/
              
