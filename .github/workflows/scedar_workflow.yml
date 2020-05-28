@@ -107,6 +107,12 @@ jobs:
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
+        
+    - name: UPLOAD artifact
+      uses: actions/upload-artifact@v2-preview
+      with:  
+        name: pylint-report.txt
+        path: pylint-report.txt
       
   job2:
       needs: [run_tests] 
