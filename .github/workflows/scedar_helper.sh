@@ -6,9 +6,9 @@ if [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   
-  #--disable=biopypir_utils.sh   
+  #--disable=biopypir_utils.sh   # ignore_warnings=
   
-  pylintscore=$(pylint $PACKAGE --exit-zero --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
+  pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   
   pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt; cat  pylint-report.txt
@@ -190,9 +190,8 @@ elif [ "$1" = "EVAL" ]; then
       created_at=${created_at:1:10}; echo $created_at;
       last_update=${last_update:1:10}; echo $last_update; 
                   
-      #jq '.foo.bar = "new value"' file.json
       jq --arg update "$last_update" '.last_commit = $update' stats.json 
-      jq --arg created "$created_at" '.created_at = $created' stats.json 
+      jq --arg created "$created_at" '.date_created = $created' stats.json 
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
