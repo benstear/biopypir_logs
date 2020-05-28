@@ -119,9 +119,13 @@ jobs:
       needs: [run_tests] 
       #if: always()
       runs-on: [ubuntu-latest]
-      env:       
-        PACKAGE: desc #scedar
-        REPO_OWNER: eleozzr #TaylorResearchLab
+      env:    
+        PACKAGE: desc  #scedar
+        OWNER: eleozzr #TaylorResearchLab
+        test_suite:  None #"pytest"
+        tests_dir:  None #"tests/"
+        ignore_tests: None
+        ignore_lint: None 
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
@@ -130,17 +134,20 @@ jobs:
           uses: actions/download-artifact@v2-preview 
           with: # version2 automatically downloads all artifacts in path
             path: parallel_runs/
-        
-        - name: cURL helper script
+        #===============================================#
+        - name: check for any job success, and cURL helper script
           run: |
-            pwd; ls -R;
-            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
-            chmod +x biopypir_utils.sh 
+             [ "$(ls -A /parallel_runs)" ] && echo "Not Empty" || echo "No runs succeded, exiting..."; exit 1;
+             echo "ALL JOBS FAILED"  > ${{github.run_number}}.json; mv ${{github.run_number}}.json logs/
+             
+             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
+             chmod +x biopypir_utils.sh 
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
-           
         #===============================================#
         - name: EVALUATE jobs
-          run: ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
+          run: |
+                ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
+                ./biopypir_utils.sh "STATS"
         - uses: geekyeggo/delete-artifact@v1
           with:
             name: |
@@ -148,12 +155,12 @@ jobs:
               biopypir-ubuntu-latest-py3.7
               biopypir-macOS-latest-py3.6
               biopypir-macOS-latest-py3.7
-              
-        - name: STATS
-          run: ./biopypir_utils.sh "STATS"
-        - run: ls -aR
-        
+        #===============================================#
+        #- name: STATS
+        #  run: ./biopypir_utils.sh "STATS" #- run: ls -aR
+        #===============================================# 
         - name: Add & Commit
+          if: always()
           uses: EndBug/add-and-commit@v4.1.0
           with:
             add: logs/${{github.run_id}}.json
