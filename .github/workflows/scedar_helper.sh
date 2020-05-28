@@ -95,7 +95,6 @@ elif [ "$1" = "EVAL" ]; then
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
-    echo "pytest_score = $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
    
