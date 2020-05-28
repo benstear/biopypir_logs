@@ -78,7 +78,7 @@ jobs:
       run: ./biopypir_utils.sh  "BUILD"
     #===============================================#
     - name: PYTEST
-      id: local
+      id: tester
       run: ./biopypir_utils.sh "TEST"  
     - name: pytest 2.0
       run: |
@@ -99,7 +99,8 @@ jobs:
       run: |
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" \
-        "${{steps.local.outputs.pytest_score}}" "True" "True"
+        "${{steps.tester.outputs.pytest_score}}" \
+        "True" "True"
    #===============================================#
     - name: UPLOAD artifact
       uses: actions/upload-artifact@v2-preview
