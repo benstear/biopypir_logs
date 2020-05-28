@@ -6,13 +6,12 @@ if [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   
-  #--disable=biopypir_utils.sh   --ignore biopypir_utils.sh
+  #--disable=biopypir_utils.sh   
   
- 
-  pylintscore=$(pylint $PACKAGE --exit-zero --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
+  pylintscore=$(pylint $PACKAGE --exit-zero --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   
-  #pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt 
+  pylint $PACKAGE --exit-zero --reports=y >  pylint-report.txt; cat  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
@@ -94,8 +93,10 @@ elif [ "$1" = "EVAL" ]; then
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
+  # Get pylint and pytest scores from each of the parallel runs
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
@@ -105,11 +106,13 @@ elif [ "$1" = "EVAL" ]; then
     echo "pytest_score = $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
-  echo "cumulative pytest score: $pytest_score_cum"
-   k="$(($j+1))" 
-   echo ""k = $k
+   
+   echo "cumulative pytest score: $pytest_score_cum"
+   
+   # Calculate pylint and pytest scores average
+   k="$(($j+1))" ; echo ""k = $k
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
-   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")         # cast to int
+   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")        
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; #echo $date
    
@@ -188,7 +191,8 @@ elif [ "$1" = "EVAL" ]; then
       last_update=${last_update:1:10}; echo $last_update; 
                   
       #jq '.foo.bar = "new value"' file.json
-      jq --arg update "${last_update:1:10}" '.last_commit = $update' stats.json 
+      jq --arg update "$last_update" '.last_commit = $update' stats.json 
+      jq --arg created "$created_at" '.created_at = $created' stats.json 
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       mv $GITHUB_RUN_ID.json logs/
