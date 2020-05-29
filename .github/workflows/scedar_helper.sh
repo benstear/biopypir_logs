@@ -50,6 +50,12 @@ elif [ "$1" = "GATHER" ]; then
                                          
 elif [ "$1" = "EVAL" ]; then
   
+  #if  [ "$(ls -A parallel_runs)" ]; then
+  echo "No runs succeded."
+  echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
+  mv $GITHUB_RUN_ID.json logs/, exit 1
+  
+  
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
