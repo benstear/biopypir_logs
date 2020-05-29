@@ -138,7 +138,7 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           run: |
-            if [ ! "$(ls parallel_runs)" ] then 
+            if [[ ! "$(ls parallel_runs)" ]]; then 
               echo "No runs succeded."
               echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
               mv $GITHUB_RUN_ID.json logs/
