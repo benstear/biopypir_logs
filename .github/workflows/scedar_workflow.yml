@@ -138,9 +138,9 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           run: |
-            if  [ "$(ls -A parallel_runs)" ]; then 
+            if ! [ "$(ls parallel_runs)" ]; then 
               echo "No runs succeded."; echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
-              mv $GITHUB_RUN_ID.json logs/; exit 1
+              mv $GITHUB_RUN_ID.json logs/; ;exit 1
             fi
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
@@ -170,7 +170,7 @@ jobs:
           uses: EndBug/add-and-commit@v4.1.0
           with:
             add: logs/${{github.run_id}}.json
-            message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}'
+            message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
          #===============================================# 
