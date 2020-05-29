@@ -175,6 +175,14 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
          #===============================================# 
-        - run: python process_logs.py
+        - run: |
+            pip install os
+            pip install time
+            pip install json
+            pip install pandas 
+            pip install tabulate 
+            pip install glob
+            pip install numpy 
+            python process_logs.py
  
 
