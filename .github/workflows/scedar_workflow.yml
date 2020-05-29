@@ -138,12 +138,13 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           run: |
+            if  [ "$(ls -A parallel_runs)" ]; then 
+              echo "No runs succeded."; echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
+              mv $GITHUB_RUN_ID.json logs/; exit 1
+            fi
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
-        #    ls -a
-        #    [ "$(ls -A parallel_runs)" ] && echo "Not Empty" || echo "No runs succeded, exiting...", exit 1;
-        #    echo "ALL JOBS FAILED"  > ${{github.run_number}}.json; mv ${{github.run_number}}.json logs/
-             
+
 
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
@@ -172,5 +173,7 @@ jobs:
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+         #===============================================# 
+        - run: python process_logs.py
  
 
