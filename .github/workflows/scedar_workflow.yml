@@ -117,8 +117,8 @@ jobs:
         path: pylint-report.txt
       
   job2:
-      needs: [run_tests] 
-      #if: always()
+      #needs: [run_tests] 
+      if: always()
       runs-on: [ubuntu-latest]
       env:    
         PACKAGE: desc  #scedar
@@ -138,14 +138,12 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           run: |
-            if ! [ "$(ls parallel_runs)" ]; then 
+            if ! [ "$(ls parallel_runs)" ] then 
               echo "No runs succeded."; echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
               mv $GITHUB_RUN_ID.json logs/; ;exit 1
             fi
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
-
-
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
         - name: EVALUATE jobs
