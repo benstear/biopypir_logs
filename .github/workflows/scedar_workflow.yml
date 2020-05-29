@@ -176,7 +176,9 @@ jobs:
         #===============================================# 
         - name: Python Container Action for BIOPYPIR
           uses: benstear/biopypir-python-action@v1.0
-        - run: ls, mv table1.csv  /logs
+        - run: |
+            ls
+            mv table1.csv /logs
         #===============================================# 
         - name: Add & Commit
           if: always()
