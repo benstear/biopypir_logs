@@ -180,14 +180,14 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
          #===============================================# 
         - run: |
-            pip install --upgrade pip setuptools wheel  
-            pip install os
-            pip install time
-            pip install json
-            pip install pandas 
-            pip install tabulate 
-            pip install glob
-            pip install numpy 
+            python -m pip install --upgrade pip setuptools wheel
+            python -m pip install os
+            python -m  pip install time
+            python -m pip install json
+            python -m pip install pandas 
+            python -m pip install tabulate 
+            python -m pip install glob
+            python -m pip install numpy 
             python process_logs.py
  
 
