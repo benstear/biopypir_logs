@@ -6,6 +6,7 @@ on:
   push: # remove when youre done testing workflow
     paths-ignore: 
       - 'logs/**.json' 
+      - 'biopypir_matrix.md'
 jobs:
   run_tests:
     runs-on: ${{ matrix.os }}
@@ -148,8 +149,8 @@ jobs:
         - name: EVALUATE jobs
           if: success()
           run: |
-                ./biopypir_utils.sh "EVAL" # no need for passing repo or run id, access through helpscript
-                ./biopypir_utils.sh "STATS"
+                ./biopypir_utils.sh "EVAL"
+          #./biopypir_utils.sh "STATS"
        #===============================================#
         - uses: geekyeggo/delete-artifact@v1
           with:
@@ -159,8 +160,8 @@ jobs:
               biopypir-macOS-latest-py3.6
               biopypir-macOS-latest-py3.7
         #===============================================#
-        #- name: STATS
-        #  run: ./biopypir_utils.sh "STATS" #- run: ls -aR
+        - name: STATS
+          run: ./biopypir_utils.sh "STATS" #- run: ls -aR
         #===============================================# 
         - name: Add & Commit
           if: always()
