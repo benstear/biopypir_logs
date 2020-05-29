@@ -61,7 +61,6 @@ jobs:
     #===============================================#
     - name: INSTALL dependencies
       run: |
-        pip install  os
         pip install --upgrade pip setuptools wheel  
         pip install pylint
         pip install pytest
