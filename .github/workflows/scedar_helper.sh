@@ -189,6 +189,8 @@ elif [ "$1" = "EVAL" ]; then
       jq --arg created "$created_at" '.date_created = $created' stats.json > stats.json
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
+      export biopypir_workflow_status='SUCCESS'
+      printenv
       mv $GITHUB_RUN_ID.json logs/
 
 fi 
