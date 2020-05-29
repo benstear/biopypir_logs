@@ -175,6 +175,10 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
          #===============================================# 
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.6'
         - run: |
             pip install os
             pip install time
