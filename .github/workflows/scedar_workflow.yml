@@ -120,7 +120,11 @@ jobs:
   job2:
       needs: [run_tests] 
       if: always()
-      runs-on: [ubuntu-latest]
+      runs-on: ${{ matrix.os }}
+      strategy:
+       matrix:
+        python-version: [3.7] 
+        os: [ubuntu-latest]
       env:    
         PACKAGE: desc  #scedar
         OWNER: eleozzr #TaylorResearchLab
