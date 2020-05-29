@@ -138,7 +138,7 @@ jobs:
         - name: check for any job success, and cURL helper script
           run: |
             ls -a
-            [ "$(ls -A parallel_runs)" ] && echo "Not Empty" || echo "No runs succeded, exiting..."; exit 1;
+            [ "$(ls -A parallel_runs)" ] && echo "Not Empty" || echo "No runs succeded, exiting...", exit 1;
             echo "ALL JOBS FAILED"  > ${{github.run_number}}.json; mv ${{github.run_number}}.json logs/
              
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
