@@ -198,19 +198,16 @@ jobs:
        
          #===============================================# 
         - run: |
-            pip freeze
-            echo  '####################################'
-            printenv
-        #    export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-        #    python3 -m pip3 install --upgrade pip setuptools wheel
-        #    pip3 install os
-        #    pip3 install time
-        #    pip3 install json
-        #    pip3 install pandas 
-        #    pip3 install tabulate 
-        #    pip3 install glob
-        #    pip3 install numpy 
-        #    python3 process_logs.py
+            export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+            python3 -m pip install --upgrade pip setuptools wheel
+
+            pip install json
+            pip install pandas 
+            pip install tabulate 
+            pip install glob
+            pip install numpy 
+            python3 process_logs.py
+        
         - run: help('modules')
           shell: python
 
