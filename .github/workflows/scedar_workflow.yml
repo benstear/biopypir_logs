@@ -195,15 +195,15 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
             
             
-       
+        - run: help('modules')
+          shell: python  
          #===============================================# 
         - run: |
             export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-            python3 -m pip install pandas glob numpy
+            python3 -m pip install pandas numpy
             python3 process_logs.py
-       #pip install json time os tabulate
-        - run: help('modules')
-          shell: python
+       #pip install json time os tabulate glob
+
 
        
 
