@@ -145,6 +145,7 @@ jobs:
             path: parallel_runs/
         #===============================================#
         - name: check for any job success, and cURL helper script
+          id: check_success
           run: |
             ls -A
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
@@ -178,10 +179,11 @@ jobs:
           id: action_step
           uses: benstear/biopypir-python-action@v1.0
         - run: |
-            echo "${{steps.action_step.outputs.table_output}}" > tb1
+            echo "${{steps.action_step.outputs.table_output}}"
+            echo "${{steps.action_step.outputs.table_output}}" > tb1.csv
             mv "${{steps.action_step.outputs.table_output}}" tb1.csv /logs
         #===============================================# 
-        - name: Add & Commit
+        - name: Add & Commit # Even if step.check_success exits, we want this commit step to send the 'fail' log
           if: always()
           uses: EndBug/add-and-commit@v4.1.0
           with:
