@@ -176,13 +176,13 @@ jobs:
         - name: STATS
           run: ./biopypir_utils.sh "STATS" #- run: ls -aR
         #===============================================# 
-        - name: Python Container Action for BIOPYPIR
-          id: action_step
-          uses: benstear/biopypir-python-action@v1.0
-        - run: |
-            echo "${{steps.action_step.outputs.table_output}}"
-            echo "${{steps.action_step.outputs.table_output}}" > tb1.csv
-            mv "${{steps.action_step.outputs.table_output}}" tb1.csv logs
+        #- name: Python Container Action for BIOPYPIR
+        #  id: action_step
+        #  uses: benstear/biopypir-python-action@v1.0
+        #- run: |
+        #    echo "${{steps.action_step.outputs.table_output}}"
+        #    echo "${{steps.action_step.outputs.table_output}}" > tb1.csv
+        #    mv "${{steps.action_step.outputs.table_output}}" tb1.csv logs
             
         #===============================================# 
         - name: Add & Commit # Even if step.check_success exits, we want this commit step to send the 'fail' log
@@ -197,17 +197,17 @@ jobs:
             
 
          #===============================================# 
-       # - run: |
-       #     export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-       #     python3 -m pip install --upgrade pip setuptools wheel
-       #     pip install os
-       #     pip install time
-       #     pip install json
-       #     pip install pandas 
-       #     pip install tabulate 
-       #     pip install glob
-       #     pip install numpy 
-       #     python3 process_logs.py
+        - run: |
+            export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+            python3 -m pip3 install --upgrade pip setuptools wheel
+            pip3 install os
+            pip3 install time
+            pip3 install json
+            pip3 install pandas 
+            pip3 install tabulate 
+            pip3 install glob
+            pip3 install numpy 
+            python3 process_logs.py
        
 
 
