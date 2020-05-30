@@ -1,1 +1,19 @@
 
+---
+name: PROCCESS LOGS
+on: 
+  schedule:
+    - cron: '0 0 0 0 0' 
+  #push: # remove when youre done testing workflow
+  #  paths-ignore: 
+  #    - 'logs/**.json' 
+  #    - 'biopypir_matrix.md'
+    
+jobs:
+  move_old_logs:
+    runs-on: [ubuntu-latest]
+    env:       
+      PACKAGE: desc  #scedar
+    steps:
+    - name: Move old logs from /incoming to /archived if status= processed, else  proccess
+      run: mv incomng/***.json archived_logs/ 
