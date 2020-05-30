@@ -199,7 +199,7 @@ jobs:
          #===============================================# 
         - run: |
             export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-            python3 -m pip install --upgrade pip setuptools wheel os time json pandas
+            python3 -m pip install pandas
 
             pip install json
             pip install pandas 
