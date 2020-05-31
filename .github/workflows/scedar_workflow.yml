@@ -200,8 +200,10 @@ jobs:
           shell: python  
          #===============================================# 
         - run: |
+            pip install --upgrade pip setuptools wheel 
+            python3 -m pip install pandas numpy
             python3 process_logs.py
-            echo ' '
+             
         #export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
         #python3 -m pip install pandas numpy
         #pip install json 
