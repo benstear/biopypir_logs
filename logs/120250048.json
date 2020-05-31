@@ -1,0 +1,15 @@
+{
+  "Date": "ull",
+  "Pylint_score": "20.00",
+  "Pytest_score": "0",
+  "Pip": "True",
+  "License": "True",
+  "Build": "True",
+  "Linux": "",
+  "Mac": "",
+  "Windows": "",
+  "Linux_versions": "",
+  "Mac_versions": "",
+  "Windows_versions": "",
+  "Github_event_name": "push"
+}
