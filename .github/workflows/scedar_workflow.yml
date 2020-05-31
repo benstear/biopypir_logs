@@ -120,11 +120,11 @@ jobs:
   job2:
       needs: [run_tests] 
       if: always()
-      runs-on: ${{ matrix.os }}
-      strategy:
-       matrix:
-        python-version: [3.7] 
-        os: [macOS-latest]
+      runs-on: [macOS-latest] #${{ matrix.os }}
+      #strategy:
+      # matrix:
+      #  python-version: [3.7] 
+      #  os: [macOS-latest]
       env:    
         PACKAGE: desc  #scedar
         OWNER: eleozzr #TaylorResearchLab
@@ -147,7 +147,7 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           id: check_success
-          run: |
+          run: |    # put in helper, set flag, put if  stmnt here
             ls -A
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
@@ -202,7 +202,12 @@ jobs:
             export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
             python3 -m pip install pandas numpy
             python3 process_logs.py
-       #pip install json time os tabulate glob
+            pip install json 
+            pip install time 
+            pip install os 
+            pip install 
+            pip install tabulate 
+        #glob
 
 
        
