@@ -199,15 +199,16 @@ jobs:
           shell: python  
          #===============================================# 
         - run: |
-            export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-            python3 -m pip install pandas numpy
             python3 process_logs.py
-            pip install json 
-            pip install time 
-            pip install os 
-            pip install 
-            pip install tabulate 
-        #glob
+            echo ' '
+        #export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
+        #python3 -m pip install pandas numpy
+        #pip install json 
+        #pip install time 
+        #pip install os 
+        #pip install 
+        #pip install tabulate 
+        #pip install glob
 
 
        
