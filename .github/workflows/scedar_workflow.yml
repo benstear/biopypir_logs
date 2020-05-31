@@ -64,6 +64,7 @@ jobs:
       run: |
         pip install --upgrade pip setuptools wheel  
         pip install pylint
+        pip install os
         pip install pytest
         pip install coverage
         pip install pytest-cov
@@ -201,7 +202,6 @@ jobs:
         - run: |
             export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
             python3 -m pip install pandas numpy
-            pip install 'os==15.1'
             python3 process_logs.py
        #pip install json time os tabulate glob
 
