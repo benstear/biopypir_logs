@@ -120,11 +120,7 @@ jobs:
   job2:
       needs: [run_tests] 
       if: always()
-      runs-on: [macOS-latest] #${{ matrix.os }}
-      #strategy:
-      # matrix:
-      #  python-version: [3.7] 
-      #  os: [macOS-latest]
+      runs-on: [macOS-latest] 
       env:    
         PACKAGE: desc  #scedar
         OWNER: eleozzr #TaylorResearchLab
@@ -155,6 +151,7 @@ jobs:
               echo "::set-output name=run_status::False"
               mv $GITHUB_RUN_ID.json logs/
             fi
+            
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
