@@ -147,8 +147,7 @@ elif [ "$1" = "EVAL" ]; then
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; 
-  fi
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; fi
   
   if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
     badge='GOLD'; echo $badge; Hex_color=1
@@ -157,8 +156,6 @@ elif [ "$1" = "EVAL" ]; then
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  
-  #cat final.json
   
   echo $(cat final.json) $(cat badge.json) | jq -s add > cat final.json
 
