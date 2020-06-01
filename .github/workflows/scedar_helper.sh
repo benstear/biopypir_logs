@@ -194,7 +194,9 @@ elif [ "$1" = "EVAL" ]; then
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       export biopypir_workflow_status='SUCCESS'
-      printenv
-      mv $GITHUB_RUN_ID.json logs/
+      #printenv
+     
+      rm  logs/$PACKAGE*
+      mv $PACKAGE_$GITHUB_RUN_ID.json logs/
 
 fi 
