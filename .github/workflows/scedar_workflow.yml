@@ -199,7 +199,7 @@ jobs:
          #===============================================# 
         - run: |
             pip install --upgrade pip setuptools wheel 
-            python3 -m pip install pandas numpy
+            python3 -m pip install pandas numpy tabulate
             python3 process_logs.py
              
         #export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
