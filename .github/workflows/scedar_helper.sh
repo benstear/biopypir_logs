@@ -185,17 +185,18 @@ elif [ "$1" = "EVAL" ]; then
       cat stats.json
       
       if [ ! "$run_status" ]; then 
-        echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
+        echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
         export biopypir_workflow_status='FAIL'
+        echo'here'
       else
-        echo $(cat stats.json) $(cat final.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
+        echo $(cat stats.json) $(cat final.json) | jq -s add > "$PACKAGE_$GITHUB_RUN_ID".json
         export biopypir_workflow_status='SUCCESS'
       fi
       
       echo '############################'
       cat $PACKAGE_$GITHUB_RUN_ID.json
       echo '############################'
-      echo "$PACKAGE" "$GITHUB_RUN_ID"
+      #echo "$PACKAGE" "$GITHUB_RUN_ID"
       #printenv
      
       #rm  logs/$PACKAGE*
@@ -207,6 +208,6 @@ elif [ "$1" = "EVAL" ]; then
       
       #rm logs/*.json
       #ls logs/
-      mv $PACKAGE_$GITHUB_RUN_ID.json logs/
+      mv "$PACKAGE_$GITHUB_RUN_ID".json logs/
 
 fi 
