@@ -174,7 +174,9 @@ jobs:
               biopypir-macOS-latest-py3.7
         #===============================================#
         - name: STATS
-          run: ./biopypir_utils.sh "STATS" #- run: ls -aR
+          run:  |
+              ./biopypir_utils.sh "STATS" #- run: ls -aR
+              echo '${{env.PACKAGE}}_${{github.run_id}}'
         #===============================================# 
         #- name: Python Container Action for BIOPYPIR
         #  id: action_step
@@ -198,6 +200,7 @@ jobs:
         #  shell: python  
          #===============================================# 
         - run: |
+            printenv
             pip install --upgrade pip setuptools wheel 
             python3 -m pip install pandas numpy tabulate
             python3 process_logs.py
