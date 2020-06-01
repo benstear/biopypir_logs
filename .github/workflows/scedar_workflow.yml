@@ -147,7 +147,7 @@ jobs:
             ls -A; echo "::set-output name=run_status::True"
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
-              echo '{ RUN_STATUS: "FAIL" ' > $GITHUB_RUN_ID.json
+              echo '{ RUN_STATUS: "FAIL" ' > RUN_FAIL.json
               echo "::set-output name=run_status::False"
               mv $GITHUB_RUN_ID.json logs/
             fi
@@ -160,6 +160,7 @@ jobs:
         - name: EVALUATE jobs
           run: |
               if [ ${{steps.check_success.outputs.run_status}} ]; then
+                echo 'calling eval function'
                 ./biopypir_utils.sh "EVAL"
               fi
           #./biopypir_utils.sh "STATS"
