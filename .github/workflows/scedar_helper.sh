@@ -157,11 +157,11 @@ elif [ "$1" = "EVAL" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   
-  cat final.json
-  cat badge.json
+  #cat final.json
+  #cat badge.json
   echo '#########'
-  jq -s add final.json badge.json  > new.json
-  cat new.json
+  jq -s add final.json badge.json  > final.json
+  cat final.json
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
 
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
@@ -189,9 +189,11 @@ elif [ "$1" = "EVAL" ]; then
       '{ Github_event_name: $github_event,
           Run_ID: $run_id }' > run_info.json
       
-      echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
+      #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
+      jq -s add stats.json run_info.json  > stats.json
       
       cat stats.json
+      echo "$run_status"
       
       if [ ! "$run_status" ]; then 
         echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
