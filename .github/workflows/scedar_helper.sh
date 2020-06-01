@@ -117,7 +117,7 @@ elif [ "$1" = "EVAL" ]; then
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
-         --arg github_event "$GITHUB_EVENT_NAME" \
+
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -179,14 +179,18 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      last_update=$(cat stats.json |  jq ".last_commit")
-      created_at=$(cat stats.json |  jq ".date_created")
+      last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
+      created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
      
-      created_at=${created_at:1:10}; echo $created_at;
-      last_update=${last_update:1:10}; echo $last_update; 
-                  
       jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
       jq --arg created "$created_at" '.date_created = $created' stats.json > stats.json
+      
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
+            --arg run_id $GITHUB_RUN_ID \
+      '{ Github_event_name: $github_event,
+          Run_ID: $run_id }' > run_info.json
+      
+      echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       
       echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
       export biopypir_workflow_status='SUCCESS'
