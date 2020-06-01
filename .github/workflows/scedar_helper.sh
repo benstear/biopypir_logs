@@ -186,15 +186,18 @@ elif [ "$1" = "EVAL" ]; then
       cat run_info.json
       echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       
-      echo $(cat stats.json) $(cat final.json) | jq -s add > $GITHUB_RUN_ID.json
+      echo $(cat stats.json) $(cat final.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
       export biopypir_workflow_status='SUCCESS'
       #printenv
      
       #rm  logs/$PACKAGE*
      for file in "$(pwd)"/logs/*.json; do
-        echo $file
+        if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
+          echo file
+        fi
       done
-   
+      
+      rm logs/*.json
       mv $PACKAGE_$GITHUB_RUN_ID.json logs/
 
 fi 
