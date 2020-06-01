@@ -103,7 +103,7 @@ elif [ "$1" = "EVAL" ]; then
    echo "cumulative pytest score: $pytest_score_cum"
    
    # Calculate pylint and pytest scores average
-   k="$(($j+1))" ; echo ""k = $k
+   k="$(($j+1))" ; echo k = $k
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
@@ -134,6 +134,8 @@ elif [ "$1" = "EVAL" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > final.json
 
+  cat final.json
+
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat final.json | jq ".License")
    BUILD=$(cat final.json | jq ".Build")
@@ -157,7 +159,9 @@ elif [ "$1" = "EVAL" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   
-  echo $(cat final.json) $(cat badge.json) | jq -s add > cat final.json
+  echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+  
+  cat final.json
 
   
   elif [ "$1" = "STATS" ]; then
