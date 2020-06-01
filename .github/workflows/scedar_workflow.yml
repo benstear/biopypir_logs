@@ -148,12 +148,12 @@ jobs:
         - name: check for any job success, and cURL helper script
           id: check_success
           run: |    # put in helper, set flag, put if  stmnt here
-            ls -A
+            ls -A; echo "::set-output name=run_status::True"
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
-              echo "ALL JOBS FAILED"  > $GITHUB_RUN_ID.json
+              echo '{ RUN_STATUS: "FAIL" ' > $GITHUB_RUN_ID.json
+              echo "::set-output name=run_status::False"
               mv $GITHUB_RUN_ID.json logs/
-              exit 1
             fi
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
@@ -161,8 +161,8 @@ jobs:
         #===============================================#
           
         - name: EVALUATE jobs
-          if: success()
           run: |
+              if [[ "${{steps.check_success.outputs.run_status}}" ]]; then
                 ./biopypir_utils.sh "EVAL"
           #./biopypir_utils.sh "STATS"
        #===============================================#
