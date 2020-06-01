@@ -138,7 +138,7 @@ elif [ "$1" = "EVAL" ]; then
    LICENSE=$(cat final.json | jq ".License")
    BUILD=$(cat final.json | jq ".Build")
    PIP=$(cat final.json | jq ".Pip")
-   LINT_SCORE=$(cat final.json | jq ".Pylint_score")
+   LINT_SCORE=$(cat final.json | jq ".Pylint_score")   # move into other cmd
    COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
    badge='NONE'
    
@@ -159,13 +159,14 @@ elif [ "$1" = "EVAL" ]; then
   
   cat final.json
   cat badge.json
-  
-  
-  echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+  echo '#########'
+  jq -s add final.json badge.json  > new.json
+  cat new.json
+  #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
 
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
   
-  cat final.json
+  #cat final.json
 
   
   elif [ "$1" = "STATS" ]; then
