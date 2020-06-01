@@ -195,7 +195,7 @@ elif [ "$1" = "EVAL" ]; then
       echo '############################'
       cat $PACKAGE_$GITHUB_RUN_ID.json
       echo '############################'
-      echo '$PACKAGE $GITHUB_RUN_ID'
+      echo "$PACKAGE" "$GITHUB_RUN_ID"
       #printenv
      
       #rm  logs/$PACKAGE*
