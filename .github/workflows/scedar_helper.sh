@@ -117,7 +117,6 @@ elif [ "$1" = "EVAL" ]; then
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
-
            '{ Date          :  $date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -196,7 +195,7 @@ elif [ "$1" = "EVAL" ]; then
       export biopypir_workflow_status='SUCCESS'
       #printenv
      
-      rm  logs/$PACKAGE*
+      #rm  logs/$PACKAGE*
       mv $PACKAGE_$GITHUB_RUN_ID.json logs/
 
 fi 
