@@ -147,7 +147,7 @@ jobs:
             ls -A; echo "::set-output name=run_status::True"
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
-              echo '{ RUN_STATUS: "FAIL" ' > RUN_FAIL.json
+              echo '{ RUN_STATUS: "FAIL" ' > RUN_STATUS.json
               echo "::set-output name=run_status::False"
               mv $GITHUB_RUN_ID.json logs/
             fi
@@ -194,8 +194,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
             
             
-        - run: help('modules')
-          shell: python  
+        #- run: help('modules')
+        #  shell: python  
          #===============================================# 
         - run: |
             pip install --upgrade pip setuptools wheel 
