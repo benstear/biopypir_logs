@@ -6,14 +6,6 @@ Created on Thu May 28 15:09:37 2020
 @author: stearb
 """
 
-
-
-
-# read biopypir_log
-
-# get name date, run id, and info
-
-
 # and check if anything is different, only change 'last checked' if everything same   
 import os
 import time
@@ -34,6 +26,7 @@ logs_path = "logs/*.json"
 all_logs = glob.glob(local_path) 
 print('Total Logs found: '+str(len(all_logs)))
 
+'''
 owners  = []
 dups =  []
 v=0
@@ -73,7 +66,7 @@ print(u)
 
 
 df.to_csv('log_matrix.csv',sep='\t')
-
+'''
 
 '''
 
