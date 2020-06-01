@@ -150,7 +150,6 @@ elif [ "$1" = "EVAL" ]; then
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; 
   fi
   
-  #(( $(echo "$num1 > $num2" |bc -l) ))
   if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
     badge='GOLD'; echo $badge; Hex_color=1
   elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
@@ -160,12 +159,8 @@ elif [ "$1" = "EVAL" ]; then
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   
   cat final.json
-  echo '------------'
-  cat scores_and_matrix.json
-  echo '------------'
-  cat badge.json
   
-  echo $(cat scores_and_matrix.json) $(cat badge.json) | jq -s add > cat scores_and_matrix.json
+  echo $(cat final.json) $(cat badge.json) | jq -s add > cat final.json
 
   
   elif [ "$1" = "STATS" ]; then
@@ -191,11 +186,15 @@ elif [ "$1" = "EVAL" ]; then
       cat run_info.json
       echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       
-      echo $(cat stats.json) $(cat scores_and_matrix.json) | jq -s add > $GITHUB_RUN_ID.json
+      echo $(cat stats.json) $(cat final.json) | jq -s add > $GITHUB_RUN_ID.json
       export biopypir_workflow_status='SUCCESS'
       #printenv
      
       #rm  logs/$PACKAGE*
+     for file in "$(pwd)"/logs/*.json; do
+        echo $file
+      done
+   
       mv $PACKAGE_$GITHUB_RUN_ID.json logs/
 
 fi 
