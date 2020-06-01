@@ -134,8 +134,6 @@ elif [ "$1" = "EVAL" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > final.json
 
-  cat final.json
-
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat final.json | jq ".License")
    BUILD=$(cat final.json | jq ".Build")
@@ -159,7 +157,13 @@ elif [ "$1" = "EVAL" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   
+  cat final.json
+  cat badge.json
+  
+  
   echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
+
+  #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
   
   cat final.json
 
