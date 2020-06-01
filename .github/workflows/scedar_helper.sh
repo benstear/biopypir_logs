@@ -50,15 +50,15 @@ elif [ "$1" = "GATHER" ]; then
                                          
 elif [ "$1" = "EVAL" ]; then
   
-  echo $GITHUB_RUN_ID
+  #echo $GITHUB_RUN_ID
   
   # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
-  #echo "raw job count: $job_count"
+  echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
-  #echo "adjusted jobcount: $j (0 indexed)"
+  echo "adjusted jobcount: $j (0 indexed)"
   
   linux_array=(); linux_vs=()
   mac_array=();  mac_vs=()
@@ -128,8 +128,7 @@ elif [ "$1" = "EVAL" ]; then
               Windows       : $windows,
               Linux_versions: $linux_vers,
               Mac_versions: $mac_vers,
-              Windows_versions: $windows_vers,
-              Github_event_name: $github_event }'  > scores_and_matrix.json
+              Windows_versions: $windows_vers }'  > scores_and_matrix.json
                
   a=$(ls parallel_runs/ | head -1)
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
