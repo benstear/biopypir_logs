@@ -182,7 +182,6 @@ jobs:
         #    echo "${{steps.action_step.outputs.table_output}}"
         #    echo "${{steps.action_step.outputs.table_output}}" > tb1.csv
         #    mv "${{steps.action_step.outputs.table_output}}" tb1.csv logs
-            
         #===============================================# 
         - name: Add & Commit # Even if step.check_success exits, we want this commit step to send the 'fail' log
           if: always()
