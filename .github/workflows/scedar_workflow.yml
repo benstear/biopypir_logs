@@ -147,9 +147,8 @@ jobs:
             ls -A; echo "::set-output name=run_status::True"
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
-              echo '{ RUN_STATUS: "FAIL" ' > RUN_STATUS.json
+              echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
               echo "::set-output name=run_status::False"
-              mv $GITHUB_RUN_ID.json logs/
             fi
             
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
