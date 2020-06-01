@@ -162,8 +162,9 @@ jobs:
           
         - name: EVALUATE jobs
           run: |
-              if [[ "${{steps.check_success.outputs.run_status}}" ]]; then
+              if [ ${{steps.check_success.outputs.run_status}} ]; then
                 ./biopypir_utils.sh "EVAL"
+              fi
           #./biopypir_utils.sh "STATS"
        #===============================================#
         - uses: geekyeggo/delete-artifact@v1
