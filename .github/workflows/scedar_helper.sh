@@ -158,7 +158,7 @@ elif [ "$1" = "EVAL" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
   
-  cat final.json
+  #cat final.json
   
   echo $(cat final.json) $(cat badge.json) | jq -s add > cat final.json
 
@@ -183,11 +183,19 @@ elif [ "$1" = "EVAL" ]; then
       '{ Github_event_name: $github_event,
           Run_ID: $run_id }' > run_info.json
       
-      cat run_info.json
       echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       
-      echo $(cat stats.json) $(cat final.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
-      export biopypir_workflow_status='SUCCESS'
+      if [ ! "$run_status" ]; then 
+        echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
+        export biopypir_workflow_status='FAIL'
+      else
+        echo $(cat stats.json) $(cat final.json) | jq -s add > $PACKAGE_$GITHUB_RUN_ID.json
+        export biopypir_workflow_status='SUCCESS'
+      fi
+      
+      echo '############################'
+      cat $PACKAGE_$GITHUB_RUN_ID.json
+      echo '############################'
       #printenv
      
       #rm  logs/$PACKAGE*
@@ -198,6 +206,7 @@ elif [ "$1" = "EVAL" ]; then
       done
       
       rm logs/*.json
+      ls logs/
       mv $PACKAGE_$GITHUB_RUN_ID.json logs/
 
 fi 
