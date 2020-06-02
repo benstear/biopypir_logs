@@ -193,9 +193,10 @@ elif [ "$1" = "EVAL" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
-      
-      #rm logs/*.json
-      #ls logs/
-      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/
+      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
+
+    pip install --upgrade pip setuptools wheel 
+    python3 -m pip install pandas numpy tabulate
+    python3 process_logs.py
 
 fi 
