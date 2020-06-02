@@ -1,9 +1,11 @@
 
 ---
 name: PROCCESS LOGS
-on: 
-  schedule:
-    - cron: '0 0 0 0 0' 
+on:
+  issue_comment:
+      
+  #schedule:
+  #  - cron: '0 0 0 0 0' 
   #push: # remove when youre done testing workflow
   #  paths-ignore: 
   #    - 'logs/**.json' 
