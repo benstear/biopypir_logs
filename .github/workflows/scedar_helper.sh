@@ -114,13 +114,13 @@ elif [ "$1" = "EVAL" ]; then
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; #echo $date
    
-   jq -n --arg date "$date_slice" \
+   jq -n --arg full_date "$date" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
-           '{ Date          :  $date,
+           '{ Date          :  $full_date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
               Pip           : "True",
@@ -182,11 +182,7 @@ elif [ "$1" = "EVAL" ]; then
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-      
-      #echo '### stats ####'
-      #cat stats.json 
-      #echo '################'
-      
+
       #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
       #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
       #jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
@@ -198,11 +194,7 @@ elif [ "$1" = "EVAL" ]; then
       #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       jq -s add stats.json run_info.json  > stats_2.json
       
-      #echo '### stats 2 ####'
-      #cat stats_2.json 
-      #echo '################'
-     
-      echo "run_status: $run_status"
+      #echo "run_status: $run_status"
       
       if [ ! "$run_status" ]; then
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
@@ -215,18 +207,18 @@ elif [ "$1" = "EVAL" ]; then
       echo '##### "$PACKAGE"_"$GITHUB_RUN_ID"  ########'
       cat "$PACKAGE"_"$GITHUB_RUN_ID".json
       echo '####################################'
-      #echo "$PACKAGE" "$GITHUB_RUN_ID"
-      #printenv
+
      
-     rm  logs/"$PACKAGE"*.json
-     #for file in "$(pwd)"/logs/*.json; do
-     #   if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
-     #     echo file
-     #   fi
-     # done
+     rm  /logs/"$PACKAGE"*.json
+     
+     for file in "$(pwd)"/logs/*.json; do
+        if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
+          echo file; rm file
+        fi
+      done
       
       #rm logs/*.json
-      #ls logs/
+      ls logs/
       mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/
 
 fi 
