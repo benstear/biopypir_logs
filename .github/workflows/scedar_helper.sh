@@ -20,7 +20,7 @@ elif [ "$1" = "TEST" ]; then
   
   if [[ "$test_suite" == 'pytest' ]]; then
     echo "::set-output name=pytest_score::False"
-    pytest_cov=$(pytest tests/ -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
+    pytest_cov=$(pytest "$test_dir" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
@@ -30,7 +30,7 @@ elif [ "$1" = "TEST" ]; then
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
   python setup.py build
-  pytestcheck=$"True"
+  #pytestcheck=$"True"
   echo "::set-output name=build_output::True"  
   
 elif [ "$1" = "GATHER" ]; then
