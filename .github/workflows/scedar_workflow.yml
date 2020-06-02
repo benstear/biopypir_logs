@@ -15,10 +15,10 @@ jobs:
         python-version: [3.6,3.7] 
         os: [ubuntu-latest] #,windows-latest, macOS-latest]
     env:       
-      PACKAGE: scedar #desc  
-      OWNER:  TaylorResearchLab  #eleozzr
+      PACKAGE: manubot #scedar #desc  
+      OWNER:  cgreene #TaylorResearchLab  #eleozzr
       test_suite:  "pytest" # None
-      tests_dir:  "tests/" # None
+      tests_dir:  manubot #"tests/" # None
       ignore_tests: None
       ignore_lint: None
     steps:
@@ -112,10 +112,10 @@ jobs:
       if: always()
       runs-on: [ubuntu-latest] 
       env:    
-        PACKAGE: scedar #desc
-        OWNER:  TaylorResearchLab #eleozzr
+        PACKAGE: manubot #scedar #desc
+        OWNER:  cgreene #TaylorResearchLab #eleozzr
         test_suite:  "pytest"
-        tests_dir: "tests/"
+        tests_dir: manubot #"tests/"
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
@@ -164,15 +164,7 @@ jobs:
           run:  |
               ./biopypir_utils.sh "STATS"
         #===============================================# 
-        #- name: Python Container Action for BIOPYPIR
-        #  id: action_step
-        #  uses: benstear/biopypir-python-action@v1.0
-        #- run: |
-        #    echo "${{steps.action_step.outputs.table_output}}"
-        #    echo "${{steps.action_step.outputs.table_output}}" > tb1.csv
-        #    mv "${{steps.action_step.outputs.table_output}}" tb1.csv logs
-        #===============================================# 
-        - name: Add & Commit # Even if step.check_success exits, we want this commit step to send the 'fail' log
+        - name: Add & Commit 
           if: always()
           uses: EndBug/add-and-commit@v4.1.0
           with:
