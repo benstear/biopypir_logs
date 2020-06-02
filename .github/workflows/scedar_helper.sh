@@ -176,6 +176,10 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
+      echo '### stats ####'
+      cat stats.json 
+      echo'################'
+      
       #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
       #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
       #jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
@@ -187,9 +191,11 @@ elif [ "$1" = "EVAL" ]; then
       #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       jq -s add stats.json run_info.json  > stats_2.json
       
-      cat stats_2.json
+      echo '### stats 2 ####'
+      cat stats_2.json 
+      echo'################'
      
-      echo "$run_status"
+      echo "run_status: $run_status"
       
       if [ "$run_status" ]; then
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
@@ -202,9 +208,9 @@ elif [ "$1" = "EVAL" ]; then
         export biopypir_workflow_status='SUCCESS'
       fi
       
-      echo '############################'
+      echo '##### "$PACKAGE"_"$GITHUB_RUN_ID"  ########'
       cat "$PACKAGE"_"$GITHUB_RUN_ID".json
-      echo '############################'
+      echo '####################################'
       #echo "$PACKAGE" "$GITHUB_RUN_ID"
       #printenv
      
