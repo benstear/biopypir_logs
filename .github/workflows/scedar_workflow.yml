@@ -125,8 +125,6 @@ jobs:
         OWNER: eleozzr #TaylorResearchLab
         test_suite:  None #"pytest"
         tests_dir:  None #"tests/"
-        ignore_tests: None
-        ignore_lint: None 
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
@@ -190,7 +188,7 @@ jobs:
           if: always()
           uses: EndBug/add-and-commit@v4.1.0
           with:
-            add: logs/${{env.PACKAGE}}_${{github.run_id}}.json
+            add: logs/*  #${{env.PACKAGE}}_${{github.run_id}}.json
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
