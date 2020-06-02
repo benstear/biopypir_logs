@@ -94,10 +94,12 @@ elif [ "$1" = "EVAL" ]; then
   echo 'pylint/pytest scores'
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
-    pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; echo  "pylint_score"
+    pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; 
+    echo "pylint_score: $pylint_score"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
-    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"');  "pytest_score"
+    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"'); 
+    echo "pytest_score: $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
    
@@ -175,7 +177,7 @@ elif [ "$1" = "EVAL" ]; then
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
-      has_downloads: .has_downloads}" > stats.json
+      has_downloads: .has_downloads}" -o stats.json
       
       echo '### stats ####'
       cat stats.json 
