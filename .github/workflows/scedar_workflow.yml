@@ -7,7 +7,6 @@ on:
     paths-ignore: 
       - 'logs/**.json' 
       - 'biopypir_matrix.md'
-    
 jobs:
   run_tests:
     runs-on: ${{ matrix.os }}
@@ -120,7 +119,7 @@ jobs:
   job2:
       needs: [run_tests] 
       if: always()
-      runs-on: [macOS-latest] 
+      runs-on: [ubuntu-latest] 
       env:    
         PACKAGE: desc  #scedar
         OWNER: eleozzr #TaylorResearchLab
