@@ -173,26 +173,13 @@ jobs:
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-            
-        - run: ls -a 
-        #- run: help('modules')
-        #  shell: python  
          #===============================================# 
         - run: |
-            printenv
             pip install --upgrade pip setuptools wheel 
             python3 -m pip install pandas numpy tabulate
             python3 process_logs.py
-             
-        #export AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
-        #python3 -m pip install pandas numpy
-        #pip install json 
-        #pip install time 
-        #pip install os 
-        #pip install 
-        #pip install tabulate 
-        #pip install glob
-
+            
+        - run: ls -a              
 
        
 
