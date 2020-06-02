@@ -194,10 +194,11 @@ elif [ "$1" = "EVAL" ]; then
       
       #cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
-     rm  'logs/"$PACKAGE"**.json'
+     rm  logs/"$PACKAGE"_*.json
+     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json scores_and_matrix.json
      
      for file in "$(pwd)"/logs/*.json; do
-        if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
+        if [[ file  =~  .*"$PACKAGE".*  ]]; then # .*"ubuntu".*
           echo file; rm file
         fi
       done
