@@ -143,11 +143,9 @@ jobs:
           run: |    # put in helper, set flag, put if  stmnt here
             echo "::set-output name=run_status::True"
             echo "::set-env name=run_status::True"
-            export run_status=True
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
               echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
-              export run_status=False
               echo "::set-output name=run_status::False"   
             fi
             
