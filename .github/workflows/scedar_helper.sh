@@ -173,9 +173,9 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-    echo "$OWNER"
-    echo "$PACKAGE"
-    printenv
+    #echo "$OWNER"
+    #echo "$PACKAGE"
+    #printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -183,9 +183,9 @@ elif [ "$1" = "EVAL" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      echo '### stats ####'
-      cat stats.json 
-      echo '################'
+      #echo '### stats ####'
+      #cat stats.json 
+      #echo '################'
       
       #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
       #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
@@ -198,21 +198,18 @@ elif [ "$1" = "EVAL" ]; then
       #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       jq -s add stats.json run_info.json  > stats_2.json
       
-      echo '### stats 2 ####'
-      cat stats_2.json 
-      echo '################'
+      #echo '### stats 2 ####'
+      #cat stats_2.json 
+      #echo '################'
      
       echo "run_status: $run_status"
       
-      if [ "$run_status" ]; then
+      if [ ! "$run_status" ]; then
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        #echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        export biopypir_workflow_status='FAIL'
-        echo 'here'
+        echo "::set-env name=biopypir_workflow_status::FAIL"
       else
         jq -s add stats_2.json eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        #echo $(cat stats.json) $(cat eval.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        export biopypir_workflow_status='SUCCESS'
+        echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
       echo '##### "$PACKAGE"_"$GITHUB_RUN_ID"  ########'
@@ -221,7 +218,7 @@ elif [ "$1" = "EVAL" ]; then
       #echo "$PACKAGE" "$GITHUB_RUN_ID"
       #printenv
      
-     rm  logs/$PACKAGE*.json
+     rm  logs/"$PACKAGE"*.json
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
      #     echo file
