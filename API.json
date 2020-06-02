@@ -1,0 +1,472 @@
+{
+  "total_count": 3,
+  "jobs": [
+    {
+      "id": 731965778,
+      "run_id": 122842962,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/122842962",
+      "node_id": "MDg6Q2hlY2tSdW43MzE5NjU3Nzg=",
+      "head_sha": "1a01ef2bc831770947ad762e040af230997bc085",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/731965778",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/731965778",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2020-06-02T18:07:40Z",
+      "completed_at": "2020-06-02T18:10:10Z",
+      "name": "run_tests (3.6, ubuntu-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2020-06-02T18:07:40.000Z",
+          "completed_at": "2020-06-02T18:07:42.000Z"
+        },
+        {
+          "name": "Build datreeio/validate-license-action@v1.0.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2020-06-02T18:07:42.000Z",
+          "completed_at": "2020-06-02T18:07:52.000Z"
+        },
+        {
+          "name": "Create cache file",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2020-06-02T18:07:52.000Z",
+          "completed_at": "2020-06-02T18:07:52.000Z"
+        },
+        {
+          "name": "Check SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2020-06-02T18:07:52.000Z",
+          "completed_at": "2020-06-02T18:07:52.000Z"
+        },
+        {
+          "name": "Some subsequent steps",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2020-06-02T18:07:52.000Z",
+          "completed_at": "2020-06-02T18:07:52.000Z"
+        },
+        {
+          "name": "checkout desc repo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2020-06-02T18:07:52.000Z",
+          "completed_at": "2020-06-02T18:08:04.000Z"
+        },
+        {
+          "name": "cURL helper script",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2020-06-02T18:08:04.000Z",
+          "completed_at": "2020-06-02T18:08:04.000Z"
+        },
+        {
+          "name": "Set Up ubuntu-latest-py3.6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2020-06-02T18:08:04.000Z",
+          "completed_at": "2020-06-02T18:08:04.000Z"
+        },
+        {
+          "name": "validate-license-action",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2020-06-02T18:08:04.000Z",
+          "completed_at": "2020-06-02T18:08:16.000Z"
+        },
+        {
+          "name": "INSTALL dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2020-06-02T18:08:16.000Z",
+          "completed_at": "2020-06-02T18:08:35.000Z"
+        },
+        {
+          "name": "LINT",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2020-06-02T18:08:35.000Z",
+          "completed_at": "2020-06-02T18:09:02.000Z"
+        },
+        {
+          "name": "BUILD",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2020-06-02T18:09:02.000Z",
+          "completed_at": "2020-06-02T18:09:02.000Z"
+        },
+        {
+          "name": "PYTEST",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2020-06-02T18:09:02.000Z",
+          "completed_at": "2020-06-02T18:09:02.000Z"
+        },
+        {
+          "name": "PIP deployment test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2020-06-02T18:09:02.000Z",
+          "completed_at": "2020-06-02T18:10:09.000Z"
+        },
+        {
+          "name": "GATHER outputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2020-06-02T18:10:09.000Z",
+          "completed_at": "2020-06-02T18:10:09.000Z"
+        },
+        {
+          "name": "UPLOAD artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2020-06-02T18:10:09.000Z",
+          "completed_at": "2020-06-02T18:10:09.000Z"
+        },
+        {
+          "name": "UPLOAD artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2020-06-02T18:10:09.000Z",
+          "completed_at": "2020-06-02T18:10:09.000Z"
+        },
+        {
+          "name": "Post checkout desc repo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2020-06-02T18:10:09.000Z",
+          "completed_at": "2020-06-02T18:10:10.000Z"
+        },
+        {
+          "name": "Post Check SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2020-06-02T18:10:10.000Z",
+          "completed_at": "2020-06-02T18:10:10.000Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2020-06-02T18:10:10.000Z",
+          "completed_at": "2020-06-02T18:10:10.000Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/731965778"
+    },
+    {
+      "id": 731965813,
+      "run_id": 122842962,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/122842962",
+      "node_id": "MDg6Q2hlY2tSdW43MzE5NjU4MTM=",
+      "head_sha": "1a01ef2bc831770947ad762e040af230997bc085",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/731965813",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/731965813",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2020-06-02T18:07:41Z",
+      "completed_at": "2020-06-02T18:10:44Z",
+      "name": "run_tests (3.7, ubuntu-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2020-06-02T18:07:41.000Z",
+          "completed_at": "2020-06-02T18:07:44.000Z"
+        },
+        {
+          "name": "Build datreeio/validate-license-action@v1.0.0",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2020-06-02T18:07:44.000Z",
+          "completed_at": "2020-06-02T18:08:04.000Z"
+        },
+        {
+          "name": "Create cache file",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2020-06-02T18:08:04.000Z",
+          "completed_at": "2020-06-02T18:08:04.000Z"
+        },
+        {
+          "name": "Check SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2020-06-02T18:08:04.000Z",
+          "completed_at": "2020-06-02T18:08:06.000Z"
+        },
+        {
+          "name": "Some subsequent steps",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2020-06-02T18:08:06.000Z",
+          "completed_at": "2020-06-02T18:08:06.000Z"
+        },
+        {
+          "name": "checkout desc repo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2020-06-02T18:08:06.000Z",
+          "completed_at": "2020-06-02T18:08:21.000Z"
+        },
+        {
+          "name": "cURL helper script",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2020-06-02T18:08:21.000Z",
+          "completed_at": "2020-06-02T18:08:21.000Z"
+        },
+        {
+          "name": "Set Up ubuntu-latest-py3.7",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2020-06-02T18:08:21.000Z",
+          "completed_at": "2020-06-02T18:08:21.000Z"
+        },
+        {
+          "name": "validate-license-action",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2020-06-02T18:08:21.000Z",
+          "completed_at": "2020-06-02T18:08:38.000Z"
+        },
+        {
+          "name": "INSTALL dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2020-06-02T18:08:38.000Z",
+          "completed_at": "2020-06-02T18:09:04.000Z"
+        },
+        {
+          "name": "LINT",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2020-06-02T18:09:04.000Z",
+          "completed_at": "2020-06-02T18:09:27.000Z"
+        },
+        {
+          "name": "BUILD",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2020-06-02T18:09:27.000Z",
+          "completed_at": "2020-06-02T18:09:27.000Z"
+        },
+        {
+          "name": "PYTEST",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2020-06-02T18:09:27.000Z",
+          "completed_at": "2020-06-02T18:09:27.000Z"
+        },
+        {
+          "name": "PIP deployment test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2020-06-02T18:09:27.000Z",
+          "completed_at": "2020-06-02T18:10:43.000Z"
+        },
+        {
+          "name": "GATHER outputs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2020-06-02T18:10:43.000Z",
+          "completed_at": "2020-06-02T18:10:43.000Z"
+        },
+        {
+          "name": "UPLOAD artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2020-06-02T18:10:43.000Z",
+          "completed_at": "2020-06-02T18:10:43.000Z"
+        },
+        {
+          "name": "UPLOAD artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2020-06-02T18:10:43.000Z",
+          "completed_at": "2020-06-02T18:10:44.000Z"
+        },
+        {
+          "name": "Post checkout desc repo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2020-06-02T18:10:44.000Z",
+          "completed_at": "2020-06-02T18:10:44.000Z"
+        },
+        {
+          "name": "Post Check SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 34,
+          "started_at": "2020-06-02T18:10:44.000Z",
+          "completed_at": "2020-06-02T18:10:44.000Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35,
+          "started_at": "2020-06-02T18:10:44.000Z",
+          "completed_at": "2020-06-02T18:10:44.000Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/731965813"
+    },
+    {
+      "id": 731978119,
+      "run_id": 122842962,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/122842962",
+      "node_id": "MDg6Q2hlY2tSdW43MzE5NzgxMTk=",
+      "head_sha": "1a01ef2bc831770947ad762e040af230997bc085",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/731978119",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/731978119",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2020-06-02T18:10:59Z",
+      "completed_at": null,
+      "name": "job2",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2020-06-02T18:10:59.000Z",
+          "completed_at": "2020-06-02T18:11:01.000Z"
+        },
+        {
+          "name": "Check-Out Repo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2020-06-02T18:11:01.000Z",
+          "completed_at": "2020-06-02T18:11:02.000Z"
+        },
+        {
+          "name": "Set up Python ",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2020-06-02T18:11:02.000Z",
+          "completed_at": "2020-06-02T18:11:03.000Z"
+        },
+        {
+          "name": "Download artifact",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 4,
+          "started_at": "2020-06-02T18:11:03.000Z",
+          "completed_at": null
+        },
+        {
+          "name": "check for any job success, and cURL helper script",
+          "status": "queued",
+          "conclusion": null,
+          "number": 5,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "EVALUATE jobs",
+          "status": "queued",
+          "conclusion": null,
+          "number": 6,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Run geekyeggo/delete-artifact@v1",
+          "status": "queued",
+          "conclusion": null,
+          "number": 7,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "STATS",
+          "status": "queued",
+          "conclusion": null,
+          "number": 8,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Add & Commit",
+          "status": "queued",
+          "conclusion": null,
+          "number": 9,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Run ls -a",
+          "status": "queued",
+          "conclusion": null,
+          "number": 10,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Run printenv",
+          "status": "queued",
+          "conclusion": null,
+          "number": 11,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Check-Out Repo",
+          "status": "queued",
+          "conclusion": null,
+          "number": 22,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/731978119"
+    }
+  ]
+}
