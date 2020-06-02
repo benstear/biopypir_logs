@@ -132,14 +132,14 @@ elif [ "$1" = "EVAL" ]; then
                
   a=$(ls parallel_runs/ | head -1)
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
-  jq -s add | jq 'del(.OS, .Python_version)' > final.json
+  jq -s add | jq 'del(.OS, .Python_version)' > eval.json
 
    # ================= GET BADGE STATUS ======================== #
-   LICENSE=$(cat final.json | jq ".License")
-   BUILD=$(cat final.json | jq ".Build")
-   PIP=$(cat final.json | jq ".Pip")
-   LINT_SCORE=$(cat final.json | jq ".Pylint_score")   # move into other cmd
-   COVERAGE_SCORE=$(cat final.json | jq ".Pytest_score")
+   LICENSE=$(cat eval.json | jq ".License")
+   BUILD=$(cat eval.json | jq ".Build")
+   PIP=$(cat eval.json | jq ".Pip")
+   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   # move into other cmd
+   COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
    
    COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
@@ -150,9 +150,9 @@ elif [ "$1" = "EVAL" ]; then
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; fi
   
   if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-    badge='GOLD'; echo $badge; Hex_color=1
+    badge='GOLD'; #echo $badge; Hex_color=1
   elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-    badge='SILVER'; echo $badge; Hex_color=5
+    badge='SILVER';# echo $badge; Hex_color=5
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
@@ -160,13 +160,10 @@ elif [ "$1" = "EVAL" ]; then
   #cat final.json
   #cat badge.json
   echo '#########'
-  jq -s add final.json badge.json  > final.json
-  cat final.json
+  jq -s add eval.json badge.json  > eval.json
+  cat eval.json
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
-
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
-  
-  #cat final.json
 
   
   elif [ "$1" = "STATS" ]; then
@@ -180,7 +177,6 @@ elif [ "$1" = "EVAL" ]; then
       
       #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
       #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
-     
       #jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
       #jq --arg created "$created_at" '.date_created = $created' stats.json > stats.json
       
@@ -193,14 +189,17 @@ elif [ "$1" = "EVAL" ]; then
       jq -s add stats.json run_info.json  > stats.json
       
       cat stats.json
+      
       echo "$run_status"
       
-      if [ ! "$run_status" ]; then 
-        echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
+      if [ "$run_status" ]; then
+        jq -s add stats.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        #echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
         export biopypir_workflow_status='FAIL'
         echo 'here'
       else
-        echo $(cat stats.json) $(cat final.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats.json eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        #echo $(cat stats.json) $(cat eval.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
         export biopypir_workflow_status='SUCCESS'
       fi
       
