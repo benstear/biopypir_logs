@@ -173,7 +173,9 @@ elif [ "$1" = "EVAL" ]; then
   
   elif [ "$1" = "STATS" ]; then
   
-    echo "$OWNER"/"$PACKAGE"
+    echo "$OWNER"
+    echo "$PACKAGE"
+    printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -219,7 +221,7 @@ elif [ "$1" = "EVAL" ]; then
       #echo "$PACKAGE" "$GITHUB_RUN_ID"
       #printenv
      
-      #rm  logs/$PACKAGE*
+     rm  logs/$PACKAGE*.json
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
      #     echo file
