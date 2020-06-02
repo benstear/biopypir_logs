@@ -159,17 +159,7 @@ elif [ "$1" = "EVAL" ]; then
     badge='SILVER';# echo $badge; Hex_color=5
   fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-
-  jq -s add eval.json badge.json  > eval_2.json
-  
-  echo '## eval_2 ####'
-  cat eval_2.json
-  echo '###########'
-  
-  #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
-  #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
-
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; jq -s add eval.json badge.json  > eval_2.json
   
   elif [ "$1" = "STATS" ]; then
 
@@ -192,19 +182,17 @@ elif [ "$1" = "EVAL" ]; then
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
-      #cat "$PACKAGE"_"$GITHUB_RUN_ID".json
-     
-     #echo  logs/"$PACKAGE"_*.json
-     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh
+     rm eval.json eval_2.json stats.json stats_2.json badge.json \
+     run_info.json scores_and_matrix.json API.json biopypir_utils.sh
      rm -r parallel_runs
      
-     mv logs/* archived_logs
+     mv logs/"$PACKAGE"*.json archived_logs
      
-     for file in "$(pwd)"/logs/*.json; do
-        if [[ file  =~  .*"$PACKAGE".*  ]]; then # .*"ubuntu".*
-          echo file; rm file
-        fi
-      done
+     #for file in "$(pwd)"/logs/*.json; do
+     #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
+     #     echo file; mv file archived_logs
+     #   fi
+     # done
       
       #rm logs/*.json
       #ls logs/
