@@ -91,19 +91,20 @@ elif [ "$1" = "EVAL" ]; then
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
   # Get pylint and pytest scores from each of the parallel runs
+  echo 'pylint/pytest scores'
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
-    pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"
+    pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; echo  "pylint_score"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
-    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"')
+    pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"');  "pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
    
    echo "cumulative pytest score: $pytest_score_cum"
    
    # Calculate pylint and pytest scores average
-   k="$(($j+1))" ; echo k = $k
+   k="$(($j+1))" ; echo "k = $k"
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
@@ -134,7 +135,6 @@ elif [ "$1" = "EVAL" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
-  #cat eval.json
   
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
@@ -160,25 +160,26 @@ elif [ "$1" = "EVAL" ]; then
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
 
   jq -s add eval.json badge.json  > eval_2.json
-  echo '## new ####'
+  
+  echo '## eval_2 ####'
   cat eval_2.json
   echo '###########'
+  
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
 
   
   elif [ "$1" = "STATS" ]; then
   
-  curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
-      Package: .name, Description: .description,
-      date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+    curl https://api.github.com/repos/"$REPO_OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
+      Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
       echo '### stats ####'
       cat stats.json 
-      echo'################'
+      echo '################'
       
       #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
       #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
@@ -193,7 +194,7 @@ elif [ "$1" = "EVAL" ]; then
       
       echo '### stats 2 ####'
       cat stats_2.json 
-      echo'################'
+      echo '################'
      
       echo "run_status: $run_status"
       
