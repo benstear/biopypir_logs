@@ -143,7 +143,8 @@ jobs:
         - name: check for any job success, and cURL helper script
           id: check_success
           run: |    # put in helper, set flag, put if  stmnt here
-            ls -A; echo "::set-output name=run_status::True"
+            echo "::set-output name=run_status::True"
+            echo "::set-env name=run_status::True"
             export run_status=True
             if [[ ! "$(ls -A parallel_runs)" ]]; then 
               echo "No runs succeded."
@@ -175,7 +176,7 @@ jobs:
         #===============================================#
         - name: STATS
           run:  |
-              ./biopypir_utils.sh "STATS" #- run: ls -aR
+              ./biopypir_utils.sh "STATS"
         #===============================================# 
         #- name: Python Container Action for BIOPYPIR
         #  id: action_step
