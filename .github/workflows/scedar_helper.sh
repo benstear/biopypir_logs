@@ -194,9 +194,11 @@ elif [ "$1" = "EVAL" ]; then
       
       #cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
-     echo  logs/"$PACKAGE"_*.json
-     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json scores_and_matrix.json
-     rmdir parallel_runs
+     #echo  logs/"$PACKAGE"_*.json
+     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh
+     rm -r parallel_runs
+     
+     mv logs/* archived_logs
      
      for file in "$(pwd)"/logs/*.json; do
         if [[ file  =~  .*"$PACKAGE".*  ]]; then # .*"ubuntu".*
