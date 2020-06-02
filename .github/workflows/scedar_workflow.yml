@@ -166,6 +166,13 @@ jobs:
               ./biopypir_utils.sh "STATS"
         #===============================================# 
         
+        - run: |
+            pip install --upgrade pip setuptools wheel 
+            python3 -m pip install pandas numpy tabulate
+            python3 process_logs.py
+
+        - run: ls -a              
+        
         - name: Add & Commit 
           if: always()
           uses: EndBug/add-and-commit@v4.1.0
@@ -175,8 +182,6 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
          #===============================================# 
-
-        - run: ls -a              
 
        
 
