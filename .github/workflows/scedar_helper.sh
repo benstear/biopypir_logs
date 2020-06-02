@@ -158,10 +158,7 @@ elif [ "$1" = "EVAL" ]; then
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json
-  
-  #cat final.json
-  #cat badge.json
-  
+
   jq -s add eval.json badge.json  > eval_2.json
   echo '## new ####'
   cat eval_2.json
@@ -184,16 +181,14 @@ elif [ "$1" = "EVAL" ]; then
       #jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
       #jq --arg created "$created_at" '.date_created = $created' stats.json > stats.json
       
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
-            --arg run_id $GITHUB_RUN_ID \
-      '{ Github_event_name: $github_event,
-          Run_ID: $run_id }' > run_info.json
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id $GITHUB_RUN_ID \
+      '{ Github_event_name: $github_event,Run_ID: $run_id }' > run_info.json
       
       #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       jq -s add stats.json run_info.json  > stats_2.json
       
-      cat stats.json
-      
+      cat stats_2.json
+     
       echo "$run_status"
       
       if [ "$run_status" ]; then
