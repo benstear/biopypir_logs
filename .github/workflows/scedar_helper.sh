@@ -172,30 +172,18 @@ elif [ "$1" = "EVAL" ]; then
 
   
   elif [ "$1" = "STATS" ]; then
-  
-    #echo "$OWNER"
-    #echo "$PACKAGE"
-    #printenv
-    
+
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
 
-      #last_update=$(cat stats.json |  jq ".last_commit"); created_at=${created_at:1:10}; echo $created_at;
-      #created_at=$(cat stats.json |  jq ".date_created"); last_update=${last_update:1:10}; echo $last_update; 
-      #jq --arg update "$last_update" '.last_commit = $update' stats.json > stats.json
-      #jq --arg created "$created_at" '.date_created = $created' stats.json > stats.json
-      
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id $GITHUB_RUN_ID \
       '{ Github_event_name: $github_event,Run_ID: $run_id }' > run_info.json
       
-      #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
       jq -s add stats.json run_info.json  > stats_2.json
-      
-      #echo "run_status: $run_status"
-      
+            
       if [ ! "$run_status" ]; then
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::FAIL"
@@ -204,12 +192,9 @@ elif [ "$1" = "EVAL" ]; then
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
-      echo '##### "$PACKAGE"_"$GITHUB_RUN_ID"  ########'
-      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
-      echo '####################################'
-
+      #cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
-     rm  /logs/"$PACKAGE"*.json
+     rm  'logs/"$PACKAGE"**.json'
      
      for file in "$(pwd)"/logs/*.json; do
         if [[ file  =~  $PACKAGE  ]]; then # .*"ubuntu".*
@@ -218,7 +203,7 @@ elif [ "$1" = "EVAL" ]; then
       done
       
       #rm logs/*.json
-      ls logs/
+      #ls logs/
       mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/
 
 fi 
