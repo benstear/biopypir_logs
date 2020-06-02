@@ -134,7 +134,7 @@ elif [ "$1" = "EVAL" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
-  cat eval.json
+  #cat eval.json
   
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
@@ -162,9 +162,9 @@ elif [ "$1" = "EVAL" ]; then
   #cat final.json
   #cat badge.json
   
-  jq -s add eval.json badge.json  > new.json
+  jq -s add eval.json badge.json  > eval_2.json
   echo '## new ####'
-  cat new.json
+  cat eval_2.json
   echo '###########'
   #echo $(cat final.json) $(cat badge.json) | jq -s add > final.json
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | jq -s add |
@@ -190,19 +190,19 @@ elif [ "$1" = "EVAL" ]; then
           Run_ID: $run_id }' > run_info.json
       
       #echo $(cat stats.json) $(cat run_info.json) | jq -s add > stats.json
-      jq -s add stats.json run_info.json  > stats.json
+      jq -s add stats.json run_info.json  > stats_2.json
       
       cat stats.json
       
       echo "$run_status"
       
       if [ "$run_status" ]; then
-        jq -s add stats.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
         #echo $(cat stats.json) $(cat RUN_STATUS.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
         export biopypir_workflow_status='FAIL'
         echo 'here'
       else
-        jq -s add stats.json eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats_2.json eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
         #echo $(cat stats.json) $(cat eval.json) | jq -s add > "$PACKAGE"_"$GITHUB_RUN_ID".json
         export biopypir_workflow_status='SUCCESS'
       fi
