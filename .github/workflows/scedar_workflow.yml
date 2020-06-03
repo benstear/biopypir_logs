@@ -152,7 +152,6 @@ jobs:
                 echo 'calling eval function'
                 ./biopypir_utils.sh "EVALUATE"
               fi
-          #./biopypir_utils.sh "STATS"
        #===============================================#
         - name: DELETE ARTIFACTS
           uses: geekyeggo/delete-artifact@v1
