@@ -149,7 +149,7 @@ jobs:
           run: |
               if [ ${{steps.check_success.outputs.run_status}} ]; then
                 echo 'calling eval function'
-                ./biopypir_utils.sh "EVAL"
+                ./biopypir_utils.sh "EVALUATE"
               fi
           #./biopypir_utils.sh "STATS"
        #===============================================#
@@ -163,7 +163,7 @@ jobs:
         #===============================================#
         - name: STATS
           run:  |
-              ./biopypir_utils.sh "STATS"
+              ./biopypir_utils.sh "STATISTICS"
         #===============================================# 
         
         - run: |
