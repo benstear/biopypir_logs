@@ -192,9 +192,14 @@ elif [ "$1" = "STATISTICS" ]; then
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
-     rm eval*.json  stats*.json badge.json \
-     run_info.json scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json
+elif [ "$1" = "CLEAN UP" ]; then
+
+     rm eval*.json  stats*.json badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh 
      rm -r parallel_runs
+     
+     if [ -f "RUN_STATUS.json" ]; then
+      rm "$FILE exist"
+     fi
      
      mv logs/"$PACKAGE"*.json archived_logs
      
@@ -203,6 +208,7 @@ elif [ "$1" = "STATISTICS" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
+     
      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
      
      pip install --upgrade pip 
