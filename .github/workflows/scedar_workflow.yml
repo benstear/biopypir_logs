@@ -16,10 +16,10 @@ jobs:
         python-version: [3.6,3.7] 
         os: [ubuntu-latest] #,windows-latest, macOS-latest]
     env:       
-      PACKAGE: manubot #scedar #desc  
-      OWNER:  cgreene #TaylorResearchLab  #eleozzr
+      PACKAGE: scedar # manubot # #desc  
+      OWNER:  TaylorResearchLab #cgreene #  #eleozzr
       test_suite:  "pytest" # None
-      tests_dir:  manubot #"tests/" # None
+      tests_dir:  "tests/" #manubot # # None
       ignore_tests: None
       ignore_lint: None
     steps:
@@ -114,10 +114,10 @@ jobs:
       if: always()
       runs-on: [ubuntu-latest] 
       env:    
-        PACKAGE: manubot #scedar #desc
-        OWNER:  cgreene #TaylorResearchLab #eleozzr
+        PACKAGE: scedar #manubot # #desc
+        OWNER:  TaylorResearchLab #cgreene # #eleozzr
         test_suite:  "pytest"
-        tests_dir: manubot #"tests/"
+        tests_dir: "tests/" #manubot #
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
           uses: actions/checkout@v2 
