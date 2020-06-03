@@ -189,7 +189,7 @@ elif [ "$1" = "STATISTICS" ]; then
       jq -s add stats.json run_info.json  > stats_2.json
             
       if [ ! "$run_status" ]; then
-        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; rm RUN_STATUS.json
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
         jq -s add stats_2.json eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
@@ -197,13 +197,10 @@ elif [ "$1" = "STATISTICS" ]; then
       fi
       
 elif [ "$1" = "CLEAN UP" ]; then
-
-     rm eval*.json  stats*.json badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh 
+     pwd; ls -A
+     rm "eval*.json"  "stats*.json" badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh 
      rm -r parallel_runs
-     
-     if [ -f "RUN_STATUS.json" ]; then
-      rm "$FILE exist"
-     fi
+
      
      mv logs/"$PACKAGE"*.json archived_logs
      
