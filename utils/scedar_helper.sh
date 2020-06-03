@@ -114,7 +114,7 @@ elif [ "$1" = "EVALUATE" ]; then
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; echo $date; echo $date_slice
    
-   jq -n --arg full_date "$date" \
+   jq -n --arg full_date "$date_slice" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
@@ -134,6 +134,10 @@ elif [ "$1" = "EVALUATE" ]; then
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
                
   a=$(ls parallel_runs/ | head -1)
+  
+  echo  'parallel run:'
+  cat parallel_runs/$a/biopypir-*.json
+  
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
