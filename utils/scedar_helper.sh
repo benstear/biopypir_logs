@@ -197,8 +197,9 @@ elif [ "$1" = "STATISTICS" ]; then
       fi
       
 elif [ "$1" = "CLEAN UP" ]; then
-     pwd; ls -A
-     rm "eval*.json"  "stats*.json" badge.json run_info.json scores_and_matrix.json API.json biopypir_utils.sh 
+
+     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
+     scores_and_matrix.json API.json biopypir_utils.sh 
      rm -r parallel_runs
 
      
