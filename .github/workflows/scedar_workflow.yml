@@ -44,9 +44,9 @@ jobs:
     - name:  cURL helper script
       run: |
         curl -L -o biopypir_utils.sh \
-        "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
+        "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
         chmod +x biopypir_utils.sh  
-     # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+     # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
@@ -141,15 +141,15 @@ jobs:
               echo "::set-output name=run_status::False"   
             fi
             
-            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/scedar_helper.sh"      
+            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utilsscedar_helper.sh"      
             chmod +x biopypir_utils.sh 
-        # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/.github/workflows/${{ env.PACKAGE }}_helper.sh"      
+        # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
-        - name: EVALUATE jobs
+        - name: EVALUATE TEST RESULTS
           run: |
               if [ ${{steps.check_success.outputs.run_status}} ]; then
                 echo 'calling eval function'
-                ./biopypir_utils.sh "EVALUATE"
+                ./biopypir_utils.sh "EVAL"
               fi
           #./biopypir_utils.sh "STATS"
        #===============================================#
@@ -161,17 +161,17 @@ jobs:
               biopypir-macOS-latest-py3.6
               biopypir-macOS-latest-py3.7
         #===============================================#
-        - name: STATS
+        - name: GET REPO STATISTICS
           run:  |
               ./biopypir_utils.sh "STATISTICS"
         #===============================================# 
         
-        - run: |
-            pip install --upgrade pip setuptools wheel 
-            python3 -m pip install pandas numpy tabulate
-            python3 process_logs.py
-
-        - run: ls -a              
+        #- run: |
+        #    pip install --upgrade pip setuptools wheel 
+        #    python3 -m pip install pandas numpy tabulate
+        #    python3 utils/process_logs.py
+       #===============================================# 
+        #- run: ls -a              
         
         - name: Add & Commit 
           if: always()
@@ -181,7 +181,7 @@ jobs:
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-         #===============================================# 
+
 
        
 
