@@ -154,17 +154,24 @@ elif [ "$1" = "EVALUATE" ]; then
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then badge='BRONZE'; Hex_color=1; else badge='null'; fi
-  
-  if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-    badge='GOLD'; #echo $badge; Hex_color=1
-  elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-    badge='SILVER';# echo $badge; Hex_color=5
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then 
+    badge='BRONZE'; Hex_color=0x9c5221; 
+  else 
+    badge='null';Hex_color=0xffffff; 
   fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; jq -s add eval.json badge.json  > eval_2.json
+  if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
+    badge='GOLD';  Hex_color=0xd4af37
+  elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
+    badge='SILVER';  Hex_color=0xb5b5bd
+  fi
   
-  elif [ "$1" = "STATISTICS" ]; then
+  jq -n --arg badge "$badge" --arg hex_color $Hex_color \
+  '{BADGE : $badge, badge_color: $hex_color}' > badge.json; 
+  
+  jq -s add eval.json badge.json  > eval_2.json
+  
+elif [ "$1" = "STATISTICS" ]; then
 
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -185,7 +192,7 @@ elif [ "$1" = "EVALUATE" ]; then
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
-     rm eval.json eval_2.json stats.json stats_2.json badge.json \
+     rm eval*.json  stats*.json badge.json \
      run_info.json scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json
      rm -r parallel_runs
      
