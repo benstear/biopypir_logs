@@ -36,3 +36,10 @@ df = df.reindex(reordered_cols, axis=1)
 
 df.to_csv('log_matrix.csv',sep='\t')
 
+md_table =  df.to_markdown()
+
+with open('biopypir_matrix2.md', 'w') as f:
+    f.write(md_table)
+
+
+
