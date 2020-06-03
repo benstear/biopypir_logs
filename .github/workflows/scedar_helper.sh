@@ -112,7 +112,7 @@ elif [ "$1" = "EVAL" ]; then
    
    if [[ "$test_suite" == 'pytest' ]]; then pytest_score_final=null; fi
    
-   date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; #echo $date
+   date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; echo $date; echo $date_slice
    
    jq -n --arg full_date "$date" \
          --arg lint_score "$pylint_score_final" \
