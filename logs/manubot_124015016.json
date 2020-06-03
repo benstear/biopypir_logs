@@ -13,5 +13,19 @@
   "open_issues": 0,
   "has_downloads": true,
   "Github_event_name": "push",
-  "Run_ID": "124011878"
+  "Run_ID": "124015016",
+  "Date": "2020-06-03",
+  "Pylint_score": "7.67",
+  "Pytest_score": "11",
+  "Pip": "True",
+  "License": "True",
+  "Build": "True",
+  "Linux": "3.6 3.7",
+  "Mac": "",
+  "Windows": "",
+  "Linux_versions": "ubuntu-latest",
+  "Mac_versions": "",
+  "Windows_versions": "",
+  "BADGE": "BRONZE",
+  "badge_color": "0x9c5221"
 }
