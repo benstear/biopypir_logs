@@ -141,7 +141,7 @@ jobs:
               echo "::set-output name=run_status::False"   
             fi
             
-            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utilsscedar_helper.sh"      
+            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
@@ -153,7 +153,8 @@ jobs:
               fi
           #./biopypir_utils.sh "STATS"
        #===============================================#
-        - uses: geekyeggo/delete-artifact@v1
+        - name: DELETE ARTIFACTS
+          uses: geekyeggo/delete-artifact@v1
           with:
             name: |
               biopypir-ubuntu-latest-py3.6
