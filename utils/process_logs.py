@@ -38,7 +38,7 @@ df.to_csv('log_matrix.csv',sep='\t')
 
 md_table =  df.to_markdown()
 
-with open('biopypir_matrix2.md', 'w') as f:
+with open('biopypir_matrix.md', 'w') as f:
     f.write(md_table)
 
 
