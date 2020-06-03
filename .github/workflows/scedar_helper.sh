@@ -48,7 +48,7 @@ elif [ "$1" = "GATHER" ]; then
       #    License_check : "\($license)",
       #    PIP           :  "\($pip)"    
                                          
-elif [ "$1" = "EVAL" ]; then
+elif [ "$1" = "EVALUATE" ]; then
   
   #echo $GITHUB_RUN_ID
   
@@ -137,7 +137,6 @@ elif [ "$1" = "EVAL" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
-  
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
@@ -161,7 +160,7 @@ elif [ "$1" = "EVAL" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; jq -s add eval.json badge.json  > eval_2.json
   
-  elif [ "$1" = "STATS" ]; then
+  elif [ "$1" = "STATISTICS" ]; then
 
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -183,7 +182,7 @@ elif [ "$1" = "EVAL" ]; then
       fi
       
      rm eval.json eval_2.json stats.json stats_2.json badge.json \
-     run_info.json scores_and_matrix.json API.json biopypir_utils.sh
+     run_info.json scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json
      rm -r parallel_runs
      
      mv logs/"$PACKAGE"*.json archived_logs
@@ -193,6 +192,10 @@ elif [ "$1" = "EVAL" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
-      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
-
+     mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
+     
+     pip install --upgrade pip 
+     python3 -m pip install pandas numpy tabulate
+     python3 process_logs.py
+    
 fi 
