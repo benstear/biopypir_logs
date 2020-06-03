@@ -196,6 +196,6 @@ elif [ "$1" = "EVALUATE" ]; then
      
      pip install --upgrade pip 
      python3 -m pip install pandas numpy tabulate
-     python3 process_logs.py
+     python3 utils/process_logs.py
     
 fi 
