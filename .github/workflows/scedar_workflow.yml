@@ -167,7 +167,8 @@ jobs:
           run:  |
               ./biopypir_utils.sh "STATISTICS"
         #===============================================# 
-        
+        - name: CLEAN UP
+          run: ./biopypir_utils.sh "CLEAN UP"
         #- run: |
         #    pip install --upgrade pip setuptools wheel 
         #    python3 -m pip install pandas numpy tabulate
