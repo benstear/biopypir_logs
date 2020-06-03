@@ -141,6 +141,8 @@ elif [ "$1" = "EVALUATE" ]; then
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
+  echo  'eval.json'
+  cat eval.json
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
