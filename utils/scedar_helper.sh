@@ -45,6 +45,8 @@ elif [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
   echo "$TEST_SUITE"
   
+  TEST_SUITE="pytest" 
+  
   if [ "$TEST_SUITE" == "pytest"  ]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
