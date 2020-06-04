@@ -13,12 +13,12 @@ if [ "$1" = "SET ENV" ]; then
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
   
   export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
-  export test_suite=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
-  export tests_dir=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
-  export ignore_tests=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
-  export ignore_lint=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
-  export py-vers=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
-  export workflow_os=$(cat env_vars.json | jq .$PACKAGE | jq .os)
+  export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
+  export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
+  export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
+  export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
+  #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
+  #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
 
 elif [  "$1" = "LINT" ]; then
 
@@ -35,11 +35,11 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  echo "$test_suite"
+  echo "$TEST_SUITE"
   
-  if [[ "$test_suite" == 'pytest' ]]; then
+  if [[ "$TEST_SUITE" == 'pytest' ]]; then
     echo "::set-output name=pytest_score::False"
-    pytest_cov=$(pytest "$test_dir" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
+    pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
@@ -137,7 +137,7 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ ! "$test_suite" == 'None' ]]; then pytest_score_final=null; fi
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; echo $date; echo $date_slice
    
@@ -187,17 +187,19 @@ elif [ "$1" = "EVALUATE" ]; then
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
   # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "PIP" ]; then 
+  badge='null';Hex_color=0xffffff;  
+  
+  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE'; Hex_color=0x9c5221; 
-  else 
-    badge='null';Hex_color=0xffffff; 
+    
+    if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
+      badge='GOLD';  Hex_color=0xd4af37
+    elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
+      badge='SILVER';  Hex_color=0xb5b5bd
+    fi
   fi
   
-  if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-    badge='GOLD';  Hex_color=0xd4af37
-  elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-    badge='SILVER';  Hex_color=0xb5b5bd
-  fi
+
   
   jq -n --arg badge "$badge" --arg hex_color $Hex_color \
   '{BADGE : $badge, badge_color: $hex_color}' > badge.json; 
