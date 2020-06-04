@@ -7,11 +7,11 @@ if [ "$1" = "SET ENV" ]; then
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
-  export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
+  #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   echo "::set-env name=OWNER::$OWNER"
   
   TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
-  export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
+  #export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
   echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
   TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
@@ -45,7 +45,7 @@ elif [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
   echo "$TEST_SUITE"
   
-  if [[ $TEST_SUITE = "pytest" ]]; then
+  if [ "$TEST_SUITE" == "pytest"  ]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
