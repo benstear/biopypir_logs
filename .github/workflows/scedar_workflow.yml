@@ -47,7 +47,9 @@ jobs:
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
         chmod +x biopypir_utils.sh  
-        ./biopypir_utils.sh  "SET ENV"        
+        ./biopypir_utils.sh  "SET ENV"  
+        printenv
+        echo '#####################################'
      # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
