@@ -10,11 +10,14 @@ if [ "$1" = "SET ENV" ]; then
   #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   echo "::set-env name=OWNER::$OWNER"
   
-  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); TEST_SUITE=${TEST_SUITE:1:-1}
+  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); 
+  TEST_SUITE=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_SUITE") # Remove quotes
   #export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
   echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
-  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); TEST_DIR=${TEST_DIR:1:-1}
+  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); 
+  TEST_DIR=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_DIR") # Remove quotes
+
   #export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   echo "::set-env name=TEST_DIR::$TEST_DIR"
   
@@ -26,10 +29,9 @@ if [ "$1" = "SET ENV" ]; then
   
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
- echo  $TEST_SUITE
- echo $TEST_DIR
+  echo  $TEST_SUITE
+  echo $TEST_DIR
 
-  
 elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
@@ -87,6 +89,8 @@ elif [ "$1" = "EVALUATE" ]; then
     echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
     echo "::set-output name=run_status::False"   
     exit 1
+  elif [[ "$(ls -A parallel_runs)" ]]; then 
+    echo '{ RUN_STATUS: "SUCCESS" }' > RUN_STATUS.json
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
@@ -194,9 +198,8 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
-  # switch order of badge logic and jq add of above json files, if any passed, test_pass: TRUE, put in  failed?
   
-  badge='null';Hex_color=0xffffff;  
+  badge='None';Hex_color=0xffffff;  
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE'; Hex_color=0x9c5221; 
@@ -231,20 +234,19 @@ elif [ "$1" = "STATISTICS" ]; then
       jq -s add stats.json run_info.json  > stats_2.json
             
       if [ ! "$run_status" ]; then
-        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; rm RUN_STATUS.json
+        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
-        jq -s add stats_2.json eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats_2.json eval_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi
       
 elif [ "$1" = "CLEAN UP" ]; then
 
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
-     scores_and_matrix.json API.json biopypir_utils.sh package_params.json
+     scores_and_matrix.json API.json biopypir_utils.sh package_params.json  RUN_STATUS.json
      rm -r parallel_runs
 
-     
      mv logs/"$PACKAGE"*.json archived_logs
      
      #for file in "$(pwd)"/logs/*.json; do
