@@ -3,11 +3,6 @@
 # This script was written to help the biopypir github actions workflow  
 
 if [ "$1" = "SET ENV" ]; then
-  echo '############################'
-  #printenv
-  echo '############################'
-  echo $PACKAGE
-  echo '############################'
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
@@ -31,7 +26,7 @@ if [ "$1" = "SET ENV" ]; then
   
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
-  printenv
+ 
   
 elif [  "$1" = "LINT" ]; then
 
@@ -50,7 +45,7 @@ elif [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
   echo "$TEST_SUITE"
   
-  if [[ "$TEST_SUITE" == 'pytest' ]]; then
+  if [[ "$TEST_SUITE" == "pytest" ]]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
