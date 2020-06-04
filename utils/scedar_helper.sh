@@ -10,11 +10,11 @@ if [ "$1" = "SET ENV" ]; then
   #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   echo "::set-env name=OWNER::$OWNER"
   
-  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); #TEST_SUITE=${TEST_SUITE:1:-1}
+  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); TEST_SUITE=${TEST_SUITE:1:-1}
   #export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
   echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
-  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); #TEST_DIR=${TEST_DIR:1:-1}
+  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); TEST_DIR=${TEST_DIR:1:-1}
   #export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   echo "::set-env name=TEST_DIR::$TEST_DIR"
   
