@@ -49,7 +49,6 @@ jobs:
         chmod +x biopypir_utils.sh  
         ./biopypir_utils.sh  "SET ENV"  
         printenv
-        echo '#####################################'
      # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
@@ -143,15 +142,6 @@ jobs:
         - name: EVALUATE TEST RESULTS
           run: |
             ./biopypir_utils.sh "EVALUATE"
-       #===============================================#
-        - name: DELETE ARTIFACTS
-          uses: geekyeggo/delete-artifact@v1
-          with:
-            name: |
-              biopypir-ubuntu-latest-py3.6
-              biopypir-ubuntu-latest-py3.7
-              biopypir-macOS-latest-py3.6
-              biopypir-macOS-latest-py3.7
         #===============================================#
         - name: GET REPO STATISTICS
           run:  |
@@ -164,8 +154,15 @@ jobs:
         #    python3 -m pip install pandas numpy tabulate
         #    python3 utils/process_logs.py
        #===============================================# 
-        #- run: ls -a              
-        
+        - name: DELETE ARTIFACTS
+          uses: geekyeggo/delete-artifact@v1
+          with:
+            name: |
+              biopypir-ubuntu-latest-py3.6
+              biopypir-ubuntu-latest-py3.7
+              biopypir-macOS-latest-py3.6
+              biopypir-macOS-latest-py3.7
+       #===============================================# 
         - name: Add & Commit 
           if: always()
           uses: EndBug/add-and-commit@v4.1.0
@@ -174,8 +171,5 @@ jobs:
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-
-
-       
 
 
