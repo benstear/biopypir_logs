@@ -2,21 +2,26 @@
 
 # This script was written to help the biopypir github actions workflow  
 
-if [  "$1" = "SET ENV" ]; then
-
-  curl -L -o env_vars.json \
-  https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+if [ "$1" = "SET ENV" ]; then
+  echo '############################'
+  printenv
+  echo '############################'
   echo $PACKAGE
+  echo '############################'
+
+  curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+
   cat env_vars.json
-  cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
+  cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   
-  export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
-  export test_suite=(cat env_vars.json | jq .$PACKAGE | jq ."test_suite")
-  export tests_dir=(cat env_vars.json | jq .$PACKAGE | jq ."tests_dir")
-  export ignore_tests=(cat env_vars.json | jq .$PACKAGE | jq ."ignore_tests")
-  export ignore_lint=(cat env_vars.json | jq .$PACKAGE | jq ."ignore_lint")
-  export py-vers=(cat env_vars.json | jq .$PACKAGE | jq ."python_version")
-  export workflow_os=(cat env_vars.json | jq .$PACKAGE | jq ."os")
+  #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
+  
+  #export test_suite=(cat env_vars.json | jq .$PACKAGE | jq ."test_suite")
+  #export tests_dir=(cat env_vars.json | jq .$PACKAGE | jq ."tests_dir")
+  #export ignore_tests=(cat env_vars.json | jq .$PACKAGE | jq ."ignore_tests")
+  #export ignore_lint=(cat env_vars.json | jq .$PACKAGE | jq ."ignore_lint")
+  #export py-vers=(cat env_vars.json | jq .$PACKAGE | jq ."python_version")
+  #export workflow_os=(cat env_vars.json | jq .$PACKAGE | jq ."os")
 
 elif [  "$1" = "LINT" ]; then
 
