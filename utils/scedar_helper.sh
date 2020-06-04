@@ -45,7 +45,7 @@ elif [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
   echo "$TEST_SUITE"
   
-  if [[ "$TEST_SUITE" == "pytest" ]]; then
+  if [[ "$TEST_SUITE" = "pytest" ]]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
