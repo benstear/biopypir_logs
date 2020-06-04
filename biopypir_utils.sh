@@ -6,8 +6,10 @@ if [  "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json \
   https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+  echo $PACKAGE
+  cat env_vars.json
+  cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
   
-  echo $(cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
   export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
   export test_suite=(cat env_vars.json | jq .$PACKAGE | jq ."test_suite")
   export tests_dir=(cat env_vars.json | jq .$PACKAGE | jq ."tests_dir")
