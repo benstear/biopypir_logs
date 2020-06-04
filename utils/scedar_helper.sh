@@ -47,13 +47,13 @@ elif [ "$1" = "TEST" ]; then
   
   TEST_SUITE="pytest" 
   
-  if [ "$TEST_SUITE" == "pytest"  ]; then
+  if [ "$TEST_SUITE" = "pytest"  ]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
-  else  
+  elif [ ! "$TEST_SUITE" = "pytest"  ]; then
     echo "::set-output name=pytest_score::0"; echo 'pytest not enabled for this package'
   fi
 
