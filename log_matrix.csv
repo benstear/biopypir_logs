@@ -1,3 +1,3 @@
 	Package	BADGE	Owner_Repo	Description	date_created	last_commit	forks	watchers	stars	contributors	homepage_url	has_wiki	open_issues	has_downloads	Run_ID	Date	Pylint_score	Pytest_score	Pip	License	Build	Linux	Mac	Windows	Linux_versions	Mac_versions	Windows_versions	badge_color	Github_event_name
-0		BRONZE													125030034	2020-06-04	6.83	0	True	True	True	3.6 3.7			ubuntu-latest			0x9c5221	push
-1	manubot	BRONZE	cgreene/manubot	Python utilities for Manubot: Manuscripts, open and automated	2020-03-02T14:33:49Z	2020-03-05T19:31:18Z	0.0	0.0	0.0	https://api.github.com/repos/cgreene/manubot/contributors	https://manubot.org	True	0.0	True	124061680	2020-06-03	7.67	11	True	True	True	3.6 3.7			ubuntu-latest			0x9c5221	push
+0	manubot	BRONZE	cgreene/manubot	Python utilities for Manubot: Manuscripts, open and automated	2020-03-02T14:33:49Z	2020-03-05T19:31:18Z	0.0	0.0	0.0	https://api.github.com/repos/cgreene/manubot/contributors	https://manubot.org	True	0.0	True	124061680	2020-06-03	7.67	11	True	True	True	3.6 3.7			ubuntu-latest			0x9c5221	push
+1		BRONZE													125038630	2020-06-04	6.84	0	True	True	True	3.6 3.7			ubuntu-latest			0x9c5221	push
