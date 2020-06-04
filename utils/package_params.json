@@ -5,8 +5,8 @@
        "Owner_Repo": "TaylorResearchLab/scedar",
       "test_suite" :  "pytest" ,
       "tests_dir":  "tests/" ,
-      "ignore_tests": None,
-      "ignore_lint": None,
+      "ignore_tests": "None",
+      "ignore_lint": "None",
       "python-version" :  [3.6, 3.7],
       "os"  : [ubuntu-latest, macOS-latest]
       },
@@ -17,8 +17,8 @@
          "Owner_Repo": "cgreene/manubot",
         "test_suite" :  "pytest", 
         "tests_dir":  "manubot" ,
-        "ignore_tests": None,
-        "ignore_lint": None,
+        "ignore_tests": "None",
+        "ignore_lint": "None",
         "python-version" :  [3.6, 3.7],
         "os"  : [ubuntu-latest, macOS-latest]
         },
@@ -27,10 +27,10 @@
       { "PACKAGE": "desc"  , 
         "OWNER":  "eleozzr",
          "Owner_Repo": "eleozzr/desc",
-        "test_suite" :  False, 
-        "tests_dir":  None ,
-        "ignore_tests": None,
-        "ignore_lint": None,
+        "test_suite" :  "None", 
+        "tests_dir":  "None" ,
+        "ignore_tests": "None",
+        "ignore_lint": "None",
          "python-version" :  [3.6, 3.7],
           "os"  : [ubuntu-latest, macOS-latest]
           }
