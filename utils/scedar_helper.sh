@@ -26,7 +26,7 @@ if [ "$1" = "SET ENV" ]; then
   
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
- 
+ echo  $TEST_SUITE
   
 elif [  "$1" = "LINT" ]; then
 
@@ -45,7 +45,7 @@ elif [  "$1" = "LINT" ]; then
 elif [ "$1" = "TEST" ]; then  
   echo "$TEST_SUITE"
   
-  if [[ "$TEST_SUITE" = "pytest" ]]; then
+  if [[ $TEST_SUITE = "pytest" ]]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
