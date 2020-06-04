@@ -10,11 +10,11 @@ if [ "$1" = "SET ENV" ]; then
   #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   echo "::set-env name=OWNER::$OWNER"
   
-  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
+  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); TEST_SUITE={TEST_SUITE:1:-1}
   #export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
   echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
-  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
+  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); TEST_DIR={TEST_DIR:1:-1}
   export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   echo "::set-env name=TEST_DIR::$TEST_DIR"
   
@@ -27,8 +27,8 @@ if [ "$1" = "SET ENV" ]; then
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
  echo  $TEST_SUITE
- c=pytest
- echo $c
+ echo $TEST_DIR
+
   
 elif [  "$1" = "LINT" ]; then
 
@@ -45,11 +45,6 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  #echo "$TEST_SUITE"
-  #TEST_SUITE="pytest" 
-  pwd;  ls -A
-  t=${TEST_DIR:1:-1}
-  echo $t
   
   if [[ "$TEST_SUITE" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
