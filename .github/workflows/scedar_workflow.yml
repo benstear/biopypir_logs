@@ -103,11 +103,11 @@ jobs:
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
         
-    - name: UPLOAD artifact
-      uses: actions/upload-artifact@v2-preview
-      with:  
-        name: pylint-report.txt
-        path: pylint-report.txt
+    #- name: UPLOAD artifact
+    #  uses: actions/upload-artifact@v2-preview
+    #  with:  
+    #    name: pylint-report.txt
+    #    path: pylint-report.txt
       
   job2:
       needs: [run_tests] 
@@ -131,27 +131,19 @@ jobs:
           with: # version2 automatically downloads all artifacts in path
             path: parallel_runs/
         #===============================================#
-        - name: check for any job success, and cURL helper script
-          id: check_success
-          run: |    # put in helper, set flag, put if  stmnt here
-            echo "::set-output name=run_status::True"
-            echo "::set-env name=run_status::True"
-            if [[ ! "$(ls -A parallel_runs)" ]]; then 
-              echo "No runs succeded."
-              echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
-              echo "::set-output name=run_status::False"   
-            fi
-            
+        #- name: check for any job success, and cURL helper script
+        #  id: check_success
+        -  run: |    # put in helper, set flag, put if  stmnt here
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
             chmod +x biopypir_utils.sh 
         # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
         - name: EVALUATE TEST RESULTS
           run: |
-              if [ ${{steps.check_success.outputs.run_status}} ]; then
-                echo 'calling eval function'
-                ./biopypir_utils.sh "EVALUATE"
-              fi
+            ./biopypir_utils.sh "EVALUATE"
+          #if [ ${{steps.check_success.outputs.run_status}} ]; then
+          #  echo 'calling eval function'
+          #    fi
        #===============================================#
         - name: DELETE ARTIFACTS
           uses: geekyeggo/delete-artifact@v1
