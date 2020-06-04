@@ -49,10 +49,17 @@ elif [ "$1" = "GATHER" ]; then
       #    PIP           :  "\($pip)"    
                                          
 elif [ "$1" = "EVALUATE" ]; then
+
+  echo "::set-output name=run_status::True"
+  echo "::set-env name=run_status::True"
   
-  #echo $GITHUB_RUN_ID
-  
-  # GET job_1 workflow info;  $2 = owner/repo;  $3 = RUN_ID
+  if [[ ! "$(ls -A parallel_runs)" ]]; then 
+    echo "No runs succeded, exiting eval step..."
+    echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
+    echo "::set-output name=run_status::False"   
+    exit 1
+  fi
+
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
@@ -135,14 +142,18 @@ elif [ "$1" = "EVALUATE" ]; then
                
   a=$(ls parallel_runs/ | head -1)
   
+  echo 'scores and matrix:'
+  cat scores_and_matrix.json
+  
   echo  'parallel run:'
   cat parallel_runs/$a/biopypir-*.json
   
   echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
-  echo  'eval.json'
-  cat eval.json
+  #echo  'eval.json'
+  #cat eval.json
+  
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
@@ -173,7 +184,7 @@ elif [ "$1" = "EVALUATE" ]; then
   
   jq -s add eval.json badge.json  > eval_2.json
   
-  cat eval_2.json
+  #cat eval_2.json
   
 elif [ "$1" = "STATISTICS" ]; then
     
