@@ -15,7 +15,7 @@ if [ "$1" = "SET ENV" ]; then
   echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
   TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); TEST_DIR=${TEST_DIR:1:-1}
-  export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
+  #export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   echo "::set-env name=TEST_DIR::$TEST_DIR"
   
   export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
