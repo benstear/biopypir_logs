@@ -46,6 +46,7 @@ elif [ "$1" = "TEST" ]; then
   echo "$TEST_SUITE"
   
   TEST_SUITE="pytest" 
+  pwd;  ls -A
   
   if [ "$TEST_SUITE" = "pytest"  ]; then
     echo "::set-output name=pytest_score::False"
