@@ -13,10 +13,20 @@ if [ "$1" = "SET ENV" ]; then
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
   
   export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
+  echo "::set-env name=OWNER::$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)"
+  
   export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
+  echo "::set-env name=TEST_SUITE::$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)"
+  
   export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
+  echo "::set-env name=TEST_DIR::$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)"
+  
   export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
+  echo "::set-env name=IGNORE_TESTS::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)"
+  
   export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
+  echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
+  
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
 
