@@ -211,8 +211,6 @@ elif [ "$1" = "EVALUATE" ]; then
     fi
   fi
   
-
-  
   jq -n --arg badge "$badge" --arg hex_color $Hex_color \
   '{BADGE : $badge, badge_color: $hex_color}' > badge.json; 
   
@@ -244,7 +242,7 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
 
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
-     scores_and_matrix.json API.json biopypir_utils.sh package_params.json  RUN_STATUS.json
+     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json
      rm -r parallel_runs
 
      mv logs/"$PACKAGE"*.json archived_logs
