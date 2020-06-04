@@ -11,15 +11,17 @@ if [ "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
-  
+  OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
-  echo "::set-env name=OWNER::$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)"
+  echo "::set-env name=OWNER::$OWNER"
   
+  TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
   export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
-  echo "::set-env name=TEST_SUITE::$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)"
+  echo "::set-env name=TEST_SUITE::$TEST_SUITE"
   
+  TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
-  echo "::set-env name=TEST_DIR::$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)"
+  echo "::set-env name=TEST_DIR::$TEST_DIR"
   
   export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
   echo "::set-env name=IGNORE_TESTS::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)"
@@ -29,7 +31,8 @@ if [ "$1" = "SET ENV" ]; then
   
   #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
-
+  printenv
+  
 elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
