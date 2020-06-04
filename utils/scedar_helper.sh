@@ -3,10 +3,14 @@
 # This script was written to help the biopypir github actions workflow  
 
 if [  "$1" = "SET ENV" ]; then
-
-  curl -L -o env_vars.json \
-  https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+  echo '############################'
+  printenv
+  echo '############################'
   echo $PACKAGE
+  echo '############################'
+
+  curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+
   cat env_vars.json
   cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
   
