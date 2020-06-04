@@ -2,7 +2,20 @@
 
 # This script was written to help the biopypir github actions workflow  
 
-if [  "$1" = "LINT" ]; then
+if [  "$1" = "SET ENV" ]; then
+
+  curl -L -o env_vars.json \
+  "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json" 
+  
+      export OWNER=( cat env_vars.json | jq .$PACKAGE | jq ."OWNER")
+      export test_suite=( cat env_vars.json | jq .$PACKAGE | jq ."test_suite")
+      export tests_dir=( cat env_vars.json | jq .$PACKAGE | jq ."tests_dir")
+      export ignore_tests=( cat env_vars.json | jq .$PACKAGE | jq ."ignore_tests")
+      export ignore_lint=( cat env_vars.json | jq .$PACKAGE | jq ."ignore_lint")
+      export py-vers=( cat env_vars.json | jq .$PACKAGE | jq ."python_version")
+      export workflow_os=( cat env_vars.json | jq .$PACKAGE | jq ."os")
+      
+elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   
@@ -10,7 +23,7 @@ if [  "$1" = "LINT" ]; then
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   
-  pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
+ # pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
@@ -117,7 +130,7 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ "$test_suite" == 'pytest' ]]; then pytest_score_final=null; fi
+   if [[ ! "$test_suite" == 'None' ]]; then pytest_score_final=null; fi
    
    date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; echo $date; echo $date_slice
    
@@ -187,7 +200,7 @@ elif [ "$1" = "EVALUATE" ]; then
   #cat eval_2.json
   
 elif [ "$1" = "STATISTICS" ]; then
-    
+     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
@@ -210,7 +223,7 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
 
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
-     scores_and_matrix.json API.json biopypir_utils.sh 
+     scores_and_matrix.json API.json biopypir_utils.sh package_params.json
      rm -r parallel_runs
 
      
