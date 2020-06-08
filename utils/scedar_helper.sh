@@ -88,8 +88,8 @@ elif [ "$1" = "EVALUATE" ]; then
     echo "No runs succeded, exiting eval step..."
     echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
     echo "::set-output name=run_status::False"   
-    exit 1
-  elif [[ "$(ls -A parallel_runs)" ]]; then 
+    #exit 1
+  elif [[ "$(ls -A parallel_runs)" ]]; then    # put the rest of evaluate under this else statement
     echo '{ RUN_STATUS: "SUCCESS" }' > RUN_STATUS.json
   fi
 
