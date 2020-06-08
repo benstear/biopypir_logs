@@ -1,9 +1,10 @@
 ---
 name: BIOPYPIR
 on: 
-  schedule:
-    - cron: '0 0 * * 0' 
-  push: # remove when youre done testing workflow
+  repository_dispatch:
+  #schedule:
+  #  - cron: '0 0 * * 0' 
+  #push: # remove when youre done testing workflow
     paths-ignore: 
       - 'logs/**.json' 
       - 'biopypir_matrix.md'
