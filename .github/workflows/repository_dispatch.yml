@@ -28,7 +28,7 @@ jobs:
         repository: benstear/biopypir_logs
         event-type: autorun
         client-payload: |
-          {"toJson(${{steps.get_vars.outputs.env_vars}})"}
+          '{"toJson(${{steps.get_vars.outputs.env_vars}})"}'
               
         
       
