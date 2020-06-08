@@ -14,10 +14,6 @@ on:
 jobs:
   trigger_biopypir_workflows:
     runs-on:  [ubuntu-latest] 
-    strategy:
-      matrix:
-        python-version: [3.6,3.7] 
-        os: [ubuntu-latest] 
     #============================================#
     #env:       
     #  PACKAGE: scedar  
