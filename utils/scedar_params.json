@@ -1,4 +1,4 @@
-'{ "PACKAGE": "scedar" ,  
+{ "PACKAGE": "scedar" ,  
   "OWNER":  "TaylorResearchLab" ,
    "Owner_Repo": "TaylorResearchLab/scedar",
   "test_suite" :  "pytest" ,
@@ -7,4 +7,4 @@
   "ignore_lint": "None",
   "python-version" :  [3.6, 3.7],
   "os"  : ["ubuntu-latest", "macOS-latest"]
-  }'
+  }
