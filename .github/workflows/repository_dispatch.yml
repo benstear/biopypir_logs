@@ -21,16 +21,10 @@ jobs:
         repository: benstear/biopypir_logs
         event-type: autorun
         client-payload:   |
-          '{ "PACKAGE": "scedar" ,  
-            "OWNER":  "TaylorResearchLab" ,
-             "Owner_Repo": "TaylorResearchLab/scedar",
-            "test_suite" :  "pytest" ,
-            "tests_dir":  "tests/" ,
-            "ignore_tests": "None",
-            "ignore_lint": "None",
-            "python-version" :  [3.6, 3.7],
-            "os"  : ["ubuntu-latest", "macOS-latest"]
-            }'
+          '{ "PACKAGE": "scedar" }'
+           
+           
+
         #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 
 
