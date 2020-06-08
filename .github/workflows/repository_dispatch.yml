@@ -1,0 +1,37 @@
+
+
+---
+name: BIOPYPIR
+on: 
+  schedule:
+    - cron: '0 0 * * 0' 
+  push: # remove when youre done testing workflow
+    paths-ignore: 
+      - 'logs/**.json' 
+      - 'biopypir_matrix.md'
+      -  'utils/package_params.json'
+    
+jobs:
+  trigger_biopypir_workflows:
+    runs-on:  [ubuntu-latest] 
+    strategy:
+      matrix:
+        python-version: [3.6,3.7] 
+        os: [ubuntu-latest] 
+    #============================================#
+    #env:       
+    #  PACKAGE: scedar  
+    #============================================#
+    steps:
+    - name: Repository Dispatch
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        repository: benstear/biopypir_logs
+        event-type: push
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
+
+
+
+
