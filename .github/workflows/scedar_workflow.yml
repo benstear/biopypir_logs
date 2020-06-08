@@ -2,13 +2,15 @@
 name: BIOPYPIR
 on: 
   repository_dispatch:
+     types: [autorun]
+     
   #schedule:
   #  - cron: '0 0 * * 0' 
   #push: # remove when youre done testing workflow
-    paths-ignore: 
-      - 'logs/**.json' 
-      - 'biopypir_matrix.md'
-      -  'utils/package_params.json'
+  #  paths-ignore: 
+  #    - 'logs/**.json' 
+  #    - 'biopypir_matrix.md'
+  #    -  'utils/package_params.json'
     
 jobs:
   run_tests:
@@ -34,11 +36,18 @@ jobs:
       if: steps.check_sha.outputs.cache-hit == 'true'
       run: echo "Cache hit not found...Execute the subsequent steps"; exit 1 # no way to exit nicely?
     #===============================================#
-    - name: checkout ${{env.PACKAGE}} repo 
-      uses: actions/checkout@v2     
-      with:
-        repository: benstear/${{ env.PACKAGE }} # change to actual package
+    #- name: checkout ${{env.PACKAGE}} repo 
+    #  uses: actions/checkout@v2     
+    #  with:
+    #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
+    - uses: actions/checkout@v2
+      with:
+          ref: ${{ github.event.client_payload.ref }}
+    - run: echo ${{ github.event.client_payload.sha }}
+      
+    - run: exit 1;    
+        
     - name:  SET ENV  
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
