@@ -41,10 +41,13 @@ jobs:
     #  with:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
-    - uses: actions/checkout@v2
-      with:
-          ref: ${{ github.event.client_payload }}
-    - run: echo ${{ github.event.client_payload }}
+    - name: check github.event
+      run: echo ${{ github.event }}
+      
+    #- uses: actions/checkout@v2
+    #  with:
+    #      ref: ${{ github.event.client_payload.PACKAGE }}
+    - run: echo ${{ github.event.client_payload.PACKAGE }}
       
     - run: exit 1;    
         
