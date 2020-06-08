@@ -20,8 +20,7 @@ jobs:
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
         repository: benstear/biopypir_logs
         event-type: autorun
-        client-payload:   |
-          '{ "PACKAGE": "scedar" }'
+        client-payload:  '{ "PACKAGE": "scedar" }'
            
            
 
