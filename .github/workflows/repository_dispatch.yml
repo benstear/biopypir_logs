@@ -18,7 +18,9 @@ jobs:
       id: get_vars
       run: 
         curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
-        echo "::set-output name=env_vars::$(cat env_vars.json)"
+        ls -A
+        cat env_vars.json
+        echo "::set-output name=env_vars::$True"
         
     - name: Repository Dispatch
       uses: peter-evans/repository-dispatch@v1
