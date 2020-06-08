@@ -27,7 +27,8 @@ jobs:
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
         repository: benstear/biopypir_logs
         event-type: autorun
-        client-payload: "$(cat env_vars.json)"
+        client-payload: |
+          "${{steps.get_vars.outputs.env_vars}}"
               
         
       
