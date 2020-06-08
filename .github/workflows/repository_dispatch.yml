@@ -29,6 +29,7 @@ jobs:
         event-type: autorun
         client-payload:  |
               ${{steps.get_vars.outputs.env_vars}}
+              
         
       
         #'{ "PACKAGE": "scedar" ,
