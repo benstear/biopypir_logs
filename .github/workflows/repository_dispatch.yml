@@ -19,6 +19,7 @@ jobs:
       run: |
         curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_params.json
         ls -A
+        
         echo "::set-output name=env_vars::$(cat env_vars.json)"
         
     - name: Repository Dispatch
