@@ -7,7 +7,7 @@ on:
     - cron: '0 0 * * 0' 
   push: # remove when youre done testing workflow
 jobs:
-  trigger_biopypir_workflows:
+  trigger_scedar_workflow:
     runs-on:  [ubuntu-latest] 
     #============================================#
     #env:       
@@ -27,7 +27,7 @@ jobs:
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
         repository: benstear/biopypir_logs
         event-type: autorun
-        client-payload: '{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
+        environment_vars: '{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
               
         
       
