@@ -52,11 +52,15 @@ jobs:
     #- uses: actions/checkout@v2
     #  with:
     #      ref: ${{ github.event.client_payload.PACKAGE }}
-    - run: echo ${{ github.event.client_payload.PACKAGE }}
-      
+    - run: |
+        echo ${{ github.event.environment_vars.OWNER }}
+        echo ${{ github.event.environment_vars.Owner_Repo }}
+        echo ${{ github.event.environment_vars.test_suite }}
+    #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
+
     - run: exit 1;    
         
-    - name:  SET ENV  
+    - name:  SET ENV 
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
         chmod +x biopypir_utils.sh  
