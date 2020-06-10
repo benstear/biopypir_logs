@@ -43,29 +43,29 @@ jobs:
     #===============================================#
     - name: check github.event
       run: echo ${{ github.event }}
-      
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
+
 
     #- uses: actions/checkout@v2
     #  with:
     #      ref: ${{ github.event.client_payload.PACKAGE }}
     - run: |
-        echo ${{ github.event.environment_vars.OWNER }}
-        echo ${{ github.event.environment_vars.Owner_Repo }}
-        echo ${{ github.event.environment_vars.test_suite }}
+        echo "::set-env name=PACKAGE::${{ github.event.environment_vars.PACKAGE }}"
+        echo "::set-env name=OWNER::${{ github.event.environment_vars.OWNER }}"
+        echo "::set-env name=Owner_Repo::${{ github.event.environment_vars.Owner_Repo }}"
+        echo "::set-env name=test_suite::${{ github.event.environment_vars.test_suite }}"
+        echo "::set-env name=tests_dir::${{ github.event.environment_vars.test_dir }}"
+        echo "::set-env name=ignore_tests::${{ github.event.environment_vars.ignore_tests }}"
+        echo "::set-env name=ignore_lint::${{ github.event.environment_vars.ignore_lint }}"
     #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
 
-    - run: exit 1;    
+    #- run: exit 1;    
         
     - name:  SET ENV 
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
         chmod +x biopypir_utils.sh  
-        ./biopypir_utils.sh  "SET ENV"  
-        printenv
+     #   ./biopypir_utils.sh  "SET ENV"  
+     #   printenv
      # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
