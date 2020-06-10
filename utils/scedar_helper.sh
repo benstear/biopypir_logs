@@ -31,7 +31,9 @@ if [ "$1" = "SET ENV" ]; then
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
   echo  $TEST_SUITE
   echo $TEST_DIR
-
+elif [  "$1" = "SET ENV DISPATCH" ]; then
+  printenv
+  #${{ github.event.environment_vars.PACKAGE }}
 elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
