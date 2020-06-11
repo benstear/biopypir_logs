@@ -48,9 +48,11 @@ jobs:
     - run: echo ${{ github.event.client_payload.sha }}
  
  
- 
+    - name: check github.event.client-payload.PACKAGE
+      run: echo ${{ github.event.action.client-payload.PACKAGE }}
+    
     - name: check github.event.client-payload
-      run: echo ${{ github.event.action.client-payload }}
+      run: echo ${{ toJson(github.event.action.client-payload) }}
     
     - name: Dump GitHub context
       env:
