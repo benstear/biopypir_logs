@@ -9,7 +9,6 @@ on:
 jobs:
   trigger_scedar_workflow:
     runs-on:  [ubuntu-latest] 
-    #============================================#
     #env:       
     #  PACKAGE: scedar  
     #============================================#
