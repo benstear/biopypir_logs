@@ -42,14 +42,20 @@ jobs:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
     - name: check github.event
-      run: echo ${{ github.event }}
+      run: echo ${{ toJson(github.event) }}
+    
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
 
-
-    #- uses: actions/checkout@v2
-    #  with:
-    #      ref: ${{ github.event.client_payload.PACKAGE }}
+    - uses: actions/checkout@v2
+      with:
+          ref: ${{ github.event.client_payload.sha }}
     - run: |
-        echo ${{ github.event.client-payload.PACKAGE }}
+        echo "${{ github.event.client-payload.PACKAGE }}"
+        echo ${{ toJson(github.event.client-payload.PACKAGE) }}
+        
         echo "::set-env name=PACKAGE::${{ github.event.client-payload.PACKAGE }}"
         echo "::set-env name=OWNER::${{ github.event.client-payload.OWNER }}"
         echo "::set-env name=Owner_Repo::${{ github.event.client-payload.Owner_Repo }}"
@@ -58,8 +64,10 @@ jobs:
         echo "::set-env name=ignore_tests::${{ github.event.client-payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client-payload.ignore_lint }}"
     #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
-
-    #- run: exit 1;    
+    
+    - run: printenv
+    
+    - run: exit 1;    
         
     - name:  SET ENV 
       run: |
