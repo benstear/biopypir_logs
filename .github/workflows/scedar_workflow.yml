@@ -49,6 +49,7 @@ jobs:
     #  with:
     #      ref: ${{ github.event.client_payload.PACKAGE }}
     - run: |
+        echo ${{ github.event.client-payload.PACKAGE }}
         echo "::set-env name=PACKAGE::${{ github.event.client-payload.PACKAGE }}"
         echo "::set-env name=OWNER::${{ github.event.client-payload.OWNER }}"
         echo "::set-env name=Owner_Repo::${{ github.event.client-payload.Owner_Repo }}"
