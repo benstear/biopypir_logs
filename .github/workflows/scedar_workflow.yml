@@ -42,8 +42,8 @@ jobs:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
     
-    - name: check github.event
-      run: echo ${{ toJson(github.event.action) }}
+    - name: check github.event.client-payload
+      run: echo ${{ toJson(github.event.action.client-payload) }}
     
     - name: Dump GitHub context
       env:
@@ -59,7 +59,7 @@ jobs:
         REPO: TaylorResearchLab/scedar
       run: echo "$REPO"
     
-    - run: echo env.REPO
+    - run: echo "$env.REPO"
     
     - run: |
         echo "${{ github.event.client-payload.PACKAGE }}"
