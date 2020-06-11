@@ -45,7 +45,7 @@ jobs:
       env: 
         BENS_PACKAGE: ${{ github.event.action.client-payload.PACKAGE}}
         
-    - run: echo $BENS_PACKAGE
+    - run: echo "$BENS_PACKAGE"
     
     - name: check github.event.client-payload
       run: echo ${{ github.event.action.client-payload }}
