@@ -42,15 +42,6 @@ jobs:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
  
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.client_payload.ref }}
-        package: ${{ github.event.client_payload.PACKAGE }}
-        
-    - run: echo ${{ github.event.client_payload.PACKAGE }}
-      env: 
-        bens_package: ${{ github.event.client_payload.PACKAGE }}
-
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -66,19 +57,19 @@ jobs:
         echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
         echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
         echo "::set-env name=test_suite::${{ github.event.client_payload.test_suite }}"
-        echo "::set-env name=tests_dir::${{ github.event.client_payload.test_dir }}"
+        echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
     #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
     
     - run: printenv
     
-    - run: exit 1;    
+ 
         
-    - name:  SET ENV 
-      run: |
-        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
-        chmod +x biopypir_utils.sh  
+    #- name:  SET ENV 
+    #  run: |
+    #    curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
+    #    chmod +x biopypir_utils.sh  
      #   ./biopypir_utils.sh  "SET ENV"  
      #   printenv
      # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
