@@ -41,7 +41,6 @@ jobs:
     #  with:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
- 
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -62,7 +61,10 @@ jobs:
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
     #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
     
-    - run: printenv
+    - name: checkout ${{env.PACKAGE}} repo 
+      uses: actions/checkout@v2     
+      with:
+        repository: benstear/${{ env.PACKAGE }} # change to actual package
     
  
         
