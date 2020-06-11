@@ -41,11 +41,14 @@ jobs:
     #  with:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
-    - name: set vars
-      env: 
-        BENS_PACKAGE: ${{ github.event.action.client-payload.PACKAGE}}
-      run: echo "$BENS_PACKAGE"
-    
+ 
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.client_payload.ref }}
+    - run: echo ${{ github.event.client_payload.sha }}
+ 
+ 
+ 
     - name: check github.event.client-payload
       run: echo ${{ github.event.action.client-payload }}
     
