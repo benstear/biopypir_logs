@@ -41,8 +41,9 @@ jobs:
     #  with:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
-    - name: check github.event
-      run: echo ${{ toJson(github.event) }}
+    
+    #- name: check github.event
+    #  run: echo ${{ toJson(github.event) }}
     
     - name: Dump GitHub context
       env:
