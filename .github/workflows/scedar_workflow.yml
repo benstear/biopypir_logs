@@ -41,25 +41,21 @@ jobs:
     #  with:
     #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
+    - name: set vars
+      env: 
+        BENS_PACKAGE: ${{ github.event.action.client-payload.PACKAGE}}
+        
+    - run: echo $BENS_PACKAGE
     
     - name: check github.event.client-payload
-      run: echo ${{ toJson(github.event.action.client-payload) }}
+      run: echo ${{ github.event.action.client-payload }}
     
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-
-    - uses: actions/checkout@v2
-      with:
-          #ref: ${{ github.event.client_payload.sha }}
-          repository: ${{ github.event.client-payload.Owner_Repo }}
-    - name: envs
-      env: 
-        REPO: TaylorResearchLab/scedar
-      run: echo "$REPO"
+  
     
-    - run: echo "$env.REPO"
     
     - run: |
         echo "${{ github.event.client-payload.PACKAGE }}"
