@@ -45,8 +45,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.ref }}
-    - run: echo ${{ github.event.client_payload.sha }}
- 
+        package: ${{ github.event.client_payload.PACKAGE }}
+        
+    - run: echo ${{ github.event.client_payload.PACKAGE }}
+      env: 
+        bens_package: ${{ github.event.client_payload.PACKAGE }}
  
     - name: check github.event.client-payload.PACKAGE
       run: echo ${{ github.event.action.client-payload.PACKAGE }}
