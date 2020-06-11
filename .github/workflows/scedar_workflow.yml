@@ -52,8 +52,8 @@ jobs:
 
     - uses: actions/checkout@v2
       with:
-          ref: ${{ github.event.client_payload.sha }}
-          repository: TaylorResearchLab/scedar
+          #ref: ${{ github.event.client_payload.sha }}
+          repository: ${{ github.event.client-payload.Owner_Repo }}
     - name: envs
       env: 
         REPO: TaylorResearchLab/scedar
