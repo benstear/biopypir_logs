@@ -242,7 +242,15 @@ elif [ "$1" = "STATISTICS" ]; then
       fi
       
 elif [ "$1" = "CLEAN UP" ]; then
-
+    
+     echo 'Starting Clean Up'
+     pwd
+     ls -A
+     echo '-------------------------'
+     ls logs/
+     
+     # Remove all files we dont want to push to the biopypir logs repository
+     
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json
      rm -r parallel_runs
@@ -254,6 +262,10 @@ elif [ "$1" = "CLEAN UP" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
+     echo '---------------------------------'
+     ls logs/
+     echo '---------------------------------'
+     cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
      
