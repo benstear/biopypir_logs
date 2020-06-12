@@ -233,8 +233,8 @@ elif [ "$1" = "STATISTICS" ]; then
       
       echo "$GITHUB_EVENT_NAME"
       
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id $GITHUB_RUN_ID \
-      '{ Github_event_name: $github_event,Run_ID: $run_id }' > run_info.json
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
+      '{ Github_event_name: "$github_event", Run_ID: "$run_id" }' > run_info.json
       
       echo 'here'
       echo '----------------------------'
