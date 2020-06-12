@@ -155,9 +155,9 @@ elif [ "$1" = "EVALUATE" ]; then
    
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
    
-   date=$(cat API.json | jq ".jobs[0].completed_at") ;date_slice=${date:1:10}; echo $date; echo $date_slice
+   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo $date; echo $date_slice
    
-   jq -n --arg full_date "$date_slice" \
+   jq -n --arg full_date "$date" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
