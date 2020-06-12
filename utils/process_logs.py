@@ -18,12 +18,15 @@ print('Total Logs found: '+str(len(all_logs)))
 list_of_lists = []
 
 for i in range(0,len(all_logs)):
-    
-    data = json.load(open(all_logs[i]))
-
-    if i==0: list_of_lists.append(list(data.keys()))
+    try:
+        data = json.load(open(all_logs[i]))
         
-    list_of_lists.append(list(data.values()))
+    except json.decoder.JSONDecodeError as e:  
+        raise SystemExit(e)
+        
+    if i==0: list_of_lists.append(list(data.keys())) # if it's the first pass of the loop, save the keys to use as headers 
+        
+    list_of_lists.append(list(data.values())) 
 
 df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0])
 
@@ -36,10 +39,10 @@ df = df.reindex(reordered_cols, axis=1)
 
 df.to_csv('log_matrix.csv',sep='\t')
 
+
+# Create and save markdown table of packages
 md_table =  df.to_markdown()
 
 with open('biopypir_matrix.md', 'w') as f:
     f.write(md_table)
-
-
 
