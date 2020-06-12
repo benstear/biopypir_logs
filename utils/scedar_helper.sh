@@ -251,8 +251,8 @@ elif [ "$1" = "STATISTICS" ]; then
       else
         echo 'here 2'
         cat eval_2.json
-        #jq -s add stats_2.json eval_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        jq -s add stats_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json #  eval_2.json RUN_STATUS.json
+        #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi     
       
@@ -285,10 +285,11 @@ elif [ "$1" = "CLEAN UP" ]; then
      
      
      # check if size of file is 0 (aka empty)
-     if [ -s "$PACKAGE"_"$GITHUB_RUN_ID".json ]; then echo 'Log File is Empty!'; exit 1;
-     else mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
-     fi
-    
+     #if [ -s "$PACKAGE"_"$GITHUB_RUN_ID".json ]; then echo 'Log File is Empty!'; exit 1;
+     #else mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
+     #fi
+     mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
+     
      pip install --upgrade pip 
      python3 -m pip install pandas numpy tabulate
      python3 utils/process_logs.py
