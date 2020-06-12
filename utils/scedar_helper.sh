@@ -86,11 +86,12 @@ elif [ "$1" = "EVALUATE" ]; then
   echo "::set-output name=run_status::True"
   echo "::set-env name=run_status::True"
   
+  # Check to see if any runs succeeded
   if [[ ! "$(ls -A parallel_runs)" ]]; then 
     echo "No runs succeded, exiting eval step..."
     echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
     echo "::set-output name=run_status::False"   
-    #exit 1
+    exit 1
   elif [[ "$(ls -A parallel_runs)" ]]; then    # put the rest of evaluate under this else statement
     echo '{ RUN_STATUS: "SUCCESS" }' > RUN_STATUS.json
   fi
@@ -177,17 +178,16 @@ elif [ "$1" = "EVALUATE" ]; then
                
   a=$(ls parallel_runs/ | head -1)
   
-  echo 'scores and matrix:'
-  cat scores_and_matrix.json
+  #echo 'scores and matrix:'
+  #cat scores_and_matrix.json
   
-  echo  'parallel run:'
-  cat parallel_runs/$a/biopypir-*.json
+  #echo  'parallel run:'
+  #cat parallel_runs/$a/biopypir-*.json
   
-  echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
-  jq -s add | jq 'del(.OS, .Python_version)' > eval.json
+  #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
+  #jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
-  #echo  'eval.json'
-  #cat eval.json
+  cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
    # ================= GET BADGE STATUS ======================== #
    LICENSE=$(cat eval.json | jq ".License")
@@ -230,9 +230,7 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-      
-      echo "$GITHUB_EVENT_NAME"
-      echo "$GITHUB_RUN_ID"
+
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       '{ Github_event_name: $github_event, Run_ID: $run_id }' > run_info.json
       
@@ -241,16 +239,15 @@ elif [ "$1" = "STATISTICS" ]; then
       
       jq -s add stats.json run_info.json  > stats_2.json
       
-      cat  stats_2.json
-      echo  "run status = $run_status"
+      #cat  stats_2.json
+      #echo  "run status = $run_status"
       
       if [ ! "$run_status" ]; then
-        echo 'here 1'
+        echo 'run_status = $run_status'
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
-        echo 'here 2'
-        cat RUN_STATUS.json
+        echo 'run_status = $run_status'        
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
