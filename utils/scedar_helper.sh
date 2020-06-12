@@ -232,7 +232,7 @@ elif [ "$1" = "STATISTICS" ]; then
       has_downloads: .has_downloads}" > stats.json
       
       echo "$GITHUB_EVENT_NAME"
-      
+      echo "$GITHUB_RUN_ID"
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       '{ Github_event_name: $github_event, Run_ID: $run_id }' > run_info.json
       
@@ -251,7 +251,8 @@ elif [ "$1" = "STATISTICS" ]; then
       else
         echo 'here 2'
         cat eval_2.json
-        jq -s add stats_2.json eval_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        #jq -s add stats_2.json eval_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi     
       
