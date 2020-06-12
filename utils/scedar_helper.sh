@@ -267,10 +267,14 @@ elif [ "$1" = "CLEAN UP" ]; then
      echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
-     mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/ 
      
+     
+     # check if size of file is 0 (aka empty)
+     if [ -s "$PACKAGE"_"$GITHUB_RUN_ID".json ]; then echo 'Log File is Empty!'; exit 1;
+     else mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
+     fi
+    
      pip install --upgrade pip 
      python3 -m pip install pandas numpy tabulate
      python3 utils/process_logs.py
-    
 fi 
