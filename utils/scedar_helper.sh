@@ -227,11 +227,16 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-
+      
+      echo "$GITHUB_EVENT_NAME"
+      
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id $GITHUB_RUN_ID \
       '{ Github_event_name: $github_event,Run_ID: $run_id }' > run_info.json
       
+      echo 'here'
+      echo '----------------------------'
       jq -s add stats.json run_info.json  > stats_2.json
+      cat  stats_2.json
             
       if [ ! "$run_status" ]; then
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
@@ -239,7 +244,7 @@ elif [ "$1" = "STATISTICS" ]; then
       else
         jq -s add stats_2.json eval_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
-      fi
+      fi     
       
 elif [ "$1" = "CLEAN UP" ]; then
     
