@@ -250,7 +250,7 @@ elif [ "$1" = "STATISTICS" ]; then
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
         echo 'here 2'
-        cat eval_2.json
+        cat RUN_STATUS.json
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # eval_2.json 
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
