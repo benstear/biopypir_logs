@@ -160,15 +160,20 @@ elif [ "$1" = "EVALUATE" ]; then
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
    
-   for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  linux_arr[$i]=${linux_arr[$i]}","; done
+   for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
+      if [[ linux_arr[$i] !=  linux_arr[-1] ]]; then
+        linux_arr[$i]=${linux_arr[$i]}","; 
+      fi
+   done
+   
    echo ${linux_arr[*]}
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}" \           #       put commas in
-         --arg linux_vers "${linux_unq[*]}" \
-         --arg mac "${mac_arr[*]}" \
+         --arg linux "${linux_arr[*]}"  \          
+         --arg linux_vers "${linux_unq[*]}"   \
+         --arg mac "${mac_arr[*]}"  \
          --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" \
          --arg windows_vers "${windows_unq[*]}" \
@@ -246,8 +251,10 @@ elif [ "$1" = "STATISTICS" ]; then
           echo $p
           c="'https://github.com/' ${p}"
           echo $c
-      done < $contributors.txt
+      done < contributors.txt
       
+      echo '-------------------------'
+
       
       #cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
        
