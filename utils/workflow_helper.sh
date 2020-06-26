@@ -155,17 +155,13 @@ elif [ "$1" = "EVALUATE" ]; then
    
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
    
-   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; 
-   
-   echo $date; 
-   echo $date_slice
-   
+   date=$(cat API.json | jq ".jobs[0].completed_at"); #date_slice=${date:1:10}; 
+
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
-   date_slice_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date_slice")
-   
+
    echo '-------------'
    echo $date_clip
-   echo $date_slice_clip
+
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
