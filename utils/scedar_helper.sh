@@ -167,13 +167,13 @@ elif [ "$1" = "EVALUATE" ]; then
    echo $date_clip
    echo $date_slice_clip
    
-   jq -n --arg Workflow_Run_Date "$date" \
+   jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
-           '{ Workflow_Run_Date :  $full_date,
+           '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
               Pip           : "True",
@@ -240,6 +240,23 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count, contributors: .contributors_url,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
+      
+      
+       # get names of contributors
+       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+       
+      tr -d '"' <contrib_logins.txt > contributors.txt
+      
+      cat  contributors.txt
+      
+      #declare TMP_FILE=$( mktemp )
+      #cp -p contrib_logins.txt "${TMP_FILE}"
+      #sed -e 's/^/https://github.com/' "${TMP_FILE}" > contrib_logins.txt
+
+       sed -e 's/^/https://github.com/' -i contrib_logins.txt
+       
+       linux_arr+=("$api_pyvers");
+       
 
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       '{ Github_event_name: $github_event, Run_ID: $run_id }' > run_info.json
