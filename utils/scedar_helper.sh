@@ -155,15 +155,25 @@ elif [ "$1" = "EVALUATE" ]; then
    
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
    
-   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; echo $date; echo $date_slice
+   date=$(cat API.json | jq ".jobs[0].completed_at"); date_slice=${date:1:10}; 
    
-   jq -n --arg full_date "$date" \
+   echo $date; 
+   echo $date_slice
+   
+   date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
+   date_slice_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date_slice")
+   
+   echo '-------------'
+   echo $date_clip
+   echo $date_slice_clip
+   
+   jq -n --arg Workflow_Run_Date "$date" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
          --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
-           '{ Date          :  $full_date,
+           '{ Workflow_Run_Date :  $full_date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
               Pip           : "True",
