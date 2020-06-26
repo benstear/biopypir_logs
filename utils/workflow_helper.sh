@@ -159,14 +159,14 @@ elif [ "$1" = "EVALUATE" ]; then
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
-   
+   linux_arr2=()
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-      if [[ linux_arr[$i] !=  linux_arr[-1] ]]; then
-        linux_arr[$i]=${linux_arr[$i]}","; 
+      if [[ "${linux_arr[$i]}" !=  "${linux_arr[-1]}" ]]; then
+        linux_arr2[$i]=${linux_arr[$i]}","; 
       fi
    done
    
-   echo ${linux_arr[*]}
+   echo ${linux_arr2[*]}
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
@@ -249,7 +249,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
       while read p; do 
           echo $p
-          c="'https://github.com/' ${p}"
+          c="'https://github.com/${p}'"
           echo $c
       done < contributors.txt
       
