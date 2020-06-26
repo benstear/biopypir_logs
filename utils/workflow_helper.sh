@@ -159,16 +159,19 @@ elif [ "$1" = "EVALUATE" ]; then
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
-   echo '-------------'
-   echo $date_clip
-
+   
+   for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  linux_arr[$i]=${linux_arr[$i]}","; done
+   echo linux_arr[@]
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}" \
-         --arg mac "${mac_arr[*]}" --arg mac_vers "${mac_unq[*]}" \
-         --arg windows "${windows_arr[*]}" --arg windows_vers "${windows_unq[*]}" \
+         --arg linux "${linux_arr[*]}"\           #       put commas in
+         --arg linux_vers "${linux_unq[*]}" \
+         --arg mac "${mac_arr[*]}" \
+         --arg mac_vers "${mac_unq[*]}" \
+         --arg windows "${windows_arr[*]}" \
+         --arg windows_vers "${windows_unq[*]}" \
            '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -182,14 +185,8 @@ elif [ "$1" = "EVALUATE" ]; then
               Mac_versions: $mac_vers,
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
                
-  a=$(ls parallel_runs/ | head -1)
-  
-  #echo 'scores and matrix:'
-  #cat scores_and_matrix.json
-  
-  #echo  'parallel run:'
-  #cat parallel_runs/$a/biopypir-*.json
-  
+  #a=$(ls parallel_runs/ | head -1)
+
   #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
   #jq -s add | jq 'del(.OS, .Python_version)' > eval.json
   
@@ -258,10 +255,8 @@ elif [ "$1" = "STATISTICS" ]; then
 
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       '{ Github_event_name: $github_event, Run_ID: $run_id }' > run_info.json
-      
-      echo 'here'
-      echo '----------------------------'
-      
+
+
       jq -s add stats.json run_info.json  > stats_2.json
       
       #cat  stats_2.json
