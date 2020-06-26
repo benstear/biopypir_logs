@@ -51,8 +51,6 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
   
-    
-    
     - run: |
         echo "${{ github.event.client_payload.PACKAGE }}"
         echo ${{ toJson(github.event.client_payload.PACKAGE) }}
@@ -73,7 +71,7 @@ jobs:
         
     - name:  SET ENV 
       run: |
-        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
+        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
         chmod +x biopypir_utils.sh  
      #   ./biopypir_utils.sh  "SET ENV"  
      #   printenv
@@ -163,9 +161,8 @@ jobs:
         #===============================================#
         - name: check for any job success, and cURL helper script
           run: |  
-            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/scedar_helper.sh"      
+            curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
             chmod +x biopypir_utils.sh; ./biopypir_utils.sh "SET ENV" 
-        # replace w this: curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
         #===============================================#
         - name: EVALUATE TEST RESULTS
           run: |
