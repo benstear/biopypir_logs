@@ -229,7 +229,6 @@ elif [ "$1" = "EVALUATE" ]; then
 elif [ "$1" = "STATISTICS" ]; then
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
-    echo $OWNER
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -244,11 +243,15 @@ elif [ "$1" = "STATISTICS" ]; then
       tr -d '"' <contrib_logins.txt > contributors.txt
       cat  contributors.txt
       
-      #declare TMP_FILE=$( mktemp )
-      #cp -p contrib_logins.txt "${TMP_FILE}"
-      #sed -e 's/^/https://github.com/' "${TMP_FILE}" > contrib_logins.txt
-        
-       cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
+
+      while read p; do 
+          echo $p
+          c="'https://github.com/' ${p}"
+          echo $c
+      done < $contributors.txt
+      
+      
+      #cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
        
        #linux_arr+=("$api_pyvers");
        
