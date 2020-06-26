@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script was written to help the biopypir github actions workflow  
+# This script was written to help the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
 
 if [ "$1" = "SET ENV" ]; then
 
@@ -246,16 +246,15 @@ elif [ "$1" = "STATISTICS" ]; then
        curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
        
       tr -d '"' <contrib_logins.txt > contributors.txt
-      
       cat  contributors.txt
       
       #declare TMP_FILE=$( mktemp )
       #cp -p contrib_logins.txt "${TMP_FILE}"
       #sed -e 's/^/https://github.com/' "${TMP_FILE}" > contrib_logins.txt
-
-       sed -e 's/^/https://github.com/' -i contrib_logins.txt
+        
+       cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
        
-       linux_arr+=("$api_pyvers");
+       #linux_arr+=("$api_pyvers");
        
 
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
@@ -270,11 +269,11 @@ elif [ "$1" = "STATISTICS" ]; then
       #echo  "run status = $run_status"
       
       if [ ! "$run_status" ]; then
-        echo 'run_status = $run_status'
+        echo 'run_status = "$run_status"'
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
-        echo 'run_status = $run_status'        
+        echo 'run_status = "$run_status"'        
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
