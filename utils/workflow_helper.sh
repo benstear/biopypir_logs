@@ -239,8 +239,8 @@ elif [ "$1" = "STATISTICS" ]; then
       has_downloads: .has_downloads}" > stats.json
       
       
-       # get names of contributors
-       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+      # get names of contributors
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
        
       tr -d '"' <contrib_logins.txt > contributors.txt
       cat  contributors.txt
@@ -249,7 +249,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
       while read p; do 
           echo $p
-          c="'https://github.com/${p}'"
+          c="https://github.com/${p}"
           echo $c
       done < contributors.txt
       
@@ -266,9 +266,6 @@ elif [ "$1" = "STATISTICS" ]; then
 
 
       jq -s add stats.json run_info.json  > stats_2.json
-      
-      #cat  stats_2.json
-      #echo  "run status = $run_status"
       
       if [ ! "$run_status" ]; then
         echo 'run_status = "$run_status"'
