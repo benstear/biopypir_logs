@@ -161,12 +161,12 @@ elif [ "$1" = "EVALUATE" ]; then
 
    
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  linux_arr[$i]=${linux_arr[$i]}","; done
-   echo linux_arr[@]
+   echo ${linux_arr[*]}
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}"\           #       put commas in
+         --arg linux "${linux_arr[*]}" \           #       put commas in
          --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr[*]}" \
          --arg mac_vers "${mac_unq[*]}" \
@@ -240,7 +240,8 @@ elif [ "$1" = "STATISTICS" ]; then
       tr -d '"' <contrib_logins.txt > contributors.txt
       cat  contributors.txt
       
-
+      echo '-------------------------'
+      
       while read p; do 
           echo $p
           c="'https://github.com/' ${p}"
