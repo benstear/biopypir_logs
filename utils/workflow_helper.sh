@@ -162,14 +162,25 @@ elif [ "$1" = "EVALUATE" ]; then
    # make OS arrays comma seperated
    
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}","; 
-      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}; fi done
+      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
+        linux_arr[$i]=${linux_arr[$i]}","; 
+      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
+        linux_arr[$i]=${linux_arr[$i]}; fi 
+    done
+        
    for (( i = 0 ; i < ${#mac_arr[@]} ; i++ )) do  
-      if ! [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then mac_arr[$i]=${mac_arr[$i]}","; 
-      elif [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then mac_arr[$i]=${mac_arr[$i]}; fi done
+      if ! [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then
+        mac_arr[$i]=${mac_arr[$i]}","; 
+      elif [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then 
+        mac_arr[$i]=${mac_arr[$i]}; fi 
+   done
+   
    for (( i = 0 ; i < ${#windows_arr[@]} ; i++ )) do  
-      if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then windows_arr[$i]=${windows_arr[$i]}","; 
-      elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then windows_arr[$i]=${windows_arr[$i]};  fi  done
+      if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
+        windows_arr[$i]=${windows_arr[$i]}","; 
+      elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
+        windows_arr[$i]=${windows_arr[$i]};  fi 
+   done
    
    #echo ${linux_arr2[*]}
    
@@ -212,7 +223,7 @@ elif [ "$1" = "EVALUATE" ]; then
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
    
-  echo $ COVERAGE_SCORE
+  echo $COVERAGE_SCORE
   
   badge='None';
   
@@ -226,8 +237,7 @@ elif [ "$1" = "EVALUATE" ]; then
     fi
   fi
   
-  jq -n --arg badge "$badge" \
-  '{BADGE : $badge}' > badge.json; 
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   
   jq -s add eval.json badge.json  > eval_2.json
   
@@ -247,8 +257,17 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt
+      
       sed -i -e  's#^#https://github.com/#'  contributors.txt
+      cont=$(cat contributors.txt)
+      echo $cont
        
+      #for (( i = 0 ; i < ${#windows_arr[@]} ; i++ )) do  
+      #  if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
+      #    windows_arr[$i]=${windows_arr[$i]}","; 
+      #  elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
+      #    windows_arr[$i]=${windows_arr[$i]};  fi 
+      #done
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       --arg contributors $(cat contributors.txt) --arg num_contributors $(wc -l contributors.txt) \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
