@@ -159,16 +159,14 @@ elif [ "$1" = "EVALUATE" ]; then
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
-   linux_arr2=()
+   #linux_arr2=()
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then
-        linux_arr2[$i]=${linux_arr[$i]}","; 
-      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then
-        linux_arr2[$i]=${linux_arr[$i]}; 
+      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}","; 
+      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}; 
       fi
    done
    
-   echo ${linux_arr2[*]}
+   #echo ${linux_arr2[*]}
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
@@ -243,34 +241,12 @@ elif [ "$1" = "STATISTICS" ]; then
       
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-       
       tr -d '"' <contrib_logins.txt > contributors.txt
-      cat  contributors.txt
-      
-      echo $(wc -l contributors.txt)
-      
-      echo '-------------------------'
-      
-      #while read p; do 
-      #    echo 'line = ${p}'
-      #    c='https://github.com/"${p}"'
-      #    echo $c
-      #done < contributors.txt
-      
-      
       sed -i -e  's#^#https://github.com/#'  contributors.txt
-      
-      echo '-------------------------'
-      cat  contributors.txt
-      
-      #cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
        
-       #linux_arr+=("$api_pyvers");
-       
-
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
-      '{ Github_event_name: $github_event, Run_ID: $run_id }' > run_info.json
-
+      --arg contributors $(cat contributors.txt) --arg num_contributors $(wc -l contributors.txt) \
+      '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
       
