@@ -155,7 +155,7 @@ elif [ "$1" = "EVALUATE" ]; then
    
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
    
-   date=$(cat API.json | jq ".jobs[0].completed_at"); #date_slice=${date:1:10}; 
+   date=$(cat API.json | jq ".jobs[0].completed_at");
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
@@ -181,9 +181,7 @@ elif [ "$1" = "EVALUATE" ]; then
       elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
         windows_arr[$i]=${windows_arr[$i]};  fi 
    done
-   
-   #echo ${linux_arr2[*]}
-   
+      
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
          --arg coverage_score "$pytest_score_final" --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}"   \
@@ -203,12 +201,7 @@ elif [ "$1" = "EVALUATE" ]; then
               Linux_versions: $linux_vers,
               Mac_versions: $mac_vers,
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
-               
-  #a=$(ls parallel_runs/ | head -1)
 
-  #echo $(cat scores_and_matrix.json) $(cat parallel_runs/$a/biopypir-*.json) | \
-  #jq -s add | jq 'del(.OS, .Python_version)' > eval.json
-  
   cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
    # ================= GET BADGE STATUS ======================== #
@@ -219,10 +212,14 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
    
-   COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
+   if [[ $COVERAGE_SCORE != "null" ]], then 
+      COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
+   fi
+   
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
-   
+  
+  echo 'coverage score:'
   echo $COVERAGE_SCORE
   
   badge='None';
@@ -253,21 +250,16 @@ elif [ "$1" = "STATISTICS" ]; then
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
       
-      
+ 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt
       
-      sed -i -e  's#^#https://github.com/#'  contributors.txt
-      cont=$(cat contributors.txt)
-      echo $cont
-       
-      #for (( i = 0 ; i < ${#windows_arr[@]} ; i++ )) do  
-      #  if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
-      #    windows_arr[$i]=${windows_arr[$i]}","; 
-      #  elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
-      #    windows_arr[$i]=${windows_arr[$i]};  fi 
-      #done
+      sed -i -e  's#^#https://github.com/#'  contributors.txt # add github url to login names
+      
+      csv_string=$(paste -sd, contributors.txt)
+      echo $csv_string
+
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       --arg contributors $(cat contributors.txt) --arg num_contributors $(wc -l contributors.txt) \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
