@@ -159,12 +159,17 @@ elif [ "$1" = "EVALUATE" ]; then
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
-   #linux_arr2=()
+   # make OS arrays comma seperated
+   
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
       if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}","; 
-      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}; 
-      fi
-   done
+      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then linux_arr[$i]=${linux_arr[$i]}; fi done
+   for (( i = 0 ; i < ${#mac_arr[@]} ; i++ )) do  
+      if ! [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then mac_arr[$i]=${mac_arr[$i]}","; 
+      elif [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then mac_arr[$i]=${mac_arr[$i]}; fi done
+   for (( i = 0 ; i < ${#windows_arr[@]} ; i++ )) do  
+      if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then windows_arr[$i]=${windows_arr[$i]}","; 
+      elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then windows_arr[$i]=${windows_arr[$i]};  fi  done
    
    #echo ${linux_arr2[*]}
    
