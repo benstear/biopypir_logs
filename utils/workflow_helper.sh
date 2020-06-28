@@ -246,8 +246,8 @@ elif [ "$1" = "STATISTICS" ]; then
       echo '-------------------------'
       
       while read p; do 
-          echo 'line = $p'
-          c='https://github.com/"$p"'
+          echo 'line = ${p}'
+          c='https://github.com/"${p}"'
           echo $c
       done < contributors.txt
       
