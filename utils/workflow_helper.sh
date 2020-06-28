@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script was written to help the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
+# This script was written to do the heavy lifting for the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
 
 if [ "$1" = "SET ENV" ]; then
 
@@ -161,7 +161,7 @@ elif [ "$1" = "EVALUATE" ]; then
 
    linux_arr2=()
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-      if [[ "${linux_arr[$i]}" !=  "${linux_arr[-1]}" ]]; then
+      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then
         linux_arr2[$i]=${linux_arr[$i]}","; 
       fi
    done
@@ -170,9 +170,7 @@ elif [ "$1" = "EVALUATE" ]; then
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
-         --arg coverage_score "$pytest_score_final" \
-         --arg linux "${linux_arr[*]}"  \          
-         --arg linux_vers "${linux_unq[*]}"   \
+         --arg coverage_score "$pytest_score_final" --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}"   \
          --arg mac "${mac_arr[*]}"  \
          --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr[*]}" \
@@ -248,8 +246,8 @@ elif [ "$1" = "STATISTICS" ]; then
       echo '-------------------------'
       
       while read p; do 
-          echo $p
-          c="https://github.com/${p}"
+          echo 'line = $p'
+          c='https://github.com/"$p"'
           echo $c
       done < contributors.txt
       
