@@ -163,6 +163,8 @@ elif [ "$1" = "EVALUATE" ]; then
    for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
       if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then
         linux_arr2[$i]=${linux_arr[$i]}","; 
+      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then
+        linux_arr2[$i]=${linux_arr[$i]}; 
       fi
    done
    
@@ -206,21 +208,23 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
    #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
+   
+  echo $ COVERAGE_SCORE
   
-  badge='None';Hex_color=0xffffff;  
+  badge='None';
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
-    badge='BRONZE'; Hex_color=0x9c5221; 
+    badge='BRONZE';
     
     if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-      badge='GOLD';  Hex_color=0xd4af37
+      badge='GOLD';  
     elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-      badge='SILVER';  Hex_color=0xb5b5bd
+      badge='SILVER'; 
     fi
   fi
   
-  jq -n --arg badge "$badge" --arg hex_color $Hex_color \
-  '{BADGE : $badge, badge_color: $hex_color}' > badge.json; 
+  jq -n --arg badge "$badge" \
+  '{BADGE : $badge}' > badge.json; 
   
   jq -s add eval.json badge.json  > eval_2.json
   
@@ -243,16 +247,21 @@ elif [ "$1" = "STATISTICS" ]; then
       tr -d '"' <contrib_logins.txt > contributors.txt
       cat  contributors.txt
       
-      echo '-------------------------'
-      
-      while read p; do 
-          echo 'line = ${p}'
-          c='https://github.com/"${p}"'
-          echo $c
-      done < contributors.txt
+      echo $(wc -l contributors.txt)
       
       echo '-------------------------'
-
+      
+      #while read p; do 
+      #    echo 'line = ${p}'
+      #    c='https://github.com/"${p}"'
+      #    echo $c
+      #done < contributors.txt
+      
+      
+      sed -i -e  's#^#https://github.com/#'  contributors.txt
+      
+      echo '-------------------------'
+      cat  contributors.txt
       
       #cat $(sed -e 's/^/https://github.com/' -i contributors.txt)
        
