@@ -166,8 +166,9 @@ elif [ "$1" = "EVALUATE" ]; then
    echo  '-----array sep-------'
    IFS=',';
    
-   linux_arr=$(echo "${linux_arr[*]}")
-   echo $linux_arr
+   linux_arr2=$(echo "${linux_arr[*]}")
+   echo "${linux_arr2[*]}"
+   
     if [ -z "{$mac_arr[*]}" ]; then
       mac_arr=$(echo "${mac_arr[*]}")
     fi
@@ -177,9 +178,6 @@ elif [ "$1" = "EVALUATE" ]; then
     fi
    IFS=$' \t\n'
 
-
-   
-   
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
    #   if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
    #     linux_arr[$i]=${linux_arr[$i]}","; 
@@ -282,11 +280,11 @@ elif [ "$1" = "STATISTICS" ]; then
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
       
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      n_cntrbtrs="$(wc -l contributors.txt)" 
+      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
       echo $n_cntrbtrs
 
 
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$(cat contributors.txt)" --arg num_contributors "$(wc -l contributors.txt)" \
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$(cat contributors.txt)" --arg num_contributors "$n_cntrbtrs" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
 
 
