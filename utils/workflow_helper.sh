@@ -163,13 +163,17 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "${linux_arr[@]}" > linux_arr.txt
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
-   echo "$linux_arr[*]"
+   echo "${linux_arr[*]}"
    echo  '-----array sep-------'
    IFS=',';
    linux_arr2=$(echo "${linux_arr[*]}")
+   
+   mac_arr=$(echo "${mac_arr[*]}")
+   
+   windows_arr=$(echo "${windows_arr[*]}")
    IFS=$' \t\n'
 
-   echo $linux_arr2
+   #echo $linux_arr
    
    
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
@@ -306,7 +310,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      # Remove all files we dont want to push to the biopypir logs repository
      
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
-     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json
+     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors.txt
      rm -r parallel_runs
 
      mv logs/"$PACKAGE"*.json archived_logs
