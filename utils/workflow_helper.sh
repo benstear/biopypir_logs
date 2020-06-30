@@ -166,10 +166,10 @@ elif [ "$1" = "EVALUATE" ]; then
    echo "${linux_arr[*]}"
    echo  '-----array sep-------'
    IFS=',';
-   linux_arr2=$(echo "${linux_arr[*]}")
-   
+   linux_arr=$(echo "${linux_arr[*]}")
+   IFS=',';
    mac_arr=$(echo "${mac_arr[*]}")
-   
+   IFS=',';
    windows_arr=$(echo "${windows_arr[*]}")
    IFS=$' \t\n'
 
@@ -277,10 +277,12 @@ elif [ "$1" = "STATISTICS" ]; then
       
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
       
-      cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt)" 
+      echo $n_cntrbtrs
 
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$cntrbtrs" --arg num_contributors "$(wc -l contributors.txt)" \
+
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$(cat contributors.txt)" --arg num_contributors "$(wc -l contributors.txt)" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
 
 
