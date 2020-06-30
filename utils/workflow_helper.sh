@@ -212,7 +212,7 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
    
-   if [[ $COVERAGE_SCORE != "null" ]], then 
+   if [[ $COVERAGE_SCORE != "null" ]]; then 
       COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
    fi
    
