@@ -134,22 +134,21 @@ elif [ "$1" = "EVALUATE" ]; then
   pylint_score_ave=0.00; pytest_score_ave=0.00
   
   # Get pylint and pytest scores from each of the parallel runs
-  echo 'pylint/pytest scores'
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; 
-    echo "pylint_score: $pylint_score"
+    #echo "pylint_score: $pylint_score"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
     
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"'); 
-    echo "pytest_score: $pytest_score"
+    #echo "pytest_score: $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done
    
    echo "cumulative pytest score: $pytest_score_cum"
    
    # Calculate pylint and pytest scores average
-   k="$(($j+1))" ; echo "k = $k"
+   k="$(($j+1))" ; #echo "k = $k"
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
@@ -163,17 +162,18 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "${linux_arr[@]}" > linux_arr.txt
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
-   echo "${linux_arr[*]}"
+   echo "${linux_unq[*]}"
    echo  '-----array sep-------'
    IFS=',';
-   linux_arr=$(echo "${linux_arr[*]}")
-   IFS=',';
-   mac_arr=$(echo "${mac_arr[*]}")
-   IFS=',';
-   windows_arr=$(echo "${windows_arr[*]}")
+   linux_unq=$(echo "${linux_unq[*]}")
+   
+    if [ -z "$var" ]; then
+      mac_unq=$(echo "${mac_unq[*]}")
+    fi
+   windows_unq=$(echo "${windows_unq[*]}")
    IFS=$' \t\n'
 
-   #echo $linux_arr
+   echo $linux_arr
    
    
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
