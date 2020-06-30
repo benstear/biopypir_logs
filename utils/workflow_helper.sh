@@ -160,13 +160,20 @@ elif [ "$1" = "EVALUATE" ]; then
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
    # make OS arrays comma seperated
+   echo "${linux_arr[@]}" > linux_arr.txt
    
-   for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-      if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
-        linux_arr[$i]=${linux_arr[$i]}","; 
-      elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
-        linux_arr[$i]=${linux_arr[$i]}; fi 
-    done
+
+   linux_arr=$(paste -sd, linux_arr.txt) # add commas
+
+   echo $linux_arr
+   
+   
+   #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
+   #   if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
+   #     linux_arr[$i]=${linux_arr[$i]}","; 
+   #   elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
+   #     linux_arr[$i]=${linux_arr[$i]}; fi 
+   # done
         
    for (( i = 0 ; i < ${#mac_arr[@]} ; i++ )) do  
       if ! [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then
@@ -221,16 +228,17 @@ elif [ "$1" = "EVALUATE" ]; then
   
   echo 'coverage score:'
   echo $COVERAGE_SCORE
-  
   badge='None';
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE';
-    
-    if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-      badge='GOLD';  
-    elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-      badge='SILVER'; 
+    if [ $COVERAGE_SCORE != 'null' ]; then
+      if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
+        badge='GOLD';  
+      elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
+        badge='SILVER'; 
+      fi
+
     fi
   fi
   
@@ -255,13 +263,14 @@ elif [ "$1" = "STATISTICS" ]; then
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt
       
-      sed -i -e  's#^#https://github.com/#'  contributors.txt # add github url to login names
+      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
       
-      csv_string=$(paste -sd, contributors.txt)
-      echo $csv_string
-
+      cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      #echo $csv_string
+      #cnt=$(cat contributors.txt)
+      
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
-      --arg contributors $(cat contributors.txt) --arg num_contributors $(wc -l contributors.txt) \
+      --arg contributors "$cntrbtrs" --arg num_contributors $(wc -l contributors.txt) \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
