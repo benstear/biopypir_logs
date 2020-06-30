@@ -162,18 +162,22 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "${linux_arr[@]}" > linux_arr.txt
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
-   echo "${linux_unq[*]}"
+   echo "${linux_arr[*]}"
    echo  '-----array sep-------'
    IFS=',';
-   linux_unq=$(echo "${linux_unq[*]}")
    
-    if [ -z "$var" ]; then
-      mac_unq=$(echo "${mac_unq[*]}")
+   linux_arr=$(echo "${linux_arr[*]}")
+   echo $linux_arr
+    if [ -z "{$mac_arr[*]}" ]; then
+      mac_arr=$(echo "${mac_arr[*]}")
     fi
-   windows_unq=$(echo "${windows_unq[*]}")
+    
+    if [ -z "{$windows_arr[*]}" ]; then
+      windows_arr=$(echo "${windows_arr[*]}")
+    fi
    IFS=$' \t\n'
 
-   echo $linux_arr
+
    
    
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
