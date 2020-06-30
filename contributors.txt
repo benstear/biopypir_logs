@@ -1,2 +1,2 @@
-logstar
-benstear
+https://github.com/logstar
+https://github.com/benstear
