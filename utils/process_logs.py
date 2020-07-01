@@ -37,7 +37,7 @@ reordered_cols= ['Package','BADGE','Owner_Repo','Description','date_created','la
 
 df = df.reindex(reordered_cols, axis=1)
 
-df.to_csv('log_matrix.csv',sep='\t')
+df.to_csv('log_matrix.csv',index=False,sep='\t')
 
 
 # Create and save markdown table of packages
