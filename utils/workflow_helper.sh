@@ -148,13 +148,13 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
-   echo "FINAL pytest score: $pytest_score_cum"
+   #echo "FINAL pytest score: $pytest_score_cum"
    date=$(cat API.json | jq ".jobs[0].completed_at");
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
    dte=$(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
-   echo 'dte  ====  $dte'
+   echo 'dte  ====  "$dte"'
     
    # make OS arrays comma seperated
     IFS=',';
@@ -171,6 +171,7 @@ elif [ "$1" = "EVALUATE" ]; then
    # done
 
   #--arg coverage_score "$pytest_score_final" \ 
+  echo  'here 1'
   
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \   
@@ -193,7 +194,8 @@ elif [ "$1" = "EVALUATE" ]; then
               Linux_versions: $linux_vers,
               Mac_versions: $mac_vers,
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
-
+  echo 'here2'
+  
   cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
    # ================= GET BADGE STATUS ======================== #
@@ -204,7 +206,7 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
    
-   if [[ $COVERAGE_SCORE != "null" ]]; then 
+   if [[ $COVERAGE_SCORE != "null" ]]; then # ! before = ? 
       COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
    fi
    
@@ -231,7 +233,7 @@ elif [ "$1" = "EVALUATE" ]; then
   
   jq -s add eval.json badge.json  > eval_2.json
   
-  cat eval_2.json
+  #cat eval_2.json
   
 elif [ "$1" = "STATISTICS" ]; then
     
