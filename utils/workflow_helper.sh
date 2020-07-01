@@ -152,7 +152,7 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=null; fi
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$("null"); fi
    
    date=$(cat API.json | jq ".jobs[0].completed_at");
 
@@ -177,7 +177,7 @@ elif [ "$1" = "EVALUATE" ]; then
 
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \
-         --arg coverage_score "$pytest_score_final"  \ 
+         --arg coverage_score "$pytest_score_final" \ 
          --arg linux "${linux_arr_[*]}" \
          --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr_[*]}" \
