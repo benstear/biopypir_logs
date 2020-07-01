@@ -141,7 +141,6 @@ elif [ "$1" = "EVALUATE" ]; then
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"'); 
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done   
-   echo "cumulative pytest score: $pytest_score_cum"
    
    # Calculate pylint and pytest scores average
    k="$(($j+1))" ; 
@@ -150,31 +149,14 @@ elif [ "$1" = "EVALUATE" ]; then
    
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
-   #echo "FINAL pytest score: $pytest_score_cum"
-   date=$(cat API.json | jq ".jobs[0].completed_at");
-   date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
+   date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
     
-   # make OS arrays comma seperated
-    IFS=',';
+    IFS=','; # make OS arrays comma seperated
     if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
     if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
    IFS=$' \t\n';
 
-   #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
-   #   if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
-   #     linux_arr[$i]=${linux_arr[$i]}","; 
-   #   elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
-   #     linux_arr[$i]=${linux_arr[$i]}; fi 
-   # done
-
-  #--arg coverage_score "$pytest_score_final" \ 
-  echo  'here 1'
-  echo "$pytest_score_final"
-  echo  'here 2'
-
-  
-  
    jq -n --arg Workflow_Run_Date "$date_clip" \
           --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr_[*]}" \
@@ -220,7 +202,7 @@ elif [ "$1" = "EVALUATE" ]; then
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE';
-    if [ $COVERAGE_SCORE != 'null' ]; then
+    if [ $COVERAGE_SCORE != 'NA' ]; then
       if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
         badge='GOLD';  
       elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
