@@ -153,11 +153,6 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "FINAL pytest score: $pytest_score_cum"
    date=$(cat API.json | jq ".jobs[0].completed_at");
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
-   #dte=
-   echo 'dte: '
-   echo $(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
-   
-   #echo 'dte  ====  "$dte"'
     
    # make OS arrays comma seperated
     IFS=',';
@@ -175,7 +170,9 @@ elif [ "$1" = "EVALUATE" ]; then
 
   #--arg coverage_score "$pytest_score_final" \ 
   echo  'here 1'
-  echo "${linux_arr_[*]}"
+  echo "$pytest_score_final"
+  
+  
   
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \   
@@ -198,7 +195,6 @@ elif [ "$1" = "EVALUATE" ]; then
               Linux_versions: $linux_vers,
               Mac_versions: $mac_vers,
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
-  echo 'here2'
   
   cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
