@@ -6,7 +6,7 @@ if [ "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
-  OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
+  OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
   #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
   echo "::set-env name=OWNER::$OWNER"
   
@@ -163,10 +163,10 @@ elif [ "$1" = "EVALUATE" ]; then
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
     IFS=',';
-    if [ -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}") fi
-    if [ -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}") fi
-    if [ -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}") fi
-   IFS=$' \t\n'
+    if [ -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); fi
+    if [ -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}"); fi
+    if [ -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}"); fi
+   IFS=$' \t\n';
 
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
    #   if ! [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
@@ -245,9 +245,10 @@ elif [ "$1" = "STATISTICS" ]; then
 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      tr -d '"' <contrib_logins.txt > contributors.txt
+      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
       
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
+      
       contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
