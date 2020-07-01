@@ -171,18 +171,19 @@ elif [ "$1" = "EVALUATE" ]; then
   #--arg coverage_score "$pytest_score_final" \ 
   echo  'here 1'
   echo "$pytest_score_final"
-  
+  echo  'here 2'
+
   
   
    jq -n --arg Workflow_Run_Date "$date_clip" \
-         --arg lint_score "$pylint_score_final" \   
-         --arg linux_vers "${linux_unq[*]}" \
+          --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr_[*]}" \
          --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr_[*]}" \
          --arg windows_vers "${windows_unq[*]}" \
          --arg coverage_score "$pytest_score_final" \
           --arg linux "${linux_arr_[*]}" \
+          --arg lint_score "$pylint_score_final"\
            '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
