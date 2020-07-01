@@ -30,9 +30,9 @@ for i in range(0,len(all_logs)):
 
 df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0])
 
-reordered_cols= ['Package','BADGE','Owner_Repo','Description','date_created','last_commit',
+reordered_cols= ['Package','BADGE','Owner_Repo','Description','Workflow_Run_Date','date_created','last_commit',
                      'forks','watchers','stars','homepage_url','has_wiki','open_issues',
-                     'has_downloads','Run_ID','Date','Pylint_score','Pytest_score','Pip','License','Build','Linux',
+                     'has_downloads','Run_ID','Pylint_score','Pytest_score','Pip','License','Build','Linux',
                      'Mac','Windows','Linux_versions','Mac_versions','Windows_versions','contributors','num_contributors','Github_event_name']
 
 df = df.reindex(reordered_cols, axis=1)
