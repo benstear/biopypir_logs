@@ -126,12 +126,12 @@ elif [ "$1" = "EVALUATE" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
-  # Remove duplicate OS versions from each list
+  # Remove any duplicate OS versions from each list
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   
-  pylint_score_ave=0.00; pytest_score_ave=0.00
+  pylint_score_ave=0.00; pytest_score_ave=0.00  #  Initialize 'average score' variables
   
   # Get pylint and pytest scores from each of the parallel runs
   for file in "$(pwd)/parallel_runs"/*/*.json; do
@@ -142,7 +142,7 @@ elif [ "$1" = "EVALUATE" ]; then
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done   
    
-   # Calculate pylint and pytest scores average
+   # Calculate pylint and pytest average scores
    k="$(($j+1))" ; 
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
@@ -155,7 +155,7 @@ elif [ "$1" = "EVALUATE" ]; then
     if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
     if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
-   IFS=$' \t\n';
+    IFS=$' \t\n';
 
    jq -n --arg Workflow_Run_Date "$date_clip" \
           --arg linux_vers "${linux_unq[*]}" \
@@ -185,20 +185,12 @@ elif [ "$1" = "EVALUATE" ]; then
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
    PIP=$(cat eval.json | jq ".Pip")
-   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   # move into other cmd
+   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   #
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
    
-   if [[ $COVERAGE_SCORE != "null" ]]; then # ! before = ? 
-      COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") # Remove quotes
-   fi
-   
+   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") fi  # Remove quotes
    LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
-   #temp="${opt%\"}"; temp="${temp#\"}"; echo "$temp"
-  
-  #echo 'coverage score:'
-  #echo $COVERAGE_SCORE
-  badge='None';
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE';
@@ -206,18 +198,11 @@ elif [ "$1" = "EVALUATE" ]; then
       if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
         badge='GOLD';  
       elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-        badge='SILVER'; 
-      fi
-
-    fi
-  fi
+        badge='SILVER'; fi fi fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
-  
   jq -s add eval.json badge.json  > eval_2.json
-  
-  #cat eval_2.json
-  
+    
 elif [ "$1" = "STATISTICS" ]; then
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
@@ -227,16 +212,12 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-      
 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-      
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
-      
       contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
-      
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
