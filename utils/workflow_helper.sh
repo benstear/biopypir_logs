@@ -162,20 +162,10 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "${linux_arr[@]}" > linux_arr.txt
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
-   echo "${linux_arr[*]}"
-   echo  '-----array sep-------'
-   IFS=',';
-   
-   linux_arr2=$(echo "${linux_arr[*]}")
-   echo "${linux_arr2[*]}"
-   
-    if [ -z "{$mac_arr[*]}" ]; then
-      mac_arr=$(echo "${mac_arr[*]}")
-    fi
-    
-    if [ -z "{$windows_arr[*]}" ]; then
-      windows_arr=$(echo "${windows_arr[*]}")
-    fi
+    IFS=',';
+    if [ -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}") fi
+    if [ -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}") fi
+    if [ -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}") fi
    IFS=$' \t\n'
 
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
@@ -184,28 +174,12 @@ elif [ "$1" = "EVALUATE" ]; then
    #   elif [[ "${linux_arr[$i]}" ==  "${linux_arr[-1]}" ]]; then 
    #     linux_arr[$i]=${linux_arr[$i]}; fi 
    # done
-        
-   for (( i = 0 ; i < ${#mac_arr[@]} ; i++ )) do  
-      if ! [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then
-        mac_arr[$i]=${mac_arr[$i]}","; 
-      elif [[ "${mac_arr[$i]}" ==  "${mac_arr[-1]}" ]]; then 
-        mac_arr[$i]=${mac_arr[$i]}; fi 
-   done
-   
-   for (( i = 0 ; i < ${#windows_arr[@]} ; i++ )) do  
-      if ! [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
-        windows_arr[$i]=${windows_arr[$i]}","; 
-      elif [[ "${windows_arr[$i]}" ==  "${windows_arr[-1]}" ]]; then 
-        windows_arr[$i]=${windows_arr[$i]};  fi 
-   done
-      
-   jq -n --arg Workflow_Run_Date "$date_clip" \
-         --arg lint_score "$pylint_score_final" \
-         --arg coverage_score "$pytest_score_final" --arg linux "${linux_arr[*]}" --arg linux_vers "${linux_unq[*]}"   \
-         --arg mac "${mac_arr[*]}"  \
-         --arg mac_vers "${mac_unq[*]}" \
-         --arg windows "${windows_arr[*]}" \
-         --arg windows_vers "${windows_unq[*]}" \
+
+   jq -n --arg Workflow_Run_Date "$date_clip" --arg lint_score "$pylint_score_final" \
+         --arg coverage_score "$pytest_score_final"  \ 
+         --arg linux "${linux_arr_[*]}" --arg linux_vers "${linux_unq[*]}"   \
+         --arg mac "${mac_arr_[*]}"  --arg mac_vers "${mac_unq[*]}" \
+         --arg windows "${windows_arr_[*]}" --arg windows_vers "${windows_unq[*]}" \
            '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
@@ -273,22 +247,15 @@ elif [ "$1" = "STATISTICS" ]; then
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt
       
-      
-      echo 'contributors = '
-      cat contributors.txt
-      
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
+      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
-      echo $n_cntrbtrs
 
 
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$(cat contributors.txt)" --arg num_contributors "$n_cntrbtrs" \
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$contributors_spc" --arg num_contributors "$n_cntrbtrs" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
-
-
-
 
       jq -s add stats.json run_info.json  > stats_2.json
       
