@@ -135,29 +135,30 @@ elif [ "$1" = "EVALUATE" ]; then
   
   # Get pylint and pytest scores from each of the parallel runs
   for file in "$(pwd)/parallel_runs"/*/*.json; do
-    
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; 
-    #echo "pylint_score: $pylint_score"
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
-    
+ 
     pytest_score=$(cat "$file" | jq ".Pytest_score"); pytest_score=$(echo "$pytest_score" | tr -d '"'); 
-    #echo "pytest_score: $pytest_score"
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
-  done
-   
+  done   
    echo "cumulative pytest score: $pytest_score_cum"
    
    # Calculate pylint and pytest scores average
-   k="$(($j+1))" ; #echo "k = $k"
+   k="$(($j+1))" ; 
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$("null"); fi
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'null'; fi
    
    date=$(cat API.json | jq ".jobs[0].completed_at");
 
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
 
+
+
+    dte=$(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
+    echo 'dte  ====  $dte'
+    
    # make OS arrays comma seperated
    #echo "${linux_arr[@]}" > linux_arr.txt
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
@@ -175,15 +176,17 @@ elif [ "$1" = "EVALUATE" ]; then
    #     linux_arr[$i]=${linux_arr[$i]}; fi 
    # done
 
+  #--arg coverage_score "$pytest_score_final" \ 
+  
    jq -n --arg Workflow_Run_Date "$date_clip" \
-         --arg lint_score "$pylint_score_final" \
-         --arg coverage_score "$pytest_score_final" \ 
+         --arg lint_score "$pylint_score_final" \   
          --arg linux "${linux_arr_[*]}" \
          --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr_[*]}" \
          --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr_[*]}" \
          --arg windows_vers "${windows_unq[*]}" \
+         --arg coverage_score "$pytest_score_final" \
            '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
