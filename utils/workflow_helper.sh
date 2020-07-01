@@ -163,9 +163,9 @@ elif [ "$1" = "EVALUATE" ]; then
    #linux_arr=$(paste -sd, linux_arr.txt) # add commas
 
     IFS=',';
-    if [ -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); fi
-    if [ -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}"); fi
-    if [ -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}"); fi
+    if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
+    if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
+    if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
    IFS=$' \t\n';
 
    #for (( i = 0 ; i < ${#linux_arr[@]} ; i++ )) do  
@@ -252,6 +252,9 @@ elif [ "$1" = "STATISTICS" ]; then
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
+      # specific OS version
+      # date added to biopypir
+      # license type
 
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$contributors_spc" --arg num_contributors "$n_cntrbtrs" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
