@@ -99,9 +99,9 @@ elif [ "$1" = "EVALUATE" ]; then
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
   job_count=$(cat API.json |  jq ".total_count")
-  echo "raw job count: $job_count"
+  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
-  echo "adjusted jobcount: $j (0 indexed)"
+  #echo "adjusted jobcount: $j (0 indexed)"
   
   linux_array=(); linux_vs=()
   mac_array=();  mac_vs=()
@@ -153,8 +153,11 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo "FINAL pytest score: $pytest_score_cum"
    date=$(cat API.json | jq ".jobs[0].completed_at");
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
-   dte=$(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
-   echo 'dte  ====  "$dte"'
+   #dte=
+   echo 'dte: '
+   echo $(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
+   
+   #echo 'dte  ====  "$dte"'
     
    # make OS arrays comma seperated
     IFS=',';
@@ -172,16 +175,17 @@ elif [ "$1" = "EVALUATE" ]; then
 
   #--arg coverage_score "$pytest_score_final" \ 
   echo  'here 1'
+  echo "${linux_arr_[*]}"
   
    jq -n --arg Workflow_Run_Date "$date_clip" \
          --arg lint_score "$pylint_score_final" \   
-         --arg linux "${linux_arr_[*]}" \
          --arg linux_vers "${linux_unq[*]}" \
          --arg mac "${mac_arr_[*]}" \
          --arg mac_vers "${mac_unq[*]}" \
          --arg windows "${windows_arr_[*]}" \
          --arg windows_vers "${windows_unq[*]}" \
          --arg coverage_score "$pytest_score_final" \
+          --arg linux "${linux_arr_[*]}" \
            '{ Workflow_Run_Date :  $Workflow_Run_Date,
               Pylint_score  :  $lint_score,  
               Pytest_score  :  $coverage_score,
