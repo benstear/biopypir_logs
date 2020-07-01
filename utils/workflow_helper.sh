@@ -148,21 +148,15 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'null'; fi
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi
    
+   echo "FINAL pytest score: $pytest_score_cum"
    date=$(cat API.json | jq ".jobs[0].completed_at");
-
    date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
-
-
-
-    dte=$(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
-    echo 'dte  ====  $dte'
+   dte=$(sed -e 's/^"//' -e 's/"$//' <<< $(cat API.json | jq ".jobs[0].completed_at"))
+   echo 'dte  ====  $dte'
     
    # make OS arrays comma seperated
-   #echo "${linux_arr[@]}" > linux_arr.txt
-   #linux_arr=$(paste -sd, linux_arr.txt) # add commas
-
     IFS=',';
     if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
     if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
@@ -283,7 +277,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
 elif [ "$1" = "CLEAN UP" ]; then
     
-     echo 'Starting Clean Up'
+     echo 'Starting Clean Up...\n\n'
      pwd
      ls -A
      echo '-------------------------'
