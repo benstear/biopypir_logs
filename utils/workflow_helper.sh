@@ -188,9 +188,9 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-  if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
+  #if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
    
-   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
+  # LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
   
   #if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then badge='BRONZE';
   #  if [ $COVERAGE_SCORE != 'NA' ]; then
@@ -252,7 +252,6 @@ elif [ "$1" = "CLEAN UP" ]; then
      ls logs/
      
      # Remove all files we dont want to push to the biopypir logs repository
-     
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors.txt
      rm -r parallel_runs
