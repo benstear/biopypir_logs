@@ -233,12 +233,14 @@ elif [ "$1" = "STATISTICS" ]; then
       # specific OS version, just say linux on website
       # license type
       
-      echo 'PIP: '
+      echo '\nPIP: '
       echo $PIP
-      if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-      else pip_url == 'NA';
-      fi
+      #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
+      #else pip_url == 'NA';
+      #fi
+      
       pip_url=https://pypi.org/project/"$PACKAGE"/
+      
       echo 'pip_url:'
       echo $pip_url
       
