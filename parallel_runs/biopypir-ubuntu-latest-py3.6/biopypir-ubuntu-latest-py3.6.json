@@ -1,0 +1,6 @@
+{
+  "Python_version": "3.6",
+  "OS": "ubuntu-latest",
+  "Pylint_score": "6.84",
+  "Pytest_score": "0"
+}
