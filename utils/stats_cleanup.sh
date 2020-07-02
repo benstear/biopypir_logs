@@ -1,3 +1,42 @@
+   # Calculate pylint and pytest average scores
+   k="$(($j+1))" ; 
+   pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
+   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
+   
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
+   
+   date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
+    
+    IFS=','; # make OS arrays comma seperated
+    if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
+    if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
+    if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
+    IFS=$' \t\n';
+
+   jq -n --arg Workflow_Run_Date "$date_clip" \
+          --arg linux_vers "${linux_unq[*]}" \
+         --arg mac "${mac_arr_[*]}" \
+         --arg mac_vers "${mac_unq[*]}" \
+         --arg windows "${windows_arr_[*]}" \
+         --arg windows_vers "${windows_unq[*]}" \
+         --arg coverage_score "$pytest_score_final" \
+          --arg linux "${linux_arr_[*]}" \
+          --arg lint_score "$pylint_score_final"\
+           '{ Workflow_Run_Date :  $Workflow_Run_Date,
+              Pylint_score  :  $lint_score,  
+              Pytest_score  :  $coverage_score,
+              Pip           : "True",
+              License       : "True",
+              Build         : "True",
+              Linux         : $linux,
+              Mac           : $mac,
+              Windows       : $windows,
+              Linux_versions: $linux_vers,
+              Mac_versions: $mac_vers,
+              Windows_versions: $windows_vers }'  > scores_and_matrix.json
+    
+    
+    
     
   cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
