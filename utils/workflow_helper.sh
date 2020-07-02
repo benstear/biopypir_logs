@@ -190,7 +190,7 @@ elif [ "$1" = "EVALUATE" ]; then
 
   #if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
    
-  # LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
+  LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
   
   #if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then badge='BRONZE';
   #  if [ $COVERAGE_SCORE != 'NA' ]; then
