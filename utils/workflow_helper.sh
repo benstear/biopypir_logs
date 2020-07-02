@@ -217,9 +217,9 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-      
-      $(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
-      cat contributors2.txt
+      cat contributors.txt
+
+      tr '\n' ' ' < contributors.txt > contributors2.txt  # replace \n with ' '
       
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
       
@@ -239,7 +239,7 @@ elif [ "$1" = "STATISTICS" ]; then
       --arg contributors_url "$contributors_url" \
       --arg num_contributors "$n_cntrbtrs" \
       --arg contributor_names "$(cat contributors2.txt)" \
-      --arg pip_url: $pip_url \
+      --arg pip_url: "$pip_url" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, PIP_url: $pip_url ,contributor_names: $contributor_names, contributors_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
