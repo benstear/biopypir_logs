@@ -217,15 +217,19 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       (tr -d '"' <contrib_logins.txt) > contributors.txt # delete quotes from file
+      contributors.txt=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
+      
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      
+      
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
       # specific OS version, just say linux on website
       # license type
       # 
-      echo 'https://pypi.org/project/"$PACKAGE"/' 
+      echo 'https://pypi.org/project/"($PACKAGE)"/'
       echo "$PACKAGE"
       
       
