@@ -178,32 +178,4 @@ elif [ "$1" = "EVALUATE" ]; then
               Linux_versions: $linux_vers,
               Mac_versions: $mac_vers,
               Windows_versions: $windows_vers }'  > scores_and_matrix.json
-  
-  cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
-  
-   # ================= GET BADGE STATUS ======================== #
-   LICENSE=$(cat eval.json | jq ".License")
-   BUILD=$(cat eval.json | jq ".Build")
-   PIP=$(cat eval.json | jq ".Pip")
-   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   #
-   COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
-   badge='NONE'
-   
-   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") fi  # Remove quotes
-   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
-  
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
-    badge='BRONZE';
-    if [ $COVERAGE_SCORE != 'NA' ]; then
-      if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-        badge='GOLD';  
-      elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-        badge='SILVER'; fi fi fi
-  
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
-  jq -s add eval.json badge.json  > eval_2.json
-    
-elif [ "$1" = "STATISTICS" ]; then
-    echo 'stats'
-    
 fi 
