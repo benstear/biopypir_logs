@@ -225,9 +225,8 @@ elif [ "$1" = "STATISTICS" ]; then
       
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       
-     
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
-
+      
       # specific OS version, just say linux on website
       # license type
       
@@ -244,7 +243,7 @@ elif [ "$1" = "STATISTICS" ]; then
       --arg contributors_url "$contributors_url" \
       --arg num_contributors "$n_cntrbtrs" \
       --arg contributor_names "$(cat contributors.txt)" \
-      --arg pip_url: "$pip_url" \
+      --arg pip_url "$pip_url" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, PIP_url: $pip_url ,contributor_names: $contributor_names, contributors_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
