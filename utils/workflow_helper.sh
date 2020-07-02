@@ -213,21 +213,21 @@ elif [ "$1" = "EVALUATE" ]; then
     
 elif [ "$1" = "STATISTICS" ]; then
     
-    OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
+#    OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     
-    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
-      Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
-      .subscribers_count, stars: .stargazers_count,
-      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
-      has_downloads: .has_downloads}" > stats.json
+#    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
+#      Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+#      .subscribers_count, stars: .stargazers_count,
+#      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
+#      has_downloads: .has_downloads}" > stats.json
 
       # get names of contributors
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
-      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
+#      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+#      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
+#      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
+#      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
+#      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
       # specific OS version
       # date added to biopypir
