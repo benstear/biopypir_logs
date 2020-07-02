@@ -233,7 +233,8 @@ elif [ "$1" = "STATISTICS" ]; then
       # specific OS version, just say linux on website
       # license type
       
-      echo '\nPIP: '
+      echo '      '  
+      echo 'PIP: '
       echo $PIP
       #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
       #else pip_url == 'NA';
@@ -241,7 +242,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
       pip_url=https://pypi.org/project/"$PACKAGE"/
       
-      echo 'pip_url:'
+      echo 'pip_url: '
       echo $pip_url
       
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
@@ -249,7 +250,8 @@ elif [ "$1" = "STATISTICS" ]; then
       --arg num_contributors "$n_cntrbtrs" \
       --arg contributor_names "$(cat contributors2.txt)" \
       --arg pip_url "$pip_url" \
-      '{ Github_event_name: $github_event, Run_ID: $run_id, PIP_url: $pip_url ,contributor_names: $contributor_names, contributors_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
+      '{ Github_event_name: $github_event, Run_ID: $run_id, Pip_url: $pip_url ,contributor_names: $contributor_names, 
+      contributor_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
       
