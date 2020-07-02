@@ -222,16 +222,15 @@ elif [ "$1" = "STATISTICS" ]; then
 #      has_downloads: .has_downloads}" > stats.json
 
       # get names of contributors
-#      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-#      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-#       cat contrib_logins.txt
-#      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
-#      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
+       cat contrib_logins.txt
+      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
+      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-#      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
+      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
       # specific OS version, just say linux on website
-      
       # license type
       # https://pypi.org/project/scedar/
 
