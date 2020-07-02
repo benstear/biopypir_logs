@@ -217,22 +217,27 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       (tr -d '"' <contrib_logins.txt) > contributors.txt # delete quotes from file
-      cat contributors.txt
+      
       sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
-      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
+      contributors_url=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
       # specific OS version, just say linux on website
       # license type
       # 
-      echo 'https://pypi.org/project/$PACKAGE/' 
+      echo 'https://pypi.org/project/"$PACKAGE"/' 
       
       
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$contributors_spc" --arg num_contributors "$n_cntrbtrs" \
-      '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
+      --arg contributors_url "$contributors_url" \
+      --arg num_contributors "$n_cntrbtrs" \
+      --arg contributor_names "$(cat contributors.txt)" \
+      '{ Github_event_name: $github_event, Run_ID: $run_id,contributor_names: $contributor_names, contributors_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
+      
+      cat stats_2.json
       
       if [ ! "$run_status" ]; then
         echo 'run_status = "$run_status"'
