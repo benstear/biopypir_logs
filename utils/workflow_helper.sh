@@ -188,12 +188,12 @@ elif [ "$1" = "EVALUATE" ]; then
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
    PIP=$(cat eval.json | jq ".Pip")
-   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   #
+   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") fi  # Remove quotes
-   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
+   #if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE") fi  # Remove quotes
+   #LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
   
   #if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
   #  badge='BRONZE';
@@ -224,14 +224,16 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
 #      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
 #      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
+#       cat contrib_logins.txt
 #      sed -i -e  's#^#https://github.com/#' contributors.txt # add github url to login names
 #      contributors_spc=$(tr '\n' ' ' < contributors.txt) # replace \n with ' '
       #cntrbtrs=$(paste -sd, contributors.txt) # add commas
 #      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)" 
 
-      # specific OS version
-      # date added to biopypir
+      # specific OS version, just say linux on website
+      
       # license type
+      # https://pypi.org/project/scedar/
 
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" --arg contributors "$contributors_spc" --arg num_contributors "$n_cntrbtrs" \
       '{ Github_event_name: $github_event, Run_ID: $run_id, contributors: $contributors, num_contributors: $num_contributors}' > run_info.json
