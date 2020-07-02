@@ -206,20 +206,19 @@ elif [ "$1" = "EVALUATE" ]; then
   #  fi 
   #fi
   
-  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
-  #jq -s add eval.json badge.json  > eval_2.json
-    
-    
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
+  jq -s add eval.json badge.json  > eval_2.json
+ 
     
 elif [ "$1" = "STATISTICS" ]; then
     
-#    OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
+    OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     
-#    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
-#      Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
-#      .subscribers_count, stars: .stargazers_count,
-#      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
-#      has_downloads: .has_downloads}" > stats.json
+    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
+      Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
+      .subscribers_count, stars: .stargazers_count,
+      homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
+      has_downloads: .has_downloads}" > stats.json
 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
