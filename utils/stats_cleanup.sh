@@ -1,12 +1,4 @@
-   # Calculate pylint and pytest average scores
-   k="$(($j+1))" ; 
-   pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
-   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
-   
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
-   
-   date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
-    
+
     IFS=','; # make OS arrays comma seperated
     if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
     if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
