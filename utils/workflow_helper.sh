@@ -216,7 +216,7 @@ elif [ "$1" = "STATISTICS" ]; then
 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      (tr -d '"' <contrib_logins.txt) > contributors.txt # delete quotes from file
+      $(tr -d '"' <contrib_logins.txt) > contributors.txt # delete quotes from file
       
       $(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       cat contributors2.txt
