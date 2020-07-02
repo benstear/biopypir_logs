@@ -142,5 +142,15 @@ elif [ "$1" = "EVALUATE" ]; then
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done   
    
+   
+   # Calculate pylint and pytest average scores
+   k="$(($j+1))" ; 
+   pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
+   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
+   
+   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
+   
+   date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
+    
 
 fi 
