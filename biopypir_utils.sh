@@ -181,5 +181,17 @@ elif [ "$1" = "EVALUATE" ]; then
           Windows_versions: $windows_vers }'  > scores_and_matrix.json
 
 
+   
+    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
+  
+   # ================= GET BADGE STATUS ======================== #
+   LICENSE=$(cat eval.json | jq ".License")
+   BUILD=$(cat eval.json | jq ".Build")
+   PIP=$(cat eval.json | jq ".Pip")
+   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   #
+   COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
+   badge='NONE'
+   
+
     
 fi 
