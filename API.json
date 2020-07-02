@@ -2,17 +2,17 @@
   "total_count": 3,
   "jobs": [
     {
-      "id": 830968210,
-      "run_id": 155464933,
-      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155464933",
-      "node_id": "MDg6Q2hlY2tSdW44MzA5NjgyMTA=",
-      "head_sha": "eb586dbd0e2c41188d461e5df8167ebb2bb0a33f",
-      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/830968210",
-      "html_url": "https://github.com/benstear/biopypir_logs/runs/830968210",
+      "id": 830993644,
+      "run_id": 155471947,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155471947",
+      "node_id": "MDg6Q2hlY2tSdW44MzA5OTM2NDQ=",
+      "head_sha": "9a65a051037b2342e182aa71d56c6687b43ab196",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/830993644",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/830993644",
       "status": "completed",
       "conclusion": "success",
-      "started_at": "2020-07-02T14:19:25Z",
-      "completed_at": "2020-07-02T14:22:41Z",
+      "started_at": "2020-07-02T14:26:22Z",
+      "completed_at": "2020-07-02T14:29:03Z",
       "name": "run_tests (3.6, ubuntu-latest)",
       "steps": [
         {
@@ -20,192 +20,192 @@
           "status": "completed",
           "conclusion": "success",
           "number": 1,
-          "started_at": "2020-07-02T14:19:25.000Z",
-          "completed_at": "2020-07-02T14:19:29.000Z"
+          "started_at": "2020-07-02T14:26:22.000Z",
+          "completed_at": "2020-07-02T14:26:25.000Z"
         },
         {
           "name": "Build datreeio/validate-license-action@v1.0.0",
           "status": "completed",
           "conclusion": "success",
           "number": 2,
-          "started_at": "2020-07-02T14:19:29.000Z",
-          "completed_at": "2020-07-02T14:19:51.000Z"
+          "started_at": "2020-07-02T14:26:25.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Create cache file",
           "status": "completed",
           "conclusion": "success",
           "number": 3,
-          "started_at": "2020-07-02T14:19:51.000Z",
-          "completed_at": "2020-07-02T14:19:51.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Check SHA",
           "status": "completed",
           "conclusion": "success",
           "number": 4,
-          "started_at": "2020-07-02T14:19:51.000Z",
-          "completed_at": "2020-07-02T14:19:54.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Some subsequent steps",
           "status": "completed",
           "conclusion": "skipped",
           "number": 5,
-          "started_at": "2020-07-02T14:19:54.000Z",
-          "completed_at": "2020-07-02T14:19:54.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Dump GitHub context",
           "status": "completed",
           "conclusion": "success",
           "number": 6,
-          "started_at": "2020-07-02T14:19:54.000Z",
-          "completed_at": "2020-07-02T14:19:54.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Dump runner context",
           "status": "completed",
           "conclusion": "success",
           "number": 7,
-          "started_at": "2020-07-02T14:19:54.000Z",
-          "completed_at": "2020-07-02T14:19:54.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "Run echo \"scedar\"",
           "status": "completed",
           "conclusion": "success",
           "number": 8,
-          "started_at": "2020-07-02T14:19:54.000Z",
-          "completed_at": "2020-07-02T14:19:54.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:34.000Z"
         },
         {
           "name": "checkout scedar repo",
           "status": "completed",
           "conclusion": "success",
           "number": 9,
-          "started_at": "2020-07-02T14:19:54.000Z",
-          "completed_at": "2020-07-02T14:19:57.000Z"
+          "started_at": "2020-07-02T14:26:34.000Z",
+          "completed_at": "2020-07-02T14:26:36.000Z"
         },
         {
           "name": "SET ENV",
           "status": "completed",
           "conclusion": "success",
           "number": 10,
-          "started_at": "2020-07-02T14:19:57.000Z",
-          "completed_at": "2020-07-02T14:19:57.000Z"
+          "started_at": "2020-07-02T14:26:36.000Z",
+          "completed_at": "2020-07-02T14:26:36.000Z"
         },
         {
           "name": "Set Up ubuntu-latest-py3.6",
           "status": "completed",
           "conclusion": "success",
           "number": 11,
-          "started_at": "2020-07-02T14:19:57.000Z",
-          "completed_at": "2020-07-02T14:19:57.000Z"
+          "started_at": "2020-07-02T14:26:36.000Z",
+          "completed_at": "2020-07-02T14:26:37.000Z"
         },
         {
           "name": "validate-license-action",
           "status": "completed",
           "conclusion": "success",
           "number": 12,
-          "started_at": "2020-07-02T14:19:57.000Z",
-          "completed_at": "2020-07-02T14:20:09.000Z"
+          "started_at": "2020-07-02T14:26:37.000Z",
+          "completed_at": "2020-07-02T14:26:43.000Z"
         },
         {
           "name": "INSTALL dependencies",
           "status": "completed",
           "conclusion": "success",
           "number": 13,
-          "started_at": "2020-07-02T14:20:09.000Z",
-          "completed_at": "2020-07-02T14:20:37.000Z"
+          "started_at": "2020-07-02T14:26:43.000Z",
+          "completed_at": "2020-07-02T14:27:07.000Z"
         },
         {
           "name": "LINT",
           "status": "completed",
           "conclusion": "success",
           "number": 14,
-          "started_at": "2020-07-02T14:20:37.000Z",
-          "completed_at": "2020-07-02T14:20:58.000Z"
+          "started_at": "2020-07-02T14:27:07.000Z",
+          "completed_at": "2020-07-02T14:27:30.000Z"
         },
         {
           "name": "BUILD",
           "status": "completed",
           "conclusion": "success",
           "number": 15,
-          "started_at": "2020-07-02T14:20:58.000Z",
-          "completed_at": "2020-07-02T14:21:47.000Z"
+          "started_at": "2020-07-02T14:27:30.000Z",
+          "completed_at": "2020-07-02T14:28:17.000Z"
         },
         {
           "name": "PYTEST",
           "status": "completed",
           "conclusion": "success",
           "number": 16,
-          "started_at": "2020-07-02T14:21:47.000Z",
-          "completed_at": "2020-07-02T14:21:47.000Z"
+          "started_at": "2020-07-02T14:28:17.000Z",
+          "completed_at": "2020-07-02T14:28:17.000Z"
         },
         {
           "name": "PIP deployment test",
           "status": "completed",
           "conclusion": "success",
           "number": 17,
-          "started_at": "2020-07-02T14:21:47.000Z",
-          "completed_at": "2020-07-02T14:22:40.000Z"
+          "started_at": "2020-07-02T14:28:17.000Z",
+          "completed_at": "2020-07-02T14:29:02.000Z"
         },
         {
           "name": "GATHER outputs",
           "status": "completed",
           "conclusion": "success",
           "number": 18,
-          "started_at": "2020-07-02T14:22:40.000Z",
-          "completed_at": "2020-07-02T14:22:40.000Z"
+          "started_at": "2020-07-02T14:29:02.000Z",
+          "completed_at": "2020-07-02T14:29:02.000Z"
         },
         {
           "name": "UPLOAD artifact",
           "status": "completed",
           "conclusion": "success",
           "number": 19,
-          "started_at": "2020-07-02T14:22:40.000Z",
-          "completed_at": "2020-07-02T14:22:40.000Z"
+          "started_at": "2020-07-02T14:29:02.000Z",
+          "completed_at": "2020-07-02T14:29:02.000Z"
         },
         {
           "name": "Post checkout scedar repo",
           "status": "completed",
           "conclusion": "success",
           "number": 37,
-          "started_at": "2020-07-02T14:22:40.000Z",
-          "completed_at": "2020-07-02T14:22:41.000Z"
+          "started_at": "2020-07-02T14:29:02.000Z",
+          "completed_at": "2020-07-02T14:29:03.000Z"
         },
         {
           "name": "Post Check SHA",
           "status": "completed",
           "conclusion": "success",
           "number": 38,
-          "started_at": "2020-07-02T14:22:41.000Z",
-          "completed_at": "2020-07-02T14:22:41.000Z"
+          "started_at": "2020-07-02T14:29:03.000Z",
+          "completed_at": "2020-07-02T14:29:03.000Z"
         },
         {
           "name": "Complete job",
           "status": "completed",
           "conclusion": "success",
           "number": 39,
-          "started_at": "2020-07-02T14:22:41.000Z",
-          "completed_at": "2020-07-02T14:22:41.000Z"
+          "started_at": "2020-07-02T14:29:03.000Z",
+          "completed_at": "2020-07-02T14:29:03.000Z"
         }
       ],
-      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/830968210"
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/830993644"
     },
     {
-      "id": 830968227,
-      "run_id": 155464933,
-      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155464933",
-      "node_id": "MDg6Q2hlY2tSdW44MzA5NjgyMjc=",
-      "head_sha": "eb586dbd0e2c41188d461e5df8167ebb2bb0a33f",
-      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/830968227",
-      "html_url": "https://github.com/benstear/biopypir_logs/runs/830968227",
+      "id": 830993663,
+      "run_id": 155471947,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155471947",
+      "node_id": "MDg6Q2hlY2tSdW44MzA5OTM2NjM=",
+      "head_sha": "9a65a051037b2342e182aa71d56c6687b43ab196",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/830993663",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/830993663",
       "status": "completed",
       "conclusion": "success",
-      "started_at": "2020-07-02T14:19:25Z",
-      "completed_at": "2020-07-02T14:21:43Z",
+      "started_at": "2020-07-02T14:26:23Z",
+      "completed_at": "2020-07-02T14:28:27Z",
       "name": "run_tests (3.7, ubuntu-latest)",
       "steps": [
         {
@@ -213,204 +213,284 @@
           "status": "completed",
           "conclusion": "success",
           "number": 1,
-          "started_at": "2020-07-02T14:19:25.000Z",
-          "completed_at": "2020-07-02T14:19:29.000Z"
+          "started_at": "2020-07-02T14:26:23.000Z",
+          "completed_at": "2020-07-02T14:26:26.000Z"
         },
         {
           "name": "Build datreeio/validate-license-action@v1.0.0",
           "status": "completed",
           "conclusion": "success",
           "number": 2,
-          "started_at": "2020-07-02T14:19:29.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:26.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Create cache file",
           "status": "completed",
           "conclusion": "success",
           "number": 3,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Check SHA",
           "status": "completed",
           "conclusion": "success",
           "number": 4,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Some subsequent steps",
           "status": "completed",
           "conclusion": "skipped",
           "number": 5,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Dump GitHub context",
           "status": "completed",
           "conclusion": "success",
           "number": 6,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Dump runner context",
           "status": "completed",
           "conclusion": "success",
           "number": 7,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "Run echo \"scedar\"",
           "status": "completed",
           "conclusion": "success",
           "number": 8,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:40.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:35.000Z"
         },
         {
           "name": "checkout scedar repo",
           "status": "completed",
           "conclusion": "success",
           "number": 9,
-          "started_at": "2020-07-02T14:19:40.000Z",
-          "completed_at": "2020-07-02T14:19:42.000Z"
+          "started_at": "2020-07-02T14:26:35.000Z",
+          "completed_at": "2020-07-02T14:26:37.000Z"
         },
         {
           "name": "SET ENV",
           "status": "completed",
           "conclusion": "success",
           "number": 10,
-          "started_at": "2020-07-02T14:19:42.000Z",
-          "completed_at": "2020-07-02T14:19:42.000Z"
+          "started_at": "2020-07-02T14:26:37.000Z",
+          "completed_at": "2020-07-02T14:26:37.000Z"
         },
         {
           "name": "Set Up ubuntu-latest-py3.7",
           "status": "completed",
           "conclusion": "success",
           "number": 11,
-          "started_at": "2020-07-02T14:19:42.000Z",
-          "completed_at": "2020-07-02T14:19:42.000Z"
+          "started_at": "2020-07-02T14:26:37.000Z",
+          "completed_at": "2020-07-02T14:26:37.000Z"
         },
         {
           "name": "validate-license-action",
           "status": "completed",
           "conclusion": "success",
           "number": 12,
-          "started_at": "2020-07-02T14:19:42.000Z",
-          "completed_at": "2020-07-02T14:19:51.000Z"
+          "started_at": "2020-07-02T14:26:37.000Z",
+          "completed_at": "2020-07-02T14:26:43.000Z"
         },
         {
           "name": "INSTALL dependencies",
           "status": "completed",
           "conclusion": "success",
           "number": 13,
-          "started_at": "2020-07-02T14:19:51.000Z",
-          "completed_at": "2020-07-02T14:20:08.000Z"
+          "started_at": "2020-07-02T14:26:43.000Z",
+          "completed_at": "2020-07-02T14:27:01.000Z"
         },
         {
           "name": "LINT",
           "status": "completed",
           "conclusion": "success",
           "number": 14,
-          "started_at": "2020-07-02T14:20:08.000Z",
-          "completed_at": "2020-07-02T14:20:28.000Z"
+          "started_at": "2020-07-02T14:27:01.000Z",
+          "completed_at": "2020-07-02T14:27:19.000Z"
         },
         {
           "name": "BUILD",
           "status": "completed",
           "conclusion": "success",
           "number": 15,
-          "started_at": "2020-07-02T14:20:28.000Z",
-          "completed_at": "2020-07-02T14:21:05.000Z"
+          "started_at": "2020-07-02T14:27:19.000Z",
+          "completed_at": "2020-07-02T14:27:51.000Z"
         },
         {
           "name": "PYTEST",
           "status": "completed",
           "conclusion": "success",
           "number": 16,
-          "started_at": "2020-07-02T14:21:05.000Z",
-          "completed_at": "2020-07-02T14:21:05.000Z"
+          "started_at": "2020-07-02T14:27:51.000Z",
+          "completed_at": "2020-07-02T14:27:51.000Z"
         },
         {
           "name": "PIP deployment test",
           "status": "completed",
           "conclusion": "success",
           "number": 17,
-          "started_at": "2020-07-02T14:21:05.000Z",
-          "completed_at": "2020-07-02T14:21:42.000Z"
+          "started_at": "2020-07-02T14:27:51.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         },
         {
           "name": "GATHER outputs",
           "status": "completed",
           "conclusion": "success",
           "number": 18,
-          "started_at": "2020-07-02T14:21:42.000Z",
-          "completed_at": "2020-07-02T14:21:42.000Z"
+          "started_at": "2020-07-02T14:28:27.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         },
         {
           "name": "UPLOAD artifact",
           "status": "completed",
           "conclusion": "success",
           "number": 19,
-          "started_at": "2020-07-02T14:21:42.000Z",
-          "completed_at": "2020-07-02T14:21:43.000Z"
+          "started_at": "2020-07-02T14:28:27.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         },
         {
           "name": "Post checkout scedar repo",
           "status": "completed",
           "conclusion": "success",
           "number": 37,
-          "started_at": "2020-07-02T14:21:43.000Z",
-          "completed_at": "2020-07-02T14:21:43.000Z"
+          "started_at": "2020-07-02T14:28:27.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         },
         {
           "name": "Post Check SHA",
           "status": "completed",
           "conclusion": "success",
           "number": 38,
-          "started_at": "2020-07-02T14:21:43.000Z",
-          "completed_at": "2020-07-02T14:21:43.000Z"
+          "started_at": "2020-07-02T14:28:27.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         },
         {
           "name": "Complete job",
           "status": "completed",
           "conclusion": "success",
           "number": 39,
-          "started_at": "2020-07-02T14:21:43.000Z",
-          "completed_at": "2020-07-02T14:21:43.000Z"
+          "started_at": "2020-07-02T14:28:27.000Z",
+          "completed_at": "2020-07-02T14:28:27.000Z"
         }
       ],
-      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/830968227"
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/830993663"
     },
     {
-      "id": 830981207,
-      "run_id": 155464933,
-      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155464933",
-      "node_id": "MDg6Q2hlY2tSdW44MzA5ODEyMDc=",
-      "head_sha": "eb586dbd0e2c41188d461e5df8167ebb2bb0a33f",
-      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/830981207",
-      "html_url": "https://github.com/benstear/biopypir_logs/runs/830981207",
+      "id": 831003452,
+      "run_id": 155471947,
+      "run_url": "https://api.github.com/repos/benstear/biopypir_logs/actions/runs/155471947",
+      "node_id": "MDg6Q2hlY2tSdW44MzEwMDM0NTI=",
+      "head_sha": "9a65a051037b2342e182aa71d56c6687b43ab196",
+      "url": "https://api.github.com/repos/benstear/biopypir_logs/actions/jobs/831003452",
+      "html_url": "https://github.com/benstear/biopypir_logs/runs/831003452",
       "status": "in_progress",
       "conclusion": null,
-      "started_at": "2020-07-02T14:22:55Z",
+      "started_at": "2020-07-02T14:29:13Z",
       "completed_at": null,
       "name": "job2",
       "steps": [
         {
           "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2020-07-02T14:29:13.000Z",
+          "completed_at": "2020-07-02T14:29:16.000Z"
+        },
+        {
+          "name": "Check-Out Repo",
           "status": "in_progress",
           "conclusion": null,
-          "number": 1,
-          "started_at": "2020-07-02T14:22:55.000Z",
+          "number": 2,
+          "started_at": "2020-07-02T14:29:16.000Z",
+          "completed_at": null
+        },
+        {
+          "name": "Set up Python ",
+          "status": "queued",
+          "conclusion": null,
+          "number": 3,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Download artifact",
+          "status": "queued",
+          "conclusion": null,
+          "number": 4,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "check for any job success, and cURL helper script",
+          "status": "queued",
+          "conclusion": null,
+          "number": 5,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "EVALUATE TEST RESULTS",
+          "status": "queued",
+          "conclusion": null,
+          "number": 6,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "GET REPO STATISTICS",
+          "status": "queued",
+          "conclusion": null,
+          "number": 7,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "CLEAN UP",
+          "status": "queued",
+          "conclusion": null,
+          "number": 8,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "DELETE ARTIFACTS",
+          "status": "queued",
+          "conclusion": null,
+          "number": 9,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Add & Commit",
+          "status": "queued",
+          "conclusion": null,
+          "number": 10,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Check-Out Repo",
+          "status": "queued",
+          "conclusion": null,
+          "number": 20,
+          "started_at": null,
           "completed_at": null
         }
       ],
-      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/830981207"
+      "check_run_url": "https://api.github.com/repos/benstear/biopypir_logs/check-runs/831003452"
     }
   ]
 }
