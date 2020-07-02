@@ -1,9 +1,5 @@
 
-    IFS=','; # make OS arrays comma seperated
-    if [ ! -z "{$linux_arr[*]}" ]; then linux_arr_=$(echo "${linux_arr[*]}"); else linux_arr_=$('NA'); fi
-    if [ ! -z "{$mac_arr[*]}" ]; then mac_arr_=$(echo "${mac_arr[*]}");  else mac_arr_=$('NA'); fi
-    if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
-    IFS=$' \t\n';
+   
 
    jq -n --arg Workflow_Run_Date "$date_clip" \
           --arg linux_vers "${linux_unq[*]}" \
