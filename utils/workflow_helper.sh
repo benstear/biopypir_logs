@@ -197,13 +197,13 @@ elif [ "$1" = "EVALUATE" ]; then
   
   if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then 
     badge='BRONZE';
-    if [ $COVERAGE_SCORE != 'NA' ]; then
-      if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
-        badge='GOLD';  
-      elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-        badge='SILVER'; 
-      fi 
-    fi 
+  #  if [ $COVERAGE_SCORE != 'NA' ]; then
+  #    if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
+  #      badge='GOLD';  
+  #    elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ]; then
+  #      badge='SILVER'; 
+  #    fi 
+  #  fi 
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
@@ -212,7 +212,6 @@ elif [ "$1" = "EVALUATE" ]; then
     
     
 elif [ "$1" = "STATISTICS" ]; then
-    
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     
