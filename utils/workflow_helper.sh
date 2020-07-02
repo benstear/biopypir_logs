@@ -201,14 +201,16 @@ elif [ "$1" = "EVALUATE" ]; then
       if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then 
         badge='GOLD';  
       elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ] ; then
-        badge='SILVER'; fi fi fi
+        badge='SILVER'; 
+      fi 
+    fi 
+  fi
   
-
-
-
-
-
-
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
+  jq -s add eval.json badge.json  > eval_2.json
+    
+    
+    
 elif [ "$1" = "STATISTICS" ]; then
     
     
