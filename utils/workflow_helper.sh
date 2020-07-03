@@ -105,10 +105,10 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
   echo $PACKAGE
   
-   echo $(echo $PACKAGE |  cut -d' ' -f 2)
-   echo $(echo $PACKAGE |  cut -d' ' -f 1)
+  #echo $(echo $PACKAGE |  cut -d' ' -f 2)
+  #echo $(echo $PACKAGE |  cut -d' ' -f 1)
 
-  #echo "::set-env name=PACKAGE::$PACKAGE"
+  echo "::set-env name=PACKAGE::$PACKAGE"
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -155,10 +155,11 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   echo  '-----TEST_SUITE---------'
-   echo "$TEST_SUITE"
-   echo '--------------------------'
-   if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
+
+   echo "$TEST_SUITE" # = pytest
+   
+   
+   if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
    date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
     
