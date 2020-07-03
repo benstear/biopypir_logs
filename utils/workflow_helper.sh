@@ -194,6 +194,12 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
+    echo '      '  
+    echo 'PIP: '
+    echo $PIP
+    #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
+    #else pip_url == 'NA';fi
+
   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
    
   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
@@ -208,7 +214,7 @@ elif [ "$1" = "EVALUATE" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   jq -s add eval.json badge.json  > eval_2.json
-    
+  
 elif [ "$1" = "STATISTICS" ]; then
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
@@ -222,8 +228,7 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-      
-
+     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       
       echo 'contributors2.txt =  '
@@ -238,13 +243,7 @@ elif [ "$1" = "STATISTICS" ]; then
       # specific OS version, just say linux on website
       # license type
       
-      echo '      '  
-      echo 'PIP: '
-      echo $PIP
-      #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-      #else pip_url == 'NA';
-      #fi
-      
+
       pip_url=https://pypi.org/project/"$PACKAGE"/
       
       echo 'pip_url: '
