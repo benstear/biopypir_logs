@@ -98,17 +98,14 @@ elif [ "$1" = "EVALUATE" ]; then
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
-   echo  '-----API.JSON---------'
-   cat API.json
-   echo '--------------------------'
+   #echo  '-----API.JSON---------'
+   #cat API.json
+   #echo '--------------------------'
   
-  PACKAGE=$(cat API.json | jq .jobs[0].steps[5]); 
+  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name |  cut -d' ' -f 2); 
+  echo ____$PACKAGE_____
   
-  echo $PACKAGE
-  
-  #echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
-  
-  
+  #echo "::set-env name=PACKAGE::$PACKAGE"
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
