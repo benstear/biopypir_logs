@@ -98,6 +98,10 @@ elif [ "$1" = "EVALUATE" ]; then
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
+   echo  '-----API.JSON---------'
+   cat API.json
+   echo '--------------------------'
+  
   job_count=$(cat API.json |  jq ".total_count")
   #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
@@ -130,7 +134,6 @@ elif [ "$1" = "EVALUATE" ]; then
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-  
   pylint_score_ave=0.00; pytest_score_ave=0.00  #  Initialize 'average score' variables
   
   # Get pylint and pytest scores from each of the parallel runs
@@ -148,6 +151,9 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
+   echo  '-----TEST_SUITE---------'
+   echo "$TEST_SUITE"
+   echo '--------------------------'
    if [[ ! "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
    date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
@@ -202,7 +208,6 @@ elif [ "$1" = "EVALUATE" ]; then
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   jq -s add eval.json badge.json  > eval_2.json
- 
     
 elif [ "$1" = "STATISTICS" ]; then
     
