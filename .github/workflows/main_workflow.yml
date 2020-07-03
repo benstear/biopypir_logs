@@ -12,10 +12,8 @@ on:
   #    - 'biopypir_matrix.md'
   #    -  'utils/package_params.json'
     
-  # date created quotes, comma bt 3.6,3.7, get linux distribution 
-  # contributions
+  #  get linux distribution 
   # tabs add ID
-  # 
     
 jobs:
   run_tests:
@@ -40,11 +38,6 @@ jobs:
     - name: Some subsequent steps
       if: steps.check_sha.outputs.cache-hit == 'true'
       run: echo "Cache hit not found...Execute the subsequent steps"; exit 1 # no way to exit nicely?
-    #===============================================#
-    #- name: checkout ${{env.PACKAGE}} repo 
-    #  uses: actions/checkout@v2     
-    #  with:
-    #    repository: benstear/${{ env.PACKAGE }} # change to actual package
     #===============================================#
     - name: Dump GitHub context
       env:
@@ -79,18 +72,11 @@ jobs:
         chmod +x biopypir_utils.sh  
      #   ./biopypir_utils.sh  "SET ENV"  
      #   printenv
-     # "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/${{ env.PACKAGE }}_helper.sh"      
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}   
-    #===============================================#
-    - name: validate-license-action
-      if: startsWith(matrix.os, 'ubuntu')
-      uses: datreeio/validate-license-action@v1.0.0 
-      with:
-        args: 'MIT, ISC, BSD'
     #===============================================#
     - name: INSTALL dependencies
       run: |
@@ -134,13 +120,8 @@ jobs:
       with:  
         name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
         path: biopypir-*.json
-        
-    #- name: UPLOAD artifact
-    #  uses: actions/upload-artifact@v2-preview
-    #  with:  
-    #    name: pylint-report.txt
-    #    path: pylint-report.txt
-      
+
+
   job2:
       needs: [run_tests] 
       if: always()
@@ -167,6 +148,11 @@ jobs:
           run: |  
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
             chmod +x biopypir_utils.sh; ./biopypir_utils.sh "SET ENV" 
+        #===============================================#
+        - name: validate-license-action
+          uses: datreeio/validate-license-action@v1.0.0 
+          with:
+            args: 'MIT, ISC, BSD'
         #===============================================#
         - name: EVALUATE TEST RESULTS
           run: |
