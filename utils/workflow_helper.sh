@@ -102,14 +102,18 @@ elif [ "$1" = "EVALUATE" ]; then
    cat API.json
    echo '--------------------------'
   
-  job_count=$(cat API.json |  jq ".total_count")
-  #echo "raw job count: $job_count"
-  j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2
-  #echo "adjusted jobcount: $j (0 indexed)"
+  PACKAGE=$(cat API.json | jq .jobs[0].steps[5]); 
   
-  linux_array=(); linux_vs=()
-  mac_array=();  mac_vs=()
-  windows_array=(); windows_vs=()
+  echo $PACKAGE
+  
+  #echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
+  
+  
+  
+  job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
+  j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
+  
+  linux_array=(); linux_vs=(); mac_array=();  mac_vs=(); windows_array=(); windows_vs=()
   
   for ((i=0;i<=$j;i++)); do 
      job_status=$(cat API.json | jq ".jobs[$i].conclusion")
@@ -286,6 +290,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
+     
      echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
