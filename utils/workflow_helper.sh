@@ -271,7 +271,7 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
      
      # Remove all files we dont want to push to the biopypir logs repository
-     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt
+     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs
 
