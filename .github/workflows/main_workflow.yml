@@ -129,12 +129,12 @@ jobs:
       if: always()
       runs-on: [ubuntu-latest] 
       env:    
-        PACKAGE: scedar #manubot # #desc
+        PACKAGE: manubot # #desc
         #OWNER:  TaylorResearchLab #cgreene # #eleozzr
         #test_suite:  "pytest"
         #tests_dir: "tests/" #manubot #
       steps:
-        - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/etc.
+        - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/manubot/etc.
           uses: actions/checkout@v2 
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v2
