@@ -102,9 +102,12 @@ elif [ "$1" = "EVALUATE" ]; then
    #cat API.json
    #echo '--------------------------'
   
-  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name |  cut -d' ' -f 2); 
-  echo ____$PACKAGE_____
+  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
+  echo $PACKAGE
   
+   echo $(echo $PACKAGE |  cut -d' ' -f 2)
+   echo $(echo $PACKAGE |  cut -d' ' -f 1)
+
   #echo "::set-env name=PACKAGE::$PACKAGE"
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
