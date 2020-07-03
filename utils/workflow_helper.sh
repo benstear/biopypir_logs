@@ -258,27 +258,21 @@ elif [ "$1" = "STATISTICS" ]; then
       cat stats_2.json
       
       if [ ! "$run_status" ]; then
-        echo 'run_status = "$run_status"'
+        echo run_status = "$run_status"
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "::set-env name=biopypir_workflow_status::FAIL"
       else
-        echo 'run_status = "$run_status"'        
+        echo run_status = "$run_status"        
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi     
       
 elif [ "$1" = "CLEAN UP" ]; then
-    
-     echo 'Starting Clean Up...\n\n'
-     pwd
-     ls -A
-     echo '-------------------------'
-     ls logs/
      
      # Remove all files we dont want to push to the biopypir logs repository
-     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json \
-     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors.txt
+     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt
+     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs
 
      mv logs/"$PACKAGE"*.json archived_logs
@@ -288,8 +282,6 @@ elif [ "$1" = "CLEAN UP" ]; then
      #     echo file; mv file archived_logs
      #   fi
      # done
-     echo '---------------------------------'
-     ls logs/
      echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
