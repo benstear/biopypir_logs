@@ -1,3 +1,3 @@
 Package	BADGE	Owner_Repo	Description	Workflow_Run_Date	date_created	last_commit	forks	watchers	stars	homepage_url	has_wiki	open_issues	has_downloads	Run_ID	Pylint_score	Pytest_score	Pip	Pip_url	License	Build	Linux	Mac	Windows	Linux_versions	Mac_versions	Windows_versions	contributor_names	contributor_urls	num_contributors	Github_event_name
-	BRONZE			2020-07-03T15:54:33Z										156756733	7.67	0	True	"https://pypi.org/project/""manubot""/"	True	True	3.6,3.7			ubuntu-latest					0	repository_dispatch
 	BRONZE			2020-07-03T15:48:43Z										156752758	7.67	NA	True	https://pypi.org/project//	True	True	3.6,3.7			ubuntu-latest					0	repository_dispatch
+	BRONZE			2020-07-05T00:08:38Z										157872128	7.67	0	True	"https://pypi.org/project/""manubot""/"	True	True	3.6,3.7			ubuntu-latest					0	repository_dispatch
