@@ -57,21 +57,19 @@ jobs:
         echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
-        echo  $GITHUB_REPOSITORY 
-        printenv
-        echo '--------------------------'
-        echo $OWNER_REPO
-    
+
     - name: ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
-        repository: $Owner_Repo #benstear/${{ env.PACKAGE }} # change to actual package
+        repository: cgreene/manubot #benstear/${{ env.PACKAGE }} # change to actual package
         
         
     - name:  SET ENV 
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
         chmod +x biopypir_utils.sh  
+        
+        printenv
      #   ./biopypir_utils.sh  "SET ENV"  
      #   printenv
        
