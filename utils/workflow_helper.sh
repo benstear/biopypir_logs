@@ -98,9 +98,9 @@ elif [ "$1" = "EVALUATE" ]; then
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
 
-   #echo  '-----API.JSON---------'
-   #cat API.json
-   #echo '--------------------------'
+   echo  '-----API.JSON---------'
+   cat API.json
+   echo '--------------------------'
   
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
   PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
