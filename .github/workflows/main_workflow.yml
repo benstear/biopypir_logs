@@ -172,13 +172,10 @@ jobs:
         #    python3 utils/process_logs.py
        #===============================================# 
         - name: DELETE ARTIFACTS
-          uses: geekyeggo/delete-artifact@v1
+          uses: geekyeggo/delete-artifact@1-glob-support
           with:
-            name: |
-              biopypir-ubuntu-latest-py3.6
-              biopypir-ubuntu-latest-py3.7
-              biopypir-macOS-latest-py3.6
-              biopypir-macOS-latest-py3.7
+              name: biopypir-*
+              useGlob: true 
        #===============================================# 
         - name: Add & Commit 
           #if: always()
