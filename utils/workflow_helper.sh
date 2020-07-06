@@ -103,6 +103,7 @@ elif [ "$1" = "EVALUATE" ]; then
    #echo '--------------------------'
   
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
+  PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
   echo $PACKAGE
   
   #echo $(echo $PACKAGE |  cut -d' ' -f 2)
@@ -155,8 +156,8 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-
-   echo "$TEST_SUITE" # = pytest
+  
+   echo 'test suite = ' "$TEST_SUITE" # = pytest
    
    
    if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
@@ -200,8 +201,8 @@ elif [ "$1" = "EVALUATE" ]; then
    badge='NONE'
 
     echo '      '  
-    echo 'PIP: '
-    echo $PIP
+    echo 'PIP: ' "$PIP"
+    
     #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
     #else pip_url == 'NA';fi
 
