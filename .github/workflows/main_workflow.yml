@@ -12,7 +12,6 @@ on:
   #    - 'biopypir_matrix.md'
   #    -  'utils/package_params.json'
     
-    
   #  get linux distribution 
   # tabs add ID
   #  how to handle the repository dispatch running  many packages
@@ -50,9 +49,7 @@ jobs:
       run: echo "$RUNNER_CONTEXT"
     
     - name: set environment variables
-      run: |
-        echo "${{ github.event.client_payload.PACKAGE }}"
-
+      run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
         echo "::set-env name=PACKAGE::${{ github.event.client_payload.PACKAGE }}"
         echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
         echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
@@ -61,13 +58,15 @@ jobs:
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo  $GITHUB_REPOSITORY 
-        echo $Owner_Repo 
-    #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
+        printenv
+        echo '--------------------------'
+        echo $OWNER_REPO
     
     - name: ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
         repository: $Owner_Repo #benstear/${{ env.PACKAGE }} # change to actual package
+        
         
     - name:  SET ENV 
       run: |
@@ -75,6 +74,8 @@ jobs:
         chmod +x biopypir_utils.sh  
      #   ./biopypir_utils.sh  "SET ENV"  
      #   printenv
+       
+       
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
