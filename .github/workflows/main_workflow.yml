@@ -52,7 +52,7 @@ jobs:
     - name: set environment variables
       run: |
         echo "${{ github.event.client_payload.PACKAGE }}"
-        echo ${{ toJson(github.event.client_payload.PACKAGE) }}
+
         echo "::set-env name=PACKAGE::${{ github.event.client_payload.PACKAGE }}"
         echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
         echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
@@ -61,12 +61,13 @@ jobs:
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo  $GITHUB_REPOSITORY 
+        echo $Owner_Repo 
     #'{ "PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None", "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
     
     - name: ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
-        repository: $GITHUB_REPOSITORY #benstear/${{ env.PACKAGE }} # change to actual package
+        repository: $Owner_Repo #benstear/${{ env.PACKAGE }} # change to actual package
         
     - name:  SET ENV 
       run: |
