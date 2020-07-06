@@ -128,8 +128,8 @@ jobs:
       needs: [run_tests] 
       if: always()
       runs-on: [ubuntu-latest] 
-      #env:    
-        #PACKAGE: manubot # #desc
+      env:    
+        PACKAGE: manubot # #desc
         #OWNER:  TaylorResearchLab #cgreene # #eleozzr
         #test_suite:  "pytest"
         #tests_dir: "tests/" #manubot #
