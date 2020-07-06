@@ -69,7 +69,7 @@ jobs:
     - name: ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
-        repository: $Owner_Repo #benstear/${{ env.PACKAGE }} # change to actual package
+        repository: ${{env.Owner_Repo}} #benstear/${{ env.PACKAGE }} # change to actual package
         
        
     #===============================================#
