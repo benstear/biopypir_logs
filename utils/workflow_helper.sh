@@ -103,11 +103,11 @@ elif [ "$1" = "EVALUATE" ]; then
   #for ((i=0;i<=$n;i++)); do 
   #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
   #   PACKAGE="${step_names[$i]}";fi; done
-  #echo $(echo $PACKAGE |  cut -d' ' -f 1)
+  #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
   
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
-  #PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
-  #echo $PACKAGE
+  PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
+  echo $PACKAGE
   
   #echo $(echo $PACKAGE |  cut -d' ' -f 2)
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)
