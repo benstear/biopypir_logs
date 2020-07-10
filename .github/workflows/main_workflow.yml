@@ -37,14 +37,14 @@ jobs:
    #   if: steps.check_sha.outputs.cache-hit == 'true'
    #   run: echo "Cache hit not found...Execute the subsequent steps"; exit 1 # no way to exit nicely?
     #===============================================#
-    #- name: Dump GitHub context
-    #  env:
-    #    GITHUB_CONTEXT: ${{ toJson(github) }}
-    #  run: echo "$GITHUB_CONTEXT"
-    #- name: Dump runner context
-    #  env:
-    #    RUNNER_CONTEXT: ${{ toJson(runner) }}
-    #  run: echo "$RUNNER_CONTEXT"
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - name: Dump runner context
+      env:
+        RUNNER_CONTEXT: ${{ toJson(runner) }}
+      run: echo "$RUNNER_CONTEXT"
     
     - name: set environment variables
       run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
