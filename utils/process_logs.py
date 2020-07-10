@@ -11,7 +11,8 @@ import glob
 import numpy as np
 
 logs_path = "logs/*.json"
-all_logs = glob.glob(logs_path) 
+all_logs = glob.glob(logs_path)  # load all logs from logs/ directory. Only the most recent 
+                                 # workflow run results for each package will be there. 
 
 print('Total Logs found: '+str(len(all_logs)))
 
@@ -24,11 +25,12 @@ for i in range(0,len(all_logs)):
     except json.decoder.JSONDecodeError as e:  
         raise SystemExit(e)
         
-    if i==0: list_of_lists.append(list(data.keys())) # if it's the first pass of the loop, save the keys to use as headers 
-        
-    list_of_lists.append(list(data.values())) 
+    if i==0: list_of_lists.append(list(data.keys())) # if it's the first pass of the loop, save the keys to use as
+                                                     #  headers for the log_matrix.csv and biopypir_matrix.md files
+            
+    list_of_lists.append(list(data.values()))  # otherwise append each packages results to list_of_lists
 
-df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0])
+df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0]) 
 
 reordered_cols= ['Package','BADGE','Owner_Repo','Description','Workflow_Run_Date','date_created','last_commit',
                      'forks','watchers','stars','homepage_url','has_wiki','open_issues',
