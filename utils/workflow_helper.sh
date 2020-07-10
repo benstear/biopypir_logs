@@ -17,7 +17,7 @@ if [ "$1" = "SET ENV" ]; then
   
   TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); 
   TEST_DIR=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_DIR") # Remove quotes
-
+   
   #export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
   echo "::set-env name=TEST_DIR::$TEST_DIR"
   
@@ -99,10 +99,13 @@ elif [ "$1" = "EVALUATE" ]; then
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
    echo  '-----API.JSON---------'
    #step_names=()
-   step_names=$(cat API.json | jq .jobs[0].steps[].name[]);
+   step_names=$(cat API.json | jq .jobs[0].steps.name[]);
    echo $step_names
    echo '--------------------------'
    
+   step_names2=$(cat API.json | jq .jobs[0].steps[].name);
+   echo $step_names2
+
   #for ((i=0;i<=$j;i++)); do 
      #if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
      #PACKAGE=$
