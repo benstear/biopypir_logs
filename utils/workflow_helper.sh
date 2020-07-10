@@ -108,10 +108,7 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
   PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
   echo $PACKAGE
-  
-  #echo $(echo $PACKAGE |  cut -d' ' -f 2)
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)
-
   echo "::set-env name=PACKAGE::$PACKAGE"
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
@@ -223,6 +220,8 @@ elif [ "$1" = "EVALUATE" ]; then
 elif [ "$1" = "STATISTICS" ]; then
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
+    echo $OWNER
+    echo $PACKAGE
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
