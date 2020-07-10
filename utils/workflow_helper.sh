@@ -97,11 +97,18 @@ elif [ "$1" = "EVALUATE" ]; then
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
-
    echo  '-----API.JSON---------'
-   cat API.json
+   #step_names=()
+   step_names=$(cat API.json | jq .jobs[0].steps[].name[]);
+   echo $step_names
    echo '--------------------------'
+   
+  #for ((i=0;i<=$j;i++)); do 
+     #if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
+     #PACKAGE=$
+  #done
   
+
   PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
   PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
   echo $PACKAGE
@@ -135,7 +142,7 @@ elif [ "$1" = "EVALUATE" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
-  # Remove any duplicate OS versions from each list
+  # Remove duplicate OS versions from each list
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
@@ -150,16 +157,12 @@ elif [ "$1" = "EVALUATE" ]; then
     pytest_score_cum=$(awk "BEGIN {print $pytest_score_cum + $pytest_score}")
   done   
    
-   
-   # Calculate pylint and pytest average scores
-   k="$(($j+1))" ; 
+   k="$(($j+1))" ;    # Calculate pylint and pytest average scores
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
   
    echo 'test suite = ' "$TEST_SUITE" # = pytest
-   
-   
    if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
    date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
