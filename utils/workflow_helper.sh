@@ -88,33 +88,29 @@ elif [ "$1" = "EVALUATE" ]; then
   
   # Check to see if any runs succeeded
   if [[ ! "$(ls -A parallel_runs)" ]]; then 
-    echo "No runs succeded, exiting eval step..."
-    echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
-    echo "::set-output name=run_status::False"   
-    exit 1
+    echo "No runs succeded, exiting eval step..."; echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
+    echo "::set-output name=run_status::False"; exit 1
   elif [[ "$(ls -A parallel_runs)" ]]; then    # put the rest of evaluate under this else statement
     echo '{ RUN_STATUS: "SUCCESS" }' > RUN_STATUS.json
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
-   echo  '-----API.JSON---------'
 
-   echo '--------------------------'
-   
    step_names=$(cat API.json | jq .jobs[0].steps[].name);
-   echo $step_names
+   #echo $step_names
    
   n=10
   for ((i=0;i<=$n;i++)); do 
      if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
      PACKAGE="${step_names[$i]}"
+     echo 'here'
      fi
+     echo 'still here'
   done
   echo $PACKAGE
-  echo $(echo $PACKAGE |  cut -d' ' -f 2)
+  echo 'package only... '
+  echo $(echo $PACKAGE |  cut -d' ' -f 1)
   
-
-
   #PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
   #PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
   #echo $PACKAGE
