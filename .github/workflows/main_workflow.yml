@@ -37,14 +37,14 @@ jobs:
    #   if: steps.check_sha.outputs.cache-hit == 'true'
    #   run: echo "Cache hit not found...Execute the subsequent steps"; exit 1 # no way to exit nicely?
     #===============================================#
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: Dump runner context
-      env:
-        RUNNER_CONTEXT: ${{ toJson(runner) }}
-      run: echo "$RUNNER_CONTEXT"
+    #- name: Dump GitHub context
+    #  env:
+    #    GITHUB_CONTEXT: ${{ toJson(github) }}
+    #  run: echo "$GITHUB_CONTEXT"
+    #- name: Dump runner context
+    #  env:
+    #    RUNNER_CONTEXT: ${{ toJson(runner) }}
+    #  run: echo "$RUNNER_CONTEXT"
     
     - name: set environment variables
       run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
@@ -60,22 +60,20 @@ jobs:
     - name: ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
-        repository: ${{env.Owner_Repo}} #benstear/${{ env.PACKAGE }} # change to actual package
+        repository: ${{env.Owner_Repo}} 
    
     - name:  SET ENV 
       run: |
         curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
         chmod +x biopypir_utils.sh  
      #   ./biopypir_utils.sh  "SET ENV"  
- 
-       
     #===============================================#
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}   
     #===============================================#
-    - name: INSTALL dependencies
+    - name: INSTALL dependencies                         #  how to handle this step?
       run: |
         pip install --upgrade pip setuptools wheel  
         pip install pylint
@@ -98,7 +96,7 @@ jobs:
     - name: PYTEST
       id: tester
       run: ./biopypir_utils.sh "TEST"  
-    
+    #===============================================#
     - name: PIP deployment test 
       uses: BSFishy/pip-action@v1
       with:
@@ -123,8 +121,8 @@ jobs:
       needs: [run_tests] 
       if: always()
       runs-on: [ubuntu-latest] 
-      env:    
-        PACKAGE: manubot # #desc
+      #env:    
+        #PACKAGE: manubot # #desc
         #OWNER:  TaylorResearchLab #cgreene # #eleozzr
         #test_suite:  "pytest"
         #tests_dir: "tests/" #manubot #
