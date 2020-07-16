@@ -220,8 +220,8 @@ elif [ "$1" = "EVALUATE" ]; then
 elif [ "$1" = "STATISTICS" ]; then
     
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
-    echo $OWNER
-    echo $PACKAGE
+    echo 'owner '$OWNER
+    echo 'package '$PACKAGE
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
