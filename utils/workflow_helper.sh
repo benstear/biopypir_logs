@@ -213,7 +213,7 @@ elif [ "$1" = "EVALUATE" ]; then
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   jq -s add eval.json badge.json  > eval_2.json
   
-  cat eval2.json
+  cat eval_2.json
   
 elif [ "$1" = "STATISTICS" ]; then
    
