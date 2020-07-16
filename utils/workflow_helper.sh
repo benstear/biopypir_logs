@@ -95,19 +95,18 @@ elif [ "$1" = "EVALUATE" ]; then
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
-
    #step_names=$(cat API.json | jq .jobs[0].steps[].name);
    #echo $step_names
    
-  n=10
+  #n=10
   #for ((i=0;i<=$n;i++)); do 
   #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
   #   PACKAGE="${step_names[$i]}";fi; done
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
   
-  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); 
-  PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
-  echo $PACKAGE
+  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
+  
+  echo 'PACKAGE: '$PACKAGE
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)
   echo "::set-env name=PACKAGE::$PACKAGE"
   
@@ -154,7 +153,6 @@ elif [ "$1" = "EVALUATE" ]; then
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
    pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-  
    echo 'test suite = ' "$TEST_SUITE" # = pytest
    if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
@@ -196,9 +194,7 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-    echo '      '  
     echo 'PIP: ' "$PIP"
-    
     #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
     #else pip_url == 'NA';fi
 
@@ -217,11 +213,16 @@ elif [ "$1" = "EVALUATE" ]; then
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   jq -s add eval.json badge.json  > eval_2.json
   
+  cat eval2.json
+  
 elif [ "$1" = "STATISTICS" ]; then
-    
+   
+    echo 'OWNER '$OWNER
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
-    echo 'owner '$OWNER
-    echo 'package '$PACKAGE
+    echo 'OWNER '$OWNER
+    echo 'PACKAGE '$PACKAGE
+    
+    printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
