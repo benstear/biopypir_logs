@@ -98,6 +98,7 @@ elif [ "$1" = "EVALUATE" ]; then
    #step_names=$(cat API.json | jq .jobs[0].steps[].name);
    #echo $step_names
    
+   cat API.json
   #n=10
   #for ((i=0;i<=$n;i++)); do 
   #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
@@ -221,8 +222,6 @@ elif [ "$1" = "STATISTICS" ]; then
     OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     echo 'OWNER '$OWNER
     echo 'PACKAGE '$PACKAGE
-    
-    
     printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
