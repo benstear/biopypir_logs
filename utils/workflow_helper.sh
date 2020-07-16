@@ -222,6 +222,7 @@ elif [ "$1" = "STATISTICS" ]; then
     echo 'OWNER '$OWNER
     echo 'PACKAGE '$PACKAGE
     
+    
     printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
