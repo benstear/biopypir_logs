@@ -98,19 +98,25 @@ elif [ "$1" = "EVALUATE" ]; then
    #step_names=$(cat API.json | jq .jobs[0].steps[].name);
    #echo $step_names
    
-   cat API.json
+  cat API.json
   #n=10
   #for ((i=0;i<=$n;i++)); do 
   #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
   #   PACKAGE="${step_names[$i]}";fi; done
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
   
-  PACKAGE=$(cat API.json | jq .jobs[0].steps[4].name); PACKAGE=$(sed -e 's/^"//' -e 's/"$//' <<<"$PACKAGE")
+  package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   
-  echo 'PACKAGE: '$PACKAGE
-  #echo $(echo $PACKAGE |  cut -d' ' -f 1)
+  echo 'package_and_owner : '$package_and_owner
+  
+  PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 2)
+  OWNER=$(echo $package_and_owner |  cut -d' ' -f 3)
+  
   echo "::set-env name=PACKAGE::$PACKAGE"
-  
+  echo "::set-env name=OWNER::$OWNER"
+  echo 'OWNER '$OWNER
+  echo 'PACKAGE '$PACKAGE
+
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
   
@@ -218,8 +224,8 @@ elif [ "$1" = "EVALUATE" ]; then
   
 elif [ "$1" = "STATISTICS" ]; then
    
-    echo 'OWNER '$OWNER
-    OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
+    #echo 'OWNER '$OWNER
+    #OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     echo 'OWNER '$OWNER
     echo 'PACKAGE '$PACKAGE
     printenv
