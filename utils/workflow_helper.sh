@@ -259,6 +259,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
       # specific OS version, just say linux on website
       # license type
+      # size, is it a fork itself? 
      
       pip_url=https://pypi.org/project/"$PACKAGE"/
       
