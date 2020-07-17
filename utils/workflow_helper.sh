@@ -293,10 +293,14 @@ elif [ "$1" = "CLEAN UP" ]; then
 
 
       FILE=logs/"$PACKAGE"*.json
+      echo 'my file= ' "$FILE"
+      
+      
       if [ -f "$FILE" ]; then
-      echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs
+      echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs   # broken
       fi
     
+     mv logs/"$PACKAGE"*.json archived_logs
      
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
