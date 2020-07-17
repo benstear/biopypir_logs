@@ -57,7 +57,7 @@ jobs:
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
 
 
-    - name: ${{env.PACKAGE}} 
+    - name:  ${{env.PACKAGE}} #${{env.OWNER}}
       uses: actions/checkout@v2     
       with:
         repository: ${{env.Owner_Repo}} 
@@ -156,7 +156,7 @@ jobs:
         - name: GET REPO STATISTICS
           run:  |
               echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
-              echo $OWNER
+              echo  ${{env.OWNER}}
               ./biopypir_utils.sh "STATISTICS"
         #===============================================# 
         - name: CLEAN UP
