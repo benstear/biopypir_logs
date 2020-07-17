@@ -291,7 +291,12 @@ elif [ "$1" = "CLEAN UP" ]; then
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs
 
-     mv logs/"$PACKAGE"*.json archived_logs
+
+      FILE=logs/"$PACKAGE"*.json
+      if [ -f "$FILE" ]; then
+      echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs
+      fi
+    
      
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
