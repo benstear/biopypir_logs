@@ -57,7 +57,7 @@ jobs:
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
 
 
-    - name:  ${{env.PACKAGE}} #${{env.OWNER}}
+    - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
         repository: ${{env.Owner_Repo}} 
