@@ -235,11 +235,7 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-
-
-    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"
-
-
+   # curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"
 
 
       # get names of contributors
@@ -248,8 +244,8 @@ elif [ "$1" = "STATISTICS" ]; then
      
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       
-      echo 'contributors2.txt =  '
-      cat contributors2.txt
+      #echo 'contributors2.txt =  '
+      #cat contributors2.txt
       
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
       
@@ -274,9 +270,7 @@ elif [ "$1" = "STATISTICS" ]; then
       contributor_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
-      
-      cat stats_2.json
-      
+            
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
@@ -307,7 +301,7 @@ elif [ "$1" = "CLEAN UP" ]; then
       echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs   # broken
       fi
     
-     mv logs/"$PACKAGE"*.json archived_logs
+     #mv logs/"$PACKAGE"*.json archived_logs
      
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
