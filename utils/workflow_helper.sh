@@ -228,7 +228,7 @@ elif [ "$1" = "STATISTICS" ]; then
     #OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
     echo 'OWNER '$OWNER
     echo 'PACKAGE '$PACKAGE
-    printenv
+    #printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -253,12 +253,10 @@ elif [ "$1" = "STATISTICS" ]; then
       
       # specific OS version, just say linux on website
       # license type
-      
-
+     
       pip_url=https://pypi.org/project/"$PACKAGE"/
       
-      echo 'pip_url: '
-      echo $pip_url
+      echo 'pip_url: ';   echo $pip_url
       
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       --arg contributors_url "$contributors_url" \
@@ -282,6 +280,9 @@ elif [ "$1" = "STATISTICS" ]; then
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"      
       fi     
+      
+      echo 'final product:    '
+      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
       
 elif [ "$1" = "CLEAN UP" ]; then
      
