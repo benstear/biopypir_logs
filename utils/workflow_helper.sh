@@ -109,8 +109,8 @@ elif [ "$1" = "EVALUATE" ]; then
   
   echo 'package_and_owner : '$package_and_owner
   
-  PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 2)
-  OWNER=$(echo $package_and_owner |  cut -d' ' -f 3)
+  PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3)
+  OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   
   echo "::set-env name=PACKAGE::$PACKAGE"
   echo "::set-env name=OWNER::$OWNER"
