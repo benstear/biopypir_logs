@@ -43,9 +43,9 @@ df.to_csv('log_matrix.csv',index=False,sep='\t')
 
 
 # Create and save markdown table of packages
-'''
+
 md_table =  df.to_markdown()
 
 with open('biopypir_matrix.md', 'w') as f:
     f.write(md_table)
-'''
+
