@@ -26,8 +26,8 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: benstear/biopypir_logs
           event-type: autorun
-          #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}","PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None"}' #, "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}","PACKAGE": "manubot" ,  "OWNER":  "cgreene" ,  "Owner_Repo":  "cgreene/manubot", "test_suite" :  "pytest" , "tests_dir":  "manubot" , "ignore_tests": "None", "ignore_lint": "None"}' #, "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}","PACKAGE": "scedar" ,  "OWNER":  "TaylorResearchLab" ,  "Owner_Repo": "TaylorResearchLab/scedar", "test_suite" :  "pytest" , "tests_dir":  "tests/" , "ignore_tests": "None", "ignore_lint": "None"}' #, "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
+          #client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}","PACKAGE": "manubot" ,  "OWNER":  "cgreene" ,  "Owner_Repo":  "cgreene/manubot", "test_suite" :  "pytest" , "tests_dir":  "manubot" , "ignore_tests": "None", "ignore_lint": "None"}' #, "python-version" :  [3.6, 3.7], "os"  : ["ubuntu-latest", "macOS-latest"] }'
 
       #        { "PACKAGE": "manubot"  , 
       #  "OWNER":  "cgreene",
