@@ -54,7 +54,7 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  echo 'TEST_SUITE =  $TEST_SUITE' 
+  echo 'TEST_SUITE = ' "$TEST_SUITE" 
   
   if [[ "$TEST_SUITE" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
