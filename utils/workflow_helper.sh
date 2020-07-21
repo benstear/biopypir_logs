@@ -31,6 +31,8 @@ if [ "$1" = "SET ENV" ]; then
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
   echo  $TEST_SUITE
   echo $TEST_DIR
+  echo '------------------------------'
+  printenv
 elif [  "$1" = "SET ENV DISPATCH" ]; then
   printenv
   #${{ github.event.environment_vars.PACKAGE }}
@@ -49,6 +51,7 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
+  echo 'TEST_SUITE =  ' '$TEST_SUITE' 
   
   if [[ "$TEST_SUITE" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
@@ -106,17 +109,15 @@ elif [ "$1" = "EVALUATE" ]; then
   
   package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   
-  echo 'package_and_owner : '$package_and_owner
+  #echo 'package_and_owner : '$package_and_owner
   
-  echo 'OWNER '$OWNER
-
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3)
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   
   echo "::set-env name=PACKAGE::$PACKAGE"
   echo "::set-env name=OWNER::$OWNER"
-  echo 'OWNER '$OWNER
-  echo 'PACKAGE '$PACKAGE
+  #echo 'OWNER '$OWNER
+  #echo 'PACKAGE '$PACKAGE
 
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -224,8 +225,8 @@ elif [ "$1" = "STATISTICS" ]; then
    
     #echo 'OWNER '$OWNER
     #OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
-    echo 'OWNER '$OWNER
-    echo 'PACKAGE '$PACKAGE
+    #echo 'OWNER '$OWNER
+    #echo 'PACKAGE '$PACKAGE
     #printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
@@ -289,26 +290,12 @@ elif [ "$1" = "CLEAN UP" ]; then
      # Remove all files we dont want to push to the biopypir logs repository
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
-     rm -r parallel_runs
-
-
-      FILE=logs/"$PACKAGE"*.json
-      echo 'my file= ' "$FILE"
-      
-      
-      #if [ -f "$FILE" ]; then   #mv *IDENTIFIER* ~/YourPath/
-      #echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs   # broken
-      #fi
-      
-      
-      if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then
-        echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
-      else
-       echo "files do not exist"
-      fi
-    
-     #mv logs/"$PACKAGE"*.json archived_logs
+     rm -r parallel_runs      
      
+      if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then
+      echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
+      else echo "files do not exist"  fi
+         
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
      #     echo file; mv file archived_logs
