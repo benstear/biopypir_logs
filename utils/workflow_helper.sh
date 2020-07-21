@@ -98,7 +98,6 @@ elif [ "$1" = "EVALUATE" ]; then
    #step_names=$(cat API.json | jq .jobs[0].steps[].name);
    #echo $step_names
    
-  cat API.json
   #n=10
   #for ((i=0;i<=$n;i++)); do 
   #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
@@ -109,6 +108,8 @@ elif [ "$1" = "EVALUATE" ]; then
   
   echo 'package_and_owner : '$package_and_owner
   
+  echo 'OWNER '$OWNER
+
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3)
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   
@@ -201,9 +202,6 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-    echo 'PIP: ' "$PIP"
-    #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-    #else pip_url == 'NA';fi
 
   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
    
@@ -235,13 +233,10 @@ elif [ "$1" = "STATISTICS" ]; then
       .subscribers_count, stars: .stargazers_count,
       homepage_url: .homepage, has_wiki: .has_wiki, open_issues: .open_issues_count,
       has_downloads: .has_downloads}" > stats.json
-   # curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"
-
 
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file
-     
+      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       
       #echo 'contributors2.txt =  '
@@ -256,7 +251,11 @@ elif [ "$1" = "STATISTICS" ]; then
       # specific OS version, just say linux on website
       # license type
       # size, is it a fork itself? 
-     
+      
+      echo 'PIP: ' "$PIP"
+      #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
+      #else pip_url == 'NA';fi
+
       pip_url=https://pypi.org/project/"$PACKAGE"/
       
       echo 'pip_url: ';   echo $pip_url
@@ -297,8 +296,15 @@ elif [ "$1" = "CLEAN UP" ]; then
       echo 'my file= ' "$FILE"
       
       
-      if [ -f "$FILE" ]; then
-      echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs   # broken
+      #if [ -f "$FILE" ]; then   #mv *IDENTIFIER* ~/YourPath/
+      #echo "$FILE exists.";  mv logs/"$PACKAGE"*.json archived_logs   # broken
+      #fi
+      
+      
+      if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then
+        echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
+      else
+       echo "files do not exist"
       fi
     
      #mv logs/"$PACKAGE"*.json archived_logs
