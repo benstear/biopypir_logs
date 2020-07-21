@@ -54,15 +54,15 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  echo 'TEST_SUITE = ' "$TEST_SUITE" 
+  echo 'TEST_SUITE = ' "$test_suite" 
   
-  if [[ "$TEST_SUITE" =~ .*"pytest".*  ]]; then
+  if [[ "$test_suite" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
-  elif [ ! "$TEST_SUITE" = "pytest"  ]; then
+  elif [ ! "$test_suite" = "pytest"  ]; then
     echo "::set-output name=pytest_score::0"; echo 'pytest not enabled for this package'
   fi
 
