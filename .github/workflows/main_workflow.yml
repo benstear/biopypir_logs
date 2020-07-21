@@ -46,28 +46,32 @@ jobs:
         RUNNER_CONTEXT: ${{ toJson(runner) }}
       run: echo "$RUNNER_CONTEXT"
     
-    - name: set environment variables
-      run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
-        echo "::set-env name=PACKAGE::${{ github.event.client_payload.PACKAGE }}"
-        echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
-        echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
-        echo "::set-env name=test_suite::${{ github.event.client_payload.test_suite }}"
-        echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
-        echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
-        echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
+    #- name: set environment variables
+    #  run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
+    #    echo "::set-env name=PACKAGE::${{ github.event.client_payload.PACKAGE }}"
+    #    echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
+    #    echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
+    #    echo "::set-env name=test_suite::${{ github.event.client_payload.test_suite }}"
+    #    echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
+    #    echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
+    #    echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
 
 
+
+    - name:  SET ENV 
+      run: |
+        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
+        chmod +x biopypir_utils.sh  
+        ./biopypir_utils.sh  "SET ENV"  
+    #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
       with:
         repository: ${{env.Owner_Repo}} 
    
-    - name:  SET ENV 
-      run: |
-        curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
-        chmod +x biopypir_utils.sh  
-     #   ./biopypir_utils.sh  "SET ENV"  
-    #===============================================#
+    
+    
+    
     - name: Set Up ${{matrix.os}}-py${{matrix.python-version}}
       uses: actions/setup-python@v1
       with:
