@@ -31,8 +31,11 @@ if [ "$1" = "SET ENV" ]; then
   #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
   echo  $TEST_SUITE
   echo $TEST_DIR
+  echo $OWNER
   echo '------------------------------'
   printenv
+  
+  
 elif [  "$1" = "SET ENV DISPATCH" ]; then
   printenv
   #${{ github.event.environment_vars.PACKAGE }}
@@ -51,7 +54,7 @@ elif [  "$1" = "LINT" ]; then
   echo $pylintscore 
 
 elif [ "$1" = "TEST" ]; then  
-  echo 'TEST_SUITE =  ' '$TEST_SUITE' 
+  echo 'TEST_SUITE =  $TEST_SUITE' 
   
   if [[ "$TEST_SUITE" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
@@ -258,9 +261,7 @@ elif [ "$1" = "STATISTICS" ]; then
       #else pip_url == 'NA';fi
 
       pip_url=https://pypi.org/project/"$PACKAGE"/
-      
-      echo 'pip_url: ';   echo $pip_url
-      
+            
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       --arg contributors_url "$contributors_url" \
       --arg num_contributors "$n_cntrbtrs" \
@@ -288,13 +289,16 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
      
      # Remove all files we dont want to push to the biopypir logs repository
+     
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs      
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then
       echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
-      else echo "files do not exist"  fi
+      else 
+      echo "files do not exist" 
+      fi
          
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
