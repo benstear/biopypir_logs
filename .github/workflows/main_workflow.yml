@@ -106,16 +106,16 @@ jobs:
       with:
         packages: "${{ env.PACKAGE }}"
         
-  #  - name: Check Pip 
-  #    run: |
-  #      if [ ${{ steps.pip_deploy_test.outputs.conclusion }  = 'success' ]; then
-  #            echo "::set-env name=pip_test_result::True"
-  #      elif [ ${{ steps.pip_deploy_test.outputs.conclusion } = 'failure' ]; then
-  #            echo "::set-env name=pip_test_result::False"
-  #      elif [ ${{ steps.pip_deploy_test.outputs.conclusion } = 'skipped' ]; then
-  #            echo "::set-env name=pip_test_result::Package Not On PIP"
-  #      fi     
-  #      echo $pip_test_result
+    - name: Check Pip 
+      run: |
+        if [ ${{ steps.pip_deploy_test.outputs.conclusion }}  = 'success' ]; then
+              echo "::set-env name=pip_test_result::True"
+        elif [ ${{ steps.pip_deploy_test.outputs.conclusion }} = 'failure' ]; then
+              echo "::set-env name=pip_test_result::False"
+        elif [ ${{ steps.pip_deploy_test.outputs.conclusion }} = 'skipped' ]; then
+              echo "::set-env name=pip_test_result::Package Not On PIP"
+        fi     
+        echo $pip_test_result
          
     #===============================================#
     - name: GATHER outputs # removed and license check passing steps
