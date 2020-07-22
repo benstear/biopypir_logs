@@ -92,7 +92,7 @@ elif [ "$1" = "EVALUATE" ]; then
   echo "::set-output name=run_status::True"
   echo "::set-env name=run_status::True"
   
-  # Check to see if any runs succeeded
+  ############ Check to see if any runs succeeded #################
   if [[ ! "$(ls -A parallel_runs)" ]]; then 
     echo "No runs succeded, exiting eval step..."; echo '{ RUN_STATUS: "FAIL" }' > RUN_STATUS.json
     echo "::set-output name=run_status::False"; exit 1
@@ -102,12 +102,9 @@ elif [ "$1" = "EVALUATE" ]; then
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
-   
-  #n=10
-  #for ((i=0;i<=$n;i++)); do 
-  #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then
-  #   PACKAGE="${step_names[$i]}";fi; done
-  #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
+  #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
+  
+  cat API.json
   
   package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
     
@@ -122,6 +119,7 @@ elif [ "$1" = "EVALUATE" ]; then
   
   linux_array=(); linux_vs=(); mac_array=();  mac_vs=(); windows_array=(); windows_vs=()
   
+  ############ Get Passing OS and Python Versions ####################
   for ((i=0;i<=$j;i++)); do 
      job_status=$(cat API.json | jq ".jobs[$i].conclusion")
      step_status=$(cat API.json | jq ".jobs[$i].steps[].conclusion")
@@ -138,13 +136,13 @@ elif [ "$1" = "EVALUATE" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
-  # Remove duplicate OS versions from each list
+  ############ Remove duplicate OS versions from each list ############################
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   pylint_score_ave=0.00; pytest_score_ave=0.00  #  Initialize 'average score' variables
   
-  # Get pylint and pytest scores from each of the parallel runs
+  ######### Get pylint and pytest scores from each of the parallel runs ######################
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; 
     pylint_score_cum=$(awk "BEGIN {print $pylint_score_cum + $pylint_score}")
@@ -168,6 +166,7 @@ elif [ "$1" = "EVALUATE" ]; then
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
     IFS=$' \t\n';
     
+   ######## Put Everything we just calculated and formatted into eval.json file ###################
    jq -n --arg Workflow_Run_Date "$date_clip" \
       --arg linux_vers "${linux_unq[*]}" \
      --arg mac "${mac_arr_[*]}" \
@@ -278,7 +277,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs      
      
-      if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then
+      if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
       echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
       else 
       echo "files do not exist" 
