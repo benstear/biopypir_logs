@@ -54,9 +54,11 @@ jobs:
         echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
-        echo "::set-env name=pip_test::${{ github.event.client_payload.pip }}"
+        echo "::set-env name=PIP_TEST::${{ github.event.client_payload.pip }}"
         
-        echo $env.pip_test
+        echo ${{ env.PIP_TEST }}
+        echo ${{ env.ignore_lint }}
+
         printenv
     #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
