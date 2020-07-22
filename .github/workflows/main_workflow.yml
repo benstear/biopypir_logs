@@ -56,7 +56,8 @@ jobs:
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo "::set-env name=pip_test::${{ github.event.client_payload.pip }}"
         
-        echo ${{env.pip_test}}
+        echo $env.pip_test
+        printenv
     #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
@@ -108,11 +109,11 @@ jobs:
         
     - name: Check Pip 
       run: |
-        if [ ${{ steps.pip_deploy_test.outputs.conclusion }}  = 'success' ]; then
+        if [ ${{ steps.pip_deploy_test.conclusion }}  = 'success' ]; then
               echo "::set-env name=pip_test_result::True"
-        elif [ ${{ steps.pip_deploy_test.outputs.conclusion }} = 'failure' ]; then
+        elif [ ${{ steps.pip_deploy_test.conclusion }} = 'failure' ]; then
               echo "::set-env name=pip_test_result::False"
-        elif [ ${{ steps.pip_deploy_test.outputs.conclusion }} = 'skipped' ]; then
+        elif [ ${{ steps.pip_deploy_test.conclusion }} = 'skipped' ]; then
               echo "::set-env name=pip_test_result::Package Not On PIP"
         fi     
         echo $pip_test_result
