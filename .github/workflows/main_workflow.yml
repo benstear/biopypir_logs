@@ -55,17 +55,6 @@ jobs:
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo "::set-env name=PIP_TEST::${{ github.event.client_payload.pip }}"
-        
-        echo ${{env.PIP_TEST}}
-        echo ${{env.ignore_lint}}
-        echo ${{env.OWNER}}
-        printenv
-        
-    - run: |  
-        echo ${{env.PIP_TEST}}
-        echo ${{env.ignore_lint}}
-        echo ${{env.OWNER}}
-        printenv
     #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
@@ -129,7 +118,7 @@ jobs:
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" \
         "${{steps.tester.outputs.pytest_score}}" \
-         "${{ env.pip_test_result }}" 
+         "${{ env.pip_test_result }}" \
         "True"
    #===============================================#
     - name: UPLOAD artifact
