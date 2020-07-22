@@ -104,18 +104,34 @@ jobs:
       run: ./biopypir_utils.sh "TEST"  
     #===============================================#
     - name: PIP deployment test 
-      if: "${{ env.pip_test }}"
+      continue-on-error: true
+      id: pip_deploy_test
+      if: "${{ env.pip_test}}" 
       uses: BSFishy/pip-action@v1
       with:
         packages: "${{ env.PACKAGE }}"
+        
+    - name: Check Pip 
+      run: |
+        if [ ${{ steps.pip_deploy_test.outputs.conclusion }  = 'success' ]; then
+              echo "::set-env name=pip_test_result::True"
+        elif [ ${{ steps.pip_deploy_test.outputs.conclusion } = 'failure' ]; then
+              echo "::set-env name=pip_test_result::False"
+        elif [ ${{ steps.pip_deploy_test.outputs.conclusion } = 'skipped' ]; then
+              echo "::set-env name=pip_test_result::Package Not On PIP"
+        fi
+        
+        echo $pip_test_result
+         
     #===============================================#
-    - name: GATHER outputs # removed pytest,pip deploy and license check passing steps
+    - name: GATHER outputs # removed and license check passing steps
       continue-on-error: true
       run: |
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" \
         "${{steps.tester.outputs.pytest_score}}" \
-        "True" "True"
+        "$pip_test_result" \ 
+        "True"
    #===============================================#
     - name: UPLOAD artifact
       uses: actions/upload-artifact@v2-preview
