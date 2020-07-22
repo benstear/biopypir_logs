@@ -125,6 +125,7 @@ jobs:
               echo "::set-env name=License_result::True"
         elif [ ${{ steps.check_license.conclusion }} = 'failure' ]; then
               echo "::set-env name=License_result::False"
+        fi
   #===============================================#
     - name: GATHER outputs # removed and license check passing steps
       continue-on-error: true
