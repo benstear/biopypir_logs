@@ -56,7 +56,7 @@ jobs:
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo "::set-env name=pip_test::${{ github.event.client_payload.pip }}"
         
-        echo ${{env.pip}}
+        echo ${{env.pip_test}}
     #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
@@ -101,7 +101,7 @@ jobs:
     - name: PIP deployment test 
       continue-on-error: true
       id: pip_deploy_test
-      if: "${{ env.pip }}" 
+      if: "${{ env.pip_test }}" 
       uses: BSFishy/pip-action@v1
       with:
         packages: "${{ env.PACKAGE }}"
