@@ -11,7 +11,6 @@ on:
   #    - 'logs/**.json' 
   #    - 'biopypir_matrix.md'
   #    -  'utils/package_params.json'
-    
   #  get linux distribution 
     
 jobs:
@@ -112,6 +111,21 @@ jobs:
               echo "::set-env name=pip_test_result::Package Not On PIP"
         fi     
     #===============================================#
+    - name: validate-license-action
+      continue-on-error: true
+      id: check_license
+      if: runner.os == 'Linux'
+      uses: datreeio/validate-license-action@v1.0.0 
+      with:
+        args: 'MIT, ISC, BSD'
+    #===============================================#
+    - name: Check License
+      run: |
+        if [ "${{ steps.check_license.conclusion }}"  = "success" ]; then
+              echo "::set-env name=License_result::True"
+        elif [ ${{ steps.check_license.conclusion }} = 'failure' ]; then
+              echo "::set-env name=License_result::False"
+  #===============================================#
     - name: GATHER outputs # removed and license check passing steps
       continue-on-error: true
       run: |
@@ -119,7 +133,10 @@ jobs:
         "${{steps.linter.outputs.pylint-score}}" \
         "${{steps.tester.outputs.pytest_score}}" \
          "${{ env.pip_test_result }}" \
-        "True"
+         "${{ env.License_result }}"
+  #===============================================#
+    - name: Make env var artifact for job 2
+      run: echo env
    #===============================================#
     - name: UPLOAD artifact
       uses: actions/upload-artifact@v2-preview
@@ -151,11 +168,7 @@ jobs:
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
             chmod +x biopypir_utils.sh; ./biopypir_utils.sh "SET ENV" 
         #===============================================#
-        - name: validate-license-action
-          uses: datreeio/validate-license-action@v1.0.0 
-          with:
-            args: 'MIT, ISC, BSD'
-        #===============================================#
+
         - name: EVALUATE TEST RESULTS
           run: ./biopypir_utils.sh "EVALUATE"
         #===============================================#
