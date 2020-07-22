@@ -90,10 +90,8 @@ jobs:
         pip install pytest
         pip install coverage
         pip install pytest-cov
-        pip install pytest-mpl
-        
-      #pip install --no-binary :all: nmslib
-      #pip install .
+        pip install pytest-mpl    
+    #pip install --no-binary :all: nmslib  #pip install .
     #===============================================#
     - name: LINT
       id: linter
@@ -124,8 +122,6 @@ jobs:
         elif [ ${{ steps.pip_deploy_test.conclusion }} = 'skipped' ]; then
               echo "::set-env name=pip_test_result::Package Not On PIP"
         fi     
-        echo $pip_test_result
-         
     #===============================================#
     - name: GATHER outputs # removed and license check passing steps
       continue-on-error: true
@@ -133,7 +129,7 @@ jobs:
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint-score}}" \
         "${{steps.tester.outputs.pytest_score}}" \
-        "$pip_test_result" \ 
+         "${{ env.pip_test_result }}" 
         "True"
    #===============================================#
     - name: UPLOAD artifact
