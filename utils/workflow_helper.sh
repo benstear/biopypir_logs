@@ -35,11 +35,7 @@ if [ "$1" = "SET ENV" ]; then
   echo '------------------------------'
   printenv
   
-  
-elif [  "$1" = "SET ENV DISPATCH" ]; then
-  printenv
-  #${{ github.event.environment_vars.PACKAGE }}
-elif [  "$1" = "LINT" ]; then
+  elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   
@@ -78,15 +74,19 @@ elif [ "$1" = "GATHER" ]; then
           --arg os $3 \
           --arg pylintscore $4 \
           --arg pytestscore $5 \
+           --arg pip $6 \
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
-              Pytest_score :  "\($pytestscore)" }' > biopypir-"$3"-py"$2".json
-      # --arg license $6 \
-      # --arg pip $7 \
+              Pytest_score :  "\($pytestscore)",
+               PIP           :  "\($pip)"    }' > biopypir-"$3"-py"$2".json
+            # --arg license $7 \
       #    License_check : "\($license)",
-      #    PIP           :  "\($pip)"    
-                                         
+
+ 
+ ###################################### 
+ ########## JOB 2 FUNCTIONS ###########
+ #####################################
 elif [ "$1" = "EVALUATE" ]; then
 
   echo "::set-output name=run_status::True"
@@ -101,8 +101,7 @@ elif [ "$1" = "EVALUATE" ]; then
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
-   #step_names=$(cat API.json | jq .jobs[0].steps[].name);
-   #echo $step_names
+   #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
    
   #n=10
   #for ((i=0;i<=$n;i++)); do 
@@ -111,16 +110,12 @@ elif [ "$1" = "EVALUATE" ]; then
   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
   
   package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
-  
-  #echo 'package_and_owner : '$package_and_owner
-  
+    
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3)
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   
   echo "::set-env name=PACKAGE::$PACKAGE"
   echo "::set-env name=OWNER::$OWNER"
-  #echo 'OWNER '$OWNER
-  #echo 'PACKAGE '$PACKAGE
 
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -130,14 +125,11 @@ elif [ "$1" = "EVALUATE" ]; then
   for ((i=0;i<=$j;i++)); do 
      job_status=$(cat API.json | jq ".jobs[$i].conclusion")
      step_status=$(cat API.json | jq ".jobs[$i].steps[].conclusion")
-    
      if  [[ "$job_status" =~ .*"success".* ]] && [[ ! "${step_status[@]}" =~ "failure" ]] ; then
-       
        # Get job name,  ie (3.6, ubuntu-latest) of parallel job, split into OS string & py version string
         name=$(cat API.json |  jq ".jobs[$i].name" | cut -d "(" -f2 | cut -d ")" -f1)
         api_pyvers=$(echo $name | cut -d "," -f1); 
         api_os=$(echo $name | rev | cut -d ' ' -f1 | rev)
-        
         # Add passing python versions to their respective OS array
         if [[ "$api_os"  =~  .*"ubuntu".* ]]; then linux_arr+=("$api_pyvers"); linux_vs+=("$api_os")
         elif [[ "$api_os"  =~  .*"mac".* ]]; then  mac_arr+=("$api_pyvers"); mac_vs+=("$api_os")
@@ -206,7 +198,6 @@ elif [ "$1" = "EVALUATE" ]; then
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-
   if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
    
   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
@@ -225,12 +216,6 @@ elif [ "$1" = "EVALUATE" ]; then
   cat eval_2.json
   
 elif [ "$1" = "STATISTICS" ]; then
-   
-    #echo 'OWNER '$OWNER
-    #OWNER=$(sed -e 's/^"//' -e 's/"$//' <<<"$OWNER")
-    #echo 'OWNER '$OWNER
-    #echo 'PACKAGE '$PACKAGE
-    #printenv
     
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
       Package: .name, Description: .description, date_created: .created_at, last_commit: .pushed_at, forks: .forks, watchers: 
@@ -289,7 +274,6 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
      
      # Remove all files we dont want to push to the biopypir logs repository
-     
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs      
