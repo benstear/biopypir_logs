@@ -117,7 +117,7 @@ jobs:
         
     - name: Check Pip 
       run: |
-        if [ ${{ steps.pip_deploy_test.conclusion }}  = 'success' ]; then
+        if [ "${{ steps.pip_deploy_test.conclusion }}"  = "success" ]; then
               echo "::set-env name=pip_test_result::True"
         elif [ ${{ steps.pip_deploy_test.conclusion }} = 'failure' ]; then
               echo "::set-env name=pip_test_result::False"
