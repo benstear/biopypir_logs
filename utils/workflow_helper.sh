@@ -136,11 +136,18 @@ elif [ "$1" = "EVALUATE" ]; then
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
   
+
+
   ############ Remove duplicate OS versions from each list ############################
   linux_unq=($(echo "${linux_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   mac_unq=($(echo "${mac_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   windows_unq=($(echo "${windows_vs[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   pylint_score_ave=0.00; pytest_score_ave=0.00  #  Initialize 'average score' variables
+  
+    ########## Get pip and license  from parallel_run  ####################
+   for file in "$(pwd)/parallel_runs"/*/*.json; do
+    pip_result=$(cat "$file" | jq ".PIP");
+    done
   
   ######### Get pylint and pytest scores from each of the parallel runs ######################
   for file in "$(pwd)/parallel_runs"/*/*.json; do
@@ -152,8 +159,7 @@ elif [ "$1" = "EVALUATE" ]; then
   done   
    
    k="$(($j+1))" ;    # Calculate pylint and pytest average scores
-   pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k")
-   pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
+   pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k"); pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
    echo 'test suite = ' "$TEST_SUITE" # = pytest
    if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
@@ -174,12 +180,14 @@ elif [ "$1" = "EVALUATE" ]; then
      --arg windows "${windows_arr_[*]}" \
      --arg windows_vers "${windows_unq[*]}" \
      --arg coverage_score "$pytest_score_final" \
-      --arg linux "${linux_arr_[*]}" \
+      --arg linux "${linux_arr_[*]}" \                    # need to get pip/license from API.json
       --arg lint_score "$pylint_score_final"\
+      --arg PIP "$pip_result"
+      
        '{ Workflow_Run_Date :  $Workflow_Run_Date,
           Pylint_score  :  $lint_score,  
           Pytest_score  :  $coverage_score,
-          Pip           : "True",
+          Pip           : $PIP,             
           License       : "True",
           Build         : "True",
           Linux         : $linux,
