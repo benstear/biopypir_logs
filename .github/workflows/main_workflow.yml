@@ -55,13 +55,8 @@ jobs:
         echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo "::set-env name=pip_test::${{ github.event.client_payload.pip }}"
-
-    #- name:  SET ENV 1
-    #  run: |
-    #    curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
-    #    chmod +x biopypir_utils.sh  
-    #    ./biopypir_utils.sh  "SET ENV"  
-
+        
+        echo ${{env.pip}}
     #===============================================#
     - name:  CHECKOUT ${{env.OWNER}} ${{env.PACKAGE}} 
       uses: actions/checkout@v2     
@@ -106,7 +101,7 @@ jobs:
     - name: PIP deployment test 
       continue-on-error: true
       id: pip_deploy_test
-      if: "${{ env.pip_test}}" 
+      if: "${{ env.pip }}" 
       uses: BSFishy/pip-action@v1
       with:
         packages: "${{ env.PACKAGE }}"
