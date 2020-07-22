@@ -75,14 +75,14 @@ elif [ "$1" = "GATHER" ]; then
           --arg pylintscore $4 \
           --arg pytestscore $5 \
            --arg pip $6 \
+           --arg license $7 \
         '{    Python_version : "\($pyversion)", 
               OS            : "\($os)",
               Pylint_score : "\($pylintscore)",
               Pytest_score :  "\($pytestscore)",
-               PIP           :  "\($pip)"    }' > biopypir-"$3"-py"$2".json
-            # --arg license $7 \
-      #    License_check : "\($license)",
-
+               PIP           :  "\($pip)",
+               License_check : "\($license)"}' > biopypir-"$3"-py"$2".json
+ 
  
  ###################################### 
  ########## JOB 2 FUNCTIONS ###########
@@ -135,7 +135,6 @@ elif [ "$1" = "EVALUATE" ]; then
         fi
      fi  #exit 1; echo "One or more steps failed in job " $(cat API.json | jq ".jobs[$i].name")
   done
-  
 
 
   ############ Remove duplicate OS versions from each list ############################
@@ -146,7 +145,8 @@ elif [ "$1" = "EVALUATE" ]; then
   
     ########## Get pip and license  from parallel_run  ####################
    for file in "$(pwd)/parallel_runs"/*/*.json; do
-    pip_result=$(cat "$file" | jq ".PIP");
+    pip_result=$(cat "$file" | jq ".PIP"); 
+    license_result=$(cat "$file" | jq ".License_check");
     done
   
   ######### Get pylint and pytest scores from each of the parallel runs ######################
@@ -181,13 +181,14 @@ elif [ "$1" = "EVALUATE" ]; then
      --arg windows_vers "${windows_unq[*]}" \
      --arg coverage_score "$pytest_score_final" \
       --arg linux "${linux_arr_[*]}" \                   
-      --arg lint_score "$pylint_score_final"\
-      --arg PIP "$pip_result"
+      --arg lint_score "$pylint_score_final" \
+      --arg PIP "$pip_result" \
+      --arg LICENSE "$license_result \ 
        '{ Workflow_Run_Date :  $Workflow_Run_Date,
           Pylint_score  :  $lint_score,  
           Pytest_score  :  $coverage_score,
           Pip           : $PIP,             
-          License       : "True",
+          License       : $LICENSE,
           Build         : "True",
           Linux         : $linux,
           Mac           : $mac,
