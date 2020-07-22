@@ -81,7 +81,7 @@ elif [ "$1" = "GATHER" ]; then
               Pylint_score : "\($pylintscore)",
               Pytest_score :  "\($pytestscore)",
                PIP           :  "\($pip)",
-               License_check : "\($license)"}' > biopypir-"$3"-py"$2".json
+               License_check : "\($license)" }' > biopypir-"$3"-py"$2".json
  
  
  ###################################### 
@@ -103,16 +103,10 @@ elif [ "$1" = "EVALUATE" ]; then
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
   #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
-  
-  cat API.json
-  
+   
   package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
-    
-  PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3)
-  OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
-  
-  echo "::set-env name=PACKAGE::$PACKAGE"
-  echo "::set-env name=OWNER::$OWNER"
+  PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
+  echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -183,7 +177,7 @@ elif [ "$1" = "EVALUATE" ]; then
       --arg linux "${linux_arr_[*]}" \                   
       --arg lint_score "$pylint_score_final" \
       --arg PIP "$pip_result" \
-      --arg LICENSE "$license_result \ 
+      --arg LICENSE "$license_result" \ 
        '{ Workflow_Run_Date :  $Workflow_Run_Date,
           Pylint_score  :  $lint_score,  
           Pytest_score  :  $coverage_score,
