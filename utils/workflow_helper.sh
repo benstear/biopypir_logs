@@ -108,6 +108,9 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
+  echo $PACKAGE
+  echo $OWNER
+  
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
   
