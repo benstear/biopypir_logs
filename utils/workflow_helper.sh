@@ -171,15 +171,14 @@ elif [ "$1" = "EVALUATE" ]; then
     IFS=$' \t\n';
     
    ######## Put Everything we just calculated and formatted into eval.json file ###################
+   
    jq -n --arg Workflow_Run_Date "$date_clip" \
       --arg linux_vers "${linux_unq[*]}" \
      --arg mac "${mac_arr_[*]}" \
      --arg mac_vers "${mac_unq[*]}" \
-     --arg windows "${windows_arr_[*]}" \
-     --arg windows_vers "${windows_unq[*]}" \
-     --arg coverage_score "$pytest_score_final"  --arg linux "${linux_arr_[*]}"  --arg lint_score "$pylint_score_final" \
-      --arg PIP "$pip_result" \
-      --arg LICENSE "$license_result" \ 
+     --arg windows "${windows_arr_[*]}" --arg windows_vers "${windows_unq[*]}" \
+     --arg coverage_score "$pytest_score_final" --arg linux "${linux_arr_[*]}" --arg lint_score "$pylint_score_final" \
+      --arg PIP "$pip_result" --arg LICENSE "$license_result" \ 
        '{ Workflow_Run_Date :  $Workflow_Run_Date,
           Pylint_score  :  $lint_score,  
           Pytest_score  :  $coverage_score,
