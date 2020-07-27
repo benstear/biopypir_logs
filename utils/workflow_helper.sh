@@ -104,7 +104,8 @@ elif [ "$1" = "EVALUATE" ]; then
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
   #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
    
-  package_and_owner=$(cat API.json | jq .jobs[0].steps[4].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
+   
+  package_and_owner=$(cat API.json | jq .jobs[0].steps[5].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
