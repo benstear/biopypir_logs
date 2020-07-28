@@ -172,14 +172,11 @@ elif [ "$1" = "EVALUATE" ]; then
     
    ######## Put Everything we just calculated and formatted into eval.json file ###################
    
-   jq -n --arg Workflow_Run_Date "$date_clip" \
-      --arg linux_vers "${linux_unq[*]}" \
-     --arg mac "${mac_arr_[*]}" \
-     --arg mac_vers "${mac_unq[*]}" \
-     --arg windows "${windows_arr_[*]}" --arg windows_vers "${windows_unq[*]}" \
+   jq -n --arg Workflow_Run_Date "$date_clip"  --arg linux_vers "${linux_unq[*]}"  --arg mac "${mac_arr_[*]}" \
+     --arg mac_vers "${mac_unq[*]}" --arg windows "${windows_arr_[*]}" --arg windows_vers "${windows_unq[*]}" \
      --arg coverage_score "$pytest_score_final" --arg linux "${linux_arr_[*]}" --arg lint_score "$pylint_score_final" \
       --arg PIP "$pip_result" --arg LICENSE "$license_result" \ 
-       '{ Workflow_Run_Date :  $Workflow_Run_Date,
+       '{  Workflow_Run_Date :  $Workflow_Run_Date,
           Pylint_score  :  $lint_score,  
           Pytest_score  :  $coverage_score,
           Pip           : $PIP,             
@@ -190,7 +187,7 @@ elif [ "$1" = "EVALUATE" ]; then
           Windows       : $windows,
           Linux_versions: $linux_vers,
           Mac_versions: $mac_vers,
-          Windows_versions: $windows_vers }'  > scores_and_matrix.json
+          Windows_versions: $windows_vers  }'  > scores_and_matrix.json
           
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
@@ -198,6 +195,8 @@ elif [ "$1" = "EVALUATE" ]; then
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
    PIP=$(cat eval.json | jq ".Pip")
+   
+   # set pip as env var for next step access
    LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
@@ -242,9 +241,6 @@ elif [ "$1" = "STATISTICS" ]; then
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       
-      #echo 'contributors2.txt =  '
-      #cat contributors2.txt
-      
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
       
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
@@ -286,10 +282,10 @@ elif [ "$1" = "STATISTICS" ]; then
       cat "$PACKAGE"_"$GITHUB_RUN_ID".json
       
 elif [ "$1" = "CLEAN UP" ]; then
-     
+   
      # Remove all files we dont want to push to the biopypir logs repository
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh env_vars.json RUN_STATUS.json contrib_logins.txt contributors_gh.txt
+     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt
      rm -r parallel_runs      
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
@@ -297,7 +293,7 @@ elif [ "$1" = "CLEAN UP" ]; then
       else 
       echo "files do not exist" 
       fi
-         
+      
      #for file in "$(pwd)"/logs/*.json; do
      #   if [[ file  =~  .*"$PACKAGE".*  ]]; then
      #     echo file; mv file archived_logs
