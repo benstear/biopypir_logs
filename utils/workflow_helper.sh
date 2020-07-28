@@ -65,7 +65,6 @@ elif [ "$1" = "TEST" ]; then
 elif [ "$1" = "BUILD" ]; then
   echo "::set-output name=build_output::False"  
   python setup.py build
-  #pytestcheck=$"True"
   echo "::set-output name=build_output::True"  
   
 elif [ "$1" = "GATHER" ]; then
@@ -146,6 +145,21 @@ elif [ "$1" = "EVALUATE" ]; then
     pip_result=$(cat "$file" | jq ".PIP"); 
     license_result=$(cat "$file" | jq ".License_check");
     done
+    
+    echo 'aaaaaaaaaaaaaaaaaaa'
+    echo $pip_result
+    echo $license_result
+    echo 'bbbbbbbbbbbbbbbbbb'
+    
+
+    #echo 'PIP: ' "$PIP"
+    if [ "$pip_result" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
+    #else pip_url == 'NA';fi
+
+    #pip_url=https://pypi.org/project/"$PACKAGE"/
+
+
+
   
   ######### Get pylint and pytest scores from each of the parallel runs ######################
   for file in "$(pwd)/parallel_runs"/*/*.json; do
@@ -176,6 +190,7 @@ elif [ "$1" = "EVALUATE" ]; then
           --arg lint_score "$pylint_score_final" \
             --arg coverage_score "$pytest_score_final" \
             --arg PIP "$pip_result" \
+             --arg pip_url "$pip_url" \  
             --arg LICENSE "$license_result" \
               --arg linux "${linux_arr_[*]}" \
               --arg mac "${mac_arr_[*]}" \
@@ -186,7 +201,8 @@ elif [ "$1" = "EVALUATE" ]; then
                                             '{  Workflow_Run_Date :  $Workflow_Run_Date,
                                                 Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
-                                                Pip           : $PIP,             
+                                                Pip           : $PIP,   
+                                                Pip_url       : $pip_url, 
                                                 License       : $LICENSE,
                                                 Build         : "True",
                                                 Linux         : $linux,
@@ -258,18 +274,11 @@ elif [ "$1" = "STATISTICS" ]; then
       # license type
       # size, is it a fork itself? 
       
-      echo 'PIP: ' "$PIP"
-      #if [ "$PIP" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-      #else pip_url == 'NA';fi
-
-      pip_url=https://pypi.org/project/"$PACKAGE"/
-            
       jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
       --arg contributors_url "$contributors_url" \
       --arg num_contributors "$n_cntrbtrs" \
       --arg contributor_names "$(cat contributors2.txt)" \
-      --arg pip_url "$pip_url" \
-      '{ Github_event_name: $github_event, Run_ID: $run_id, Pip_url: $pip_url ,contributor_names: $contributor_names, 
+      '{ Github_event_name: $github_event, Run_ID: $run_id,contributor_names: $contributor_names, 
       contributor_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
