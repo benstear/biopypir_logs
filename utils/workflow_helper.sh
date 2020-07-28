@@ -183,13 +183,13 @@ elif [ "$1" = "EVALUATE" ]; then
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
     IFS=$' \t\n';
     
-   ######## Put Everything we just calculated and formatted into eval.json file ###################
+   ######## Put Everything we just calculated (and formatted) into eval.json file ###################
    
+    # --arg pip_url "$pip_url" \        Pip_url       : $pip_url, 
    jq -n --arg Workflow_Run_Date "$date_clip" \
              --arg lint_score "$pylint_score_final" \
              --arg coverage_score "$pytest_score_final" \
              --arg PIP "$pip_result" \
-             --arg pip_url "$pip_url" \  
              --arg LICENSE "$license_result" \
               --arg linux "${linux_arr_[*]}" \
               --arg mac "${mac_arr_[*]}" \
@@ -201,7 +201,6 @@ elif [ "$1" = "EVALUATE" ]; then
                                                   Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
                                                 Pip           : $PIP,   
-                                                Pip_url       : $pip_url, 
                                                 License       : $LICENSE,
                                                 Build         : "True",
                                                 Linux         : $linux,
