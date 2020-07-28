@@ -146,18 +146,18 @@ elif [ "$1" = "EVALUATE" ]; then
     license_result=$(cat "$file" | jq ".License_check");
     done
     
-    echo 'aaaaaaaaaaaaaaaaaaa'
-    echo $pip_result
-    echo $license_result
-    echo 'bbbbbbbbbbbbbbbbbb'
+    #echo 'aaaaaaaaaaaaaaaaaaa'
+    #echo $pip_result
+    #echo $license_result
+    #echo 'bbbbbbbbbbbbbbbbbb'
     
-
+    pip_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$pip_result")
+    license_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$license_result")
     #echo 'PIP: ' "$PIP"
-    if [ "$pip_result" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-    else pip_url == 'NA'; 
+    if [ "$pip_result" ]; then pip_url=$https://pypi.org/project/"$PACKAGE"/; echo 'yes pip'
+    else pip_url == 'NA'; echo 'no pip'
     fi
-
-    pip_url=https://pypi.org/project/"$PACKAGE"/
+    pip_url=$https://pypi.org/project/"$PACKAGE"/
 
 
   ######### Get pylint and pytest scores from each of the parallel runs ######################
@@ -185,7 +185,7 @@ elif [ "$1" = "EVALUATE" ]; then
     
    ######## Put Everything we just calculated (and formatted) into eval.json file ###################
    
-    # --arg pip_url "$pip_url" \        Pip_url       : $pip_url, 
+    
    jq -n --arg Workflow_Run_Date "$date_clip" \
              --arg lint_score "$pylint_score_final" \
              --arg coverage_score "$pytest_score_final" \
@@ -197,6 +197,7 @@ elif [ "$1" = "EVALUATE" ]; then
               --arg linux_vers "${linux_unq[*]}" \
               --arg mac_vers "${mac_unq[*]}" \
               --arg windows_vers "${windows_unq[*]}" \
+              --arg pip_url "$pip_url" \
                                               '{  Workflow_Run_Date :  $Workflow_Run_Date,
                                                   Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
@@ -208,7 +209,8 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows       : $windows,
                                                 Linux_versions: $linux_vers,
                                                 Mac_versions: $mac_vers,
-                                                Windows_versions: $windows_vers  }'  > scores_and_matrix.json
+                                                Windows_versions: $windows_vers,
+                                                 Pip_url       : $pip_url }'  > scores_and_matrix.json
 
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
