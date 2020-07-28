@@ -108,9 +108,7 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
-  #echo $PACKAGE
-  #echo $OWNER
-  
+
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
   
@@ -148,7 +146,7 @@ elif [ "$1" = "EVALUATE" ]; then
     
     pip_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$pip_result")
     license_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$license_result")
-    #echo 'PIP: ' "$PIP"
+
     if [ "$pip_result" ]; then     pip_url=$'https://pypi.org/project/'"$PACKAGE"'/'; echo 'yes pip'
     else pip_url == 'NA'; echo 'no pip'
     fi
@@ -167,8 +165,8 @@ elif [ "$1" = "EVALUATE" ]; then
    k="$(($j+1))" ;    # Calculate pylint and pytest average scores
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k"); pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-   echo 'test suite = ' "$TEST_SUITE" # = pytest
-   if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
+  #   echo 'test suite = ' "$TEST_SUITE" # = pytest
+  if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
    date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
     
@@ -179,8 +177,6 @@ elif [ "$1" = "EVALUATE" ]; then
     IFS=$' \t\n';
     
    ######## Put Everything we just calculated (and formatted) into eval.json file ###################
-   
-    
    jq -n --arg Workflow_Run_Date "$date_clip" \
              --arg lint_score "$pylint_score_final" \
              --arg coverage_score "$pytest_score_final" \
@@ -211,11 +207,9 @@ elif [ "$1" = "EVALUATE" ]; then
   
    # ================= GET BADGE STATUS ======================== #
    badge='NONE'
-  
-  echo $pylint_score_final
-  if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes
-   
-  
+   badge='BRONZE'
+
+if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
   #if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE';
   #  if [ $pytest_score_final != 'NA' ]; then
   #      if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  
@@ -296,6 +290,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
       echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
+      ls  logs/
       else 
       echo "files do not exist" 
       fi
