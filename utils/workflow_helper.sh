@@ -210,37 +210,19 @@ elif [ "$1" = "EVALUATE" ]; then
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
    # ================= GET BADGE STATUS ======================== #
-   
-   # set as regular vars above and  avoid redefining
-   LICENSE=$(cat eval.json | jq ".License")
-   
-   BUILD=$(cat eval.json | jq ".Build")
-   PIP=$(cat eval.json | jq ".Pip")
-   
-   #pylint_score_final
-   #pytest_score_final
-   #build_result=$True
-   
-   #license_result
-   #pip_result
-   echo 'pytest_score_final:   '
-   echo $pytest_score_final
-   
-   LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   
-   COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
-
+  
+  echo $pylint_score_final
   if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes
    
-  LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
   
-  if [ "$LICENSE" ] && [ "$BUILD" ] && [ "$PIP" ]; then badge='BRONZE';
-    if [ $COVERAGE_SCORE != 'NA' ]; then
-        if  (( $(echo "$LINT_SCORE > 6.0" |bc -l) ))  && [ $COVERAGE_SCORE -gt 40 ]; then badge='GOLD';  
-        elif (( $(echo "$LINT_SCORE > 3.0" |bc -l) )) && [ $COVERAGE_SCORE -gt 20 ]; then badge='SILVER'; 
-        fi 
-    fi 
-  fi
+  #if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE';
+  #  if [ $pytest_score_final != 'NA' ]; then
+  #      if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  
+  #      elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; 
+  #      fi 
+  #  fi 
+  #fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
   jq -s add eval.json badge.json  > eval_2.json
@@ -249,9 +231,6 @@ elif [ "$1" = "EVALUATE" ]; then
   
 elif [ "$1" = "STATISTICS" ]; then
 
-    echo $OWNER
-    echo $PACKAGE
-    
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
                                                                  Package: .name,
                                                                  Description: .description,
