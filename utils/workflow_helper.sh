@@ -154,10 +154,10 @@ elif [ "$1" = "EVALUATE" ]; then
     pip_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$pip_result")
     license_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$license_result")
     #echo 'PIP: ' "$PIP"
-    if [ "$pip_result" ]; then pip_url=$https://pypi.org/project/"$PACKAGE"/; echo 'yes pip'
+    if [ "$pip_result" ]; then     pip_url=$'https://pypi.org/project/'"$PACKAGE"'/'; echo 'yes pip'
     else pip_url == 'NA'; echo 'no pip'
     fi
-    pip_url=$https://pypi.org/project/"$PACKAGE"/
+    pip_url=$'https://pypi.org/project/'"$PACKAGE"'/'
 
 
   ######### Get pylint and pytest scores from each of the parallel runs ######################
