@@ -108,8 +108,8 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
   echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
-  echo $PACKAGE
-  echo $OWNER
+  #echo $PACKAGE
+  #echo $OWNER
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -145,11 +145,6 @@ elif [ "$1" = "EVALUATE" ]; then
     pip_result=$(cat "$file" | jq ".PIP"); 
     license_result=$(cat "$file" | jq ".License_check");
     done
-    
-    #echo 'aaaaaaaaaaaaaaaaaaa'
-    #echo $pip_result
-    #echo $license_result
-    #echo 'bbbbbbbbbbbbbbbbbb'
     
     pip_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$pip_result")
     license_result=$(sed -e 's/^"//' -e 's/"$//' <<<"$license_result")
@@ -218,14 +213,24 @@ elif [ "$1" = "EVALUATE" ]; then
    
    # set as regular vars above and  avoid redefining
    LICENSE=$(cat eval.json | jq ".License")
+   
    BUILD=$(cat eval.json | jq ".Build")
    PIP=$(cat eval.json | jq ".Pip")
+   
+   #pylint_score_final
+   #pytest_score_final
+   #build_result=$True
+   
+   #license_result
+   #pip_result
+   echo 'pytest_score_final:   '
+   echo $pytest_score_final
    
    LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
 
-  if [[ $COVERAGE_SCORE != "NA" ]]; then COVERAGE_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$COVERAGE_SCORE"); fi  # Remove quotes
+  if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes
    
   LINT_SCORE=$(sed -e 's/^"//' -e 's/"$//' <<<"$LINT_SCORE") # Remove quotes
   
@@ -296,7 +301,8 @@ elif [ "$1" = "STATISTICS" ]; then
         echo run_status = "$run_status"        
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        echo "::set-env name=biopypir_workflow_status::SUCCESS"      
+        echo "::set-env name=biopypir_workflow_status::SUCCESS"     
+        echo 'successful run!!!!!!!!!!!!!!!!!!!'
       fi     
       
       echo 'final product:    '
