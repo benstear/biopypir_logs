@@ -157,7 +157,7 @@ elif [ "$1" = "EVALUATE" ]; then
     else pip_url == 'NA'; 
     fi
 
-    #pip_url=https://pypi.org/project/"$PACKAGE"/
+    pip_url=https://pypi.org/project/"$PACKAGE"/
 
 
   ######### Get pylint and pytest scores from each of the parallel runs ######################
@@ -186,19 +186,19 @@ elif [ "$1" = "EVALUATE" ]; then
    ######## Put Everything we just calculated and formatted into eval.json file ###################
    
    jq -n --arg Workflow_Run_Date "$date_clip" \
-          --arg lint_score "$pylint_score_final" \
-            --arg coverage_score "$pytest_score_final" \
-            --arg PIP "$pip_result" \
+             --arg lint_score "$pylint_score_final" \
+             --arg coverage_score "$pytest_score_final" \
+             --arg PIP "$pip_result" \
              --arg pip_url "$pip_url" \  
-            --arg LICENSE "$license_result" \
+             --arg LICENSE "$license_result" \
               --arg linux "${linux_arr_[*]}" \
               --arg mac "${mac_arr_[*]}" \
-                --arg windows "${windows_arr_[*]}" \
-           --arg linux_vers "${linux_unq[*]}" \
-           --arg mac_vers "${mac_unq[*]}" \
-           --arg windows_vers "${windows_unq[*]}" \
-                                            '{  Workflow_Run_Date :  $Workflow_Run_Date,
-                                                Pylint_score  :  $lint_score,  
+              --arg windows "${windows_arr_[*]}" \
+              --arg linux_vers "${linux_unq[*]}" \
+              --arg mac_vers "${mac_unq[*]}" \
+              --arg windows_vers "${windows_unq[*]}" \
+                                              '{  Workflow_Run_Date :  $Workflow_Run_Date,
+                                                  Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
                                                 Pip           : $PIP,   
                                                 Pip_url       : $pip_url, 
