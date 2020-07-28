@@ -48,7 +48,7 @@ if [ "$1" = "SET ENV" ]; then
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
   echo  'lint-score: '
-  echo $pylint-score 
+  echo "$pylint-score" 
 
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
