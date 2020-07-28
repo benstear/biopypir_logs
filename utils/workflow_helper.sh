@@ -154,13 +154,12 @@ elif [ "$1" = "EVALUATE" ]; then
 
     #echo 'PIP: ' "$PIP"
     if [ "$pip_result" ]; then pip_url=https://pypi.org/project/"$PACKAGE"/;
-    #else pip_url == 'NA';fi
+    else pip_url == 'NA'; 
+    fi
 
     #pip_url=https://pypi.org/project/"$PACKAGE"/
 
 
-
-  
   ######### Get pylint and pytest scores from each of the parallel runs ######################
   for file in "$(pwd)/parallel_runs"/*/*.json; do
     pylint_score=$(cat "$file" | jq ".Pylint_score"); pylint_score="${pylint_score:1:4}"; 
@@ -215,11 +214,12 @@ elif [ "$1" = "EVALUATE" ]; then
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
   
    # ================= GET BADGE STATUS ======================== #
+   
+   # set as regular vars above and  avoid redefining
    LICENSE=$(cat eval.json | jq ".License")
    BUILD=$(cat eval.json | jq ".Build")
    PIP=$(cat eval.json | jq ".Pip")
    
-   # set pip as env var for next step access
    LINT_SCORE=$(cat eval.json | jq ".Pylint_score")   
    COVERAGE_SCORE=$(cat eval.json | jq ".Pytest_score")
    badge='NONE'
@@ -274,12 +274,16 @@ elif [ "$1" = "STATISTICS" ]; then
       # license type
       # size, is it a fork itself? 
       
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" --arg run_id "$GITHUB_RUN_ID" \
-      --arg contributors_url "$contributors_url" \
-      --arg num_contributors "$n_cntrbtrs" \
-      --arg contributor_names "$(cat contributors2.txt)" \
-      '{ Github_event_name: $github_event, Run_ID: $run_id,contributor_names: $contributor_names, 
-      contributor_url: $contributors_url, num_contributors: $num_contributors}' > run_info.json
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg contributors_url "$contributors_url" \
+            --arg num_contributors "$n_cntrbtrs" \
+            --arg contributor_names "$(cat contributors2.txt)" \
+                                            '{ Github_event_name: $github_event,
+                                                Run_ID: $run_id,
+                                                contributor_names: $contributor_names, 
+                                                contributor_url: $contributors_url,
+                                                num_contributors: $num_contributors}' > run_info.json
 
       jq -s add stats.json run_info.json  > stats_2.json
             
