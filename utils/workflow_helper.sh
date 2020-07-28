@@ -47,7 +47,8 @@ if [ "$1" = "SET ENV" ]; then
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo "::set-output name=pylint-score::$pylintscore"
-  echo $pylintscore 
+  echo  'lint-score: '
+  echo $pylint-score 
 
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
@@ -57,9 +58,14 @@ elif [ "$1" = "TEST" ]; then
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
-    echo "::set-output name=pytest_score::$pytestscore"; echo "Pytest Coverage: $pytestscore"
+    echo "::set-output name=pytest_score::$pytestscore"; 
+    echo "Pytest Coverage: $pytest_score"
+    
   elif [ ! "$test_suite" = "pytest"  ]; then
-    echo "::set-output name=pytest_score::0"; echo 'pytest not enabled for this package'
+    echo "::set-output name=pytest_score::0"; 
+    echo 'pytest not enabled for this package'
+    echo 'pytest score:  '
+    echo $pytest_score
   fi
 
 elif [ "$1" = "BUILD" ]; then
