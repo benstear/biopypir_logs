@@ -46,9 +46,9 @@ if [ "$1" = "SET ENV" ]; then
  # pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
-  echo "::set-output name=pylint-score::$pylintscore"
-  echo  'lint-score: '
-  echo "$pylint-score" 
+  echo "::set-output name=pylint_score::$pylintscore"
+  echo  'lint_score: '
+  echo "$pylint_score" 
 
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
