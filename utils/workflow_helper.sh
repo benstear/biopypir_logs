@@ -306,8 +306,13 @@ elif [ "$1" = "CLEAN UP" ]; then
      #   fi
      # done
      
-     json_array_length=$(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length)
-     echo $json_array_length
+     if [ $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
+     echo 'equal to 31'
+     fi
+     
+     if [ ! $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
+     exit 1;
+     fi
      
      echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
