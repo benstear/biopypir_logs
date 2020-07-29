@@ -128,7 +128,7 @@ jobs:
         fi
   #===============================================#
     - name: GATHER outputs # removed and license check passing steps
-      continue-on-error: true
+      #continue-on-error: true
       run: |
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
         "${{steps.linter.outputs.pylint_score}}" \
