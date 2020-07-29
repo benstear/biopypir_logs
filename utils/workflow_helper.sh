@@ -47,10 +47,10 @@ if [ "$1" = "SET ENV" ]; then
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
  
-  #echo "::set-output name=pylint_score::$pylintscore"
-  #echo  'lint_score: '
-  #echo "$pylint_score" 
-  pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y 
+  echo "::set-output name=pylint_score::$pylintscore"
+  echo  'pylint_score: '
+  echo "$pylint_score" 
+  #pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y 
   
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
@@ -64,7 +64,8 @@ elif [ "$1" = "TEST" ]; then
     echo "Pytest Coverage: $pytest_score"
     
   elif [ ! "$test_suite" = "pytest"  ]; then
-    echo "::set-output name=pytest_score::0"; 
+    pytestscore=0
+    echo "::set-output name=pytest_score::$pytestscore"; 
     echo 'pytest not enabled for this package'
     echo 'pytest score:  '
     echo $pytest_score
