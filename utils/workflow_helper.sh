@@ -284,11 +284,8 @@ elif [ "$1" = "STATISTICS" ]; then
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         echo "::set-env name=biopypir_workflow_status::SUCCESS"     
-        echo 'successful run!!!!!!!!!!!!!!!!!!!'
       fi     
       
-      echo 'final product:    '
-      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
       
 elif [ "$1" = "CLEAN UP" ]; then
    
@@ -298,7 +295,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      rm -r parallel_runs      
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
-      echo "files do exist";  mv logs/"$PACKAGE"*.json archived_logs
+      echo "files exist";  mv logs/"$PACKAGE"*.json archived_logs
       ls  logs/
       else 
       echo "files do not exist" 
@@ -310,9 +307,11 @@ elif [ "$1" = "CLEAN UP" ]; then
      #   fi
      # done
      
+     json_array_length=$(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length)
+     echo $json_array_length
+     
      echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
-     
      
      # check if size of file is 0 (aka empty)
      #if [ -s "$PACKAGE"_"$GITHUB_RUN_ID".json ]; then echo 'Log File is Empty!'; exit 1;
