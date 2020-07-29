@@ -38,7 +38,7 @@ if [ "$1" = "SET ENV" ]; then
   elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
-  
+  echo 'LINTING!!!!!\n'
   #--disable=biopypir_utils.sh   # ignore_warnings=
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
@@ -48,7 +48,7 @@ if [ "$1" = "SET ENV" ]; then
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
  
   echo "::set-output name=pylint_score::$pylintscore"
-  echo  'pylint_score: '
+  echo "$pylintscore"
   echo "$pylint_score" 
   #pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y 
   
@@ -67,8 +67,8 @@ elif [ "$1" = "TEST" ]; then
     pytestscore=0
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo 'pytest not enabled for this package'
-    echo 'pytest score:  '
-    echo $pytest_score
+    #echo 'pytest score:  '
+    #echo $pytest_score
   fi
 
 elif [ "$1" = "BUILD" ]; then
