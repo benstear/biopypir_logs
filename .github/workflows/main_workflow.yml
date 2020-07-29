@@ -131,7 +131,7 @@ jobs:
       continue-on-error: true
       run: |
         ./biopypir_utils.sh "GATHER" "${{matrix.python-version}}" "${{matrix.os}}" \
-        "${{steps.linter.outputs.pylint-score}}" \
+        "${{steps.linter.outputs.pylint_score}}" \
         "${{steps.tester.outputs.pytest_score}}" \
          "${{ env.pip_test_result }}" \
          "${{ env.License_result }}"
