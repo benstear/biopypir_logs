@@ -306,6 +306,7 @@ elif [ "$1" = "CLEAN UP" ]; then
      #   fi
      # done
      
+     
      if [ $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
      echo 'equal to 31'
      fi
