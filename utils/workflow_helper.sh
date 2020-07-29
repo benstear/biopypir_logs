@@ -286,7 +286,6 @@ elif [ "$1" = "STATISTICS" ]; then
         echo "::set-env name=biopypir_workflow_status::SUCCESS"     
       fi     
       
-      
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
