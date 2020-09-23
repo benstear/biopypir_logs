@@ -191,7 +191,7 @@ jobs:
               useGlob: true 
               
         - name: make commit test file
-          run: echo 'test' > commit_test_file.txt 
+          run: echo 'test' > commit_test_file.txt; ls
 
        #===============================================# 
         - name: Add & Commit 
@@ -201,6 +201,7 @@ jobs:
             add: . #logs/  #${{env.PACKAGE}}_${{github.run_id}}.json
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
             ref: 'logs' 
+            force: true
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
