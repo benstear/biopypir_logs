@@ -197,7 +197,7 @@ jobs:
           with:
             add: .  #${{env.PACKAGE}}_${{github.run_id}}.json
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
-          ref: 'logs' 
+            ref: 'logs' 
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
