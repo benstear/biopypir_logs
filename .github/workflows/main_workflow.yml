@@ -193,9 +193,11 @@ jobs:
         - name: Add & Commit 
           #if: always()
           uses: EndBug/add-and-commit@v4.1.0
+
           with:
             add: .  #${{env.PACKAGE}}_${{github.run_id}}.json
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
+          ref: 'logs' 
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
