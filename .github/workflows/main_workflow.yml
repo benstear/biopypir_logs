@@ -154,7 +154,7 @@ jobs:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/manubot/etc.
           uses: actions/checkout@v2
           with:
-            ref: logs_branch
+            ref: logs_branch        # checking out logs_branch,  NOT default !!!
          #===============================================# 
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v2
@@ -170,9 +170,7 @@ jobs:
           run: |  
             curl -L -o biopypir_utils.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/workflow_helper.sh"      
             chmod +x biopypir_utils.sh
-        #./biopypir_utils.sh "SET ENV" 
         #===============================================#
-
         - name: EVALUATE TEST RESULTS
           run: ./biopypir_utils.sh "EVALUATE"
         #===============================================#
@@ -181,10 +179,6 @@ jobs:
         #===============================================# 
         - name: CLEAN UP
           run: ./biopypir_utils.sh "CLEAN UP"
-        #- run: |
-        #    pip install --upgrade pip setuptools wheel 
-        #    python3 -m pip install pandas numpy tabulate
-        #    python3 utils/process_logs.py
        #===============================================# 
         - name: DELETE ARTIFACTS
           uses: geekyeggo/delete-artifact@1-glob-support
@@ -192,13 +186,13 @@ jobs:
               name: biopypir-*
               useGlob: true 
               
-        - name: make commit test file
-          run: echo 'test' > commit_test_file.txt; ls
+        #- name: make commit test file
+        #  run: echo 'test' > commit_test_file.txt; ls
         
-        #- name: do git pull
-        #  run: |
-        #    git config pull.rebase false
-        #    git pull
+        - name: do git pull
+          run: |
+            git config pull.rebase true
+            git pull
        #===============================================# 
         - name: Add & Commit 
           #if: always()
