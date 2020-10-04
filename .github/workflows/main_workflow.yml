@@ -195,7 +195,6 @@ jobs:
         
         - name: do git pull
           run: |
-            git config pull.rebase true 
             git pull
        #===============================================# 
         - name: Add & Commit 
