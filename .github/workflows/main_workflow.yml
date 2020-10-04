@@ -149,7 +149,7 @@ jobs:
   job2:
       needs: [run_tests] 
       if: always()
-      runs-on: [ubuntu-latest] 
+      runs-on: ubuntu-latest
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/manubot/etc.
           uses: actions/checkout@v2
@@ -191,7 +191,7 @@ jobs:
         
         - name: do git pull
           run: |
-            git config pull.rebase true
+            git config pull.rebase false
             git pull
        #===============================================# 
         - name: Add & Commit 
