@@ -194,7 +194,9 @@ jobs:
           run: echo 'test' > commit_test_file.txt; ls
         
         - name: do git pull
-          run: git pull
+          run: |
+            git config pull.rebase true 
+            git pull
        #===============================================# 
         - name: Add & Commit 
           #if: always()
