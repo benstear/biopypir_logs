@@ -153,6 +153,8 @@ jobs:
       steps:
         - name: Check-Out Repo #  checkout biopypir_logs repo, not scedar/manubot/etc.
           uses: actions/checkout@v2
+          with:
+            ref: logs_branch
          #===============================================# 
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v2
@@ -193,16 +195,17 @@ jobs:
         - name: make commit test file
           run: echo 'test' > commit_test_file.txt; ls
         
-        - name: do git pull
-          run: |
-            git config pull.rebase false
-            git pull
+        #- name: do git pull
+        #  run: |
+        #    git config pull.rebase false
+        #    git pull
        #===============================================# 
         - name: Add & Commit 
           #if: always()
           uses: EndBug/add-and-commit@v4.1.0
           with:
             add: . #logs/  #${{env.PACKAGE}}_${{github.run_id}}.json
+            author_name: GitHub Actions
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
             ref: 'logs_branch' 
             force: true
