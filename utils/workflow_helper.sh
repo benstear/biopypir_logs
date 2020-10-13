@@ -57,6 +57,11 @@ elif [ "$1" = "TEST" ]; then
   
   if [[ "$test_suite" =~ .*"pytest".*  ]]; then
     echo "::set-output name=pytest_score::False"
+    
+    # Find test directory  and print it
+    find ~ -type d -name "tests -print
+    
+    
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
