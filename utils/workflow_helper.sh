@@ -7,28 +7,26 @@ if [ "$1" = "SET ENV" ]; then
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   #cat env_vars.json | jq .$PACKAGE | jq .OWNER
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
-  #export OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)
-  echo "::set-env name=OWNER::$OWNER"
+  #echo "::set-env name=OWNER::$OWNER"
+  echo "OWNER=$OWNER" >> $GITHUB_ENV
   
   TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); 
   TEST_SUITE=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_SUITE") # Remove quotes
-  #export TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite)
-  echo "::set-env name=TEST_SUITE::$TEST_SUITE"
+  #echo "::set-env name=TEST_SUITE::$TEST_SUITE"
+  echo "TEST_SUITE=TEST_SUITE"   >> $GITHUB_ENV
   
   TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); 
   TEST_DIR=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_DIR") # Remove quotes
    
-  #export TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir)
-  echo "::set-env name=TEST_DIR::$TEST_DIR"
-  
+  #echo "::set-env name=TEST_DIR::$TEST_DIR"
+  echo "TEST_DIR=$TEST_DIR"   >> $GITHUB_ENV
+
   export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
   echo "::set-env name=IGNORE_TESTS::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)"
   
   export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
   echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
   
-  #export PY_VERS=$(cat env_vars.json | jq .$PACKAGE | jq .python_version)
-  #export WORKFLOW_OS=$(cat env_vars.json | jq .$PACKAGE | jq .os)
   echo  $TEST_SUITE
   echo $TEST_DIR
   echo $OWNER
