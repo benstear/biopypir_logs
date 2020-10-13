@@ -59,7 +59,7 @@ elif [ "$1" = "TEST" ]; then
     echo "::set-output name=pytest_score::False"
     
     # Find test directory  and print it
-    find ~ -type d -name "tests -print
+    find ~ -type d -name "tests" -print
     
     
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
