@@ -120,11 +120,12 @@ jobs:
     - name: Check Pip 
       run: |
         if [ "${{ steps.pip_deploy_test.conclusion }}"  = "success" ]; then
-              echo "::set-env name=pip_test_result::True"
+              echo "pip_test_result=True" >> $GITHUB_ENV
         elif [ ${{ steps.pip_deploy_test.conclusion }} = 'failure' ]; then
-              echo "::set-env name=pip_test_result::False"
+              echo "pip_test_result=False" >> $GITHUB_ENV
         elif [ ${{ steps.pip_deploy_test.conclusion }} = 'skipped' ]; then
-              echo "::set-env name=pip_test_result::Package Not On PIP"
+              echo "pip_test_result=Package Not On PIP" >> $GITHUB_ENV
+
         fi     
     #===============================================#
     - name: validate-license-action
@@ -138,9 +139,9 @@ jobs:
     - name: Check License
       run: |
         if [ "${{ steps.check_license.conclusion }}"  = "success" ]; then
-              echo "::set-env name=License_result::True"
+              echo "License_result=True" >> $GITHUB_ENV
         elif [ ${{ steps.check_license.conclusion }} = 'failure' ]; then
-              echo "::set-env name=License_result::False"
+              echo "License_result=False" >> $GITHUB_ENV
         fi
   #===============================================#
     - name: GATHER outputs # removed and license check passing steps
