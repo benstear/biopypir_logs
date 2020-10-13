@@ -20,7 +20,6 @@ if [ "$1" = "SET ENV" ]; then
   echo "IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)" >> $GITHUB_ENV
   
   export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
-  #echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
   echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
 
   elif [  "$1" = "LINT" ]; then
