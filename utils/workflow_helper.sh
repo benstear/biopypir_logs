@@ -5,38 +5,27 @@
 if [ "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
-  #cat env_vars.json | jq .$PACKAGE | jq .OWNER
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
-  #echo "::set-env name=OWNER::$OWNER"
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   
   TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); 
   TEST_SUITE=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_SUITE") # Remove quotes
-  #echo "::set-env name=TEST_SUITE::$TEST_SUITE"
-  echo "TEST_SUITE=TEST_SUITE"   >> $GITHUB_ENV
+  echo "TEST_SUITE=TEST_SUITE" >> $GITHUB_ENV
   
   TEST_DIR=$(cat env_vars.json | jq .$PACKAGE | jq .tests_dir); 
   TEST_DIR=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_DIR") # Remove quotes
-   
-  #echo "::set-env name=TEST_DIR::$TEST_DIR"
-  echo "TEST_DIR=$TEST_DIR"   >> $GITHUB_ENV
+  echo "TEST_DIR=$TEST_DIR" >> $GITHUB_ENV
 
   export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
-  echo "::set-env name=IGNORE_TESTS::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)"
+  echo "IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)" >> $GITHUB_ENV
   
   export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
-  echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
-  
-  echo  $TEST_SUITE
-  echo $TEST_DIR
-  echo $OWNER
-  echo '------------------------------'
-  printenv
-  
+  #echo "::set-env name=IGNORE_LINT::$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)"
+  echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
+
   elif [  "$1" = "LINT" ]; then
 
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
-  echo 'LINTING!!!!!\n'
   #--disable=biopypir_utils.sh   # ignore_warnings=
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
@@ -101,7 +90,7 @@ elif [ "$1" = "GATHER" ]; then
 elif [ "$1" = "EVALUATE" ]; then
 
   echo "::set-output name=run_status::True"
-  echo "::set-env name=run_status::True"
+  echo "run_status=True" >> $GITHUB_ENV
   
   ############ Check to see if any runs succeeded #################
   if [[ ! "$(ls -A parallel_runs)" ]]; then 
@@ -118,8 +107,9 @@ elif [ "$1" = "EVALUATE" ]; then
    
   package_and_owner=$(cat API.json | jq .jobs[0].steps[5].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
-  echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
 
+  echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
+  echo "OWNER=$OWNER" >> $GITHUB_ENV
 
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -281,12 +271,14 @@ elif [ "$1" = "STATISTICS" ]; then
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
-        echo "::set-env name=biopypir_workflow_status::FAIL"
+        #echo "::set-env name=biopypir_workflow_status::FAIL"
+        echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
         echo run_status = "$run_status"        
         jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        echo "::set-env name=biopypir_workflow_status::SUCCESS"     
+        #echo "::set-env name=biopypir_workflow_status::SUCCESS" 
+        echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
       
 elif [ "$1" = "CLEAN UP" ]; then
@@ -311,11 +303,11 @@ elif [ "$1" = "CLEAN UP" ]; then
      
      
      if [ $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
-     echo 'equal to 31'
+     echo 'correct number of parameters.'
      fi
      
      if [ ! $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
-     exit 1;
+          echo 'Incorrect number of parameters, exiting...'; exit 1;
      fi
      
      echo '---------------------------------'
