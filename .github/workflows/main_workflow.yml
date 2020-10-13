@@ -46,28 +46,13 @@ jobs:
     
     - name: set environment variables
       run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
-        #echo "::set-env name=PACKAGE::${{ github.event.client_payload.PACKAGE }}"
         echo "PACKAGE=${{ github.event.client_payload.PACKAGE }}" >> $GITHUB_ENV
-        
-        #echo "::set-env name=OWNER::${{ github.event.client_payload.OWNER }}"
         echo "OWNER=${{ github.event.client_payload.OWNER }}" >> $GITHUB_ENV
-
-        #echo "::set-env name=Owner_Repo::${{ github.event.client_payload.Owner_Repo }}"
         echo "Owner_Repo=${{ github.event.client_payload.Owner_Repo }}" >> $GITHUB_ENV
-
-        #echo "::set-env name=test_suite::${{ github.event.client_payload.test_suite }}"
         echo "test_suite=${{ github.event.client_payload.test_suite }}" >> $GITHUB_ENV
-        
-        #echo "::set-env name=tests_dir::${{ github.event.client_payload.tests_dir }}"
         echo "test_dir=${{ github.event.client_payload.tests_dir }}" >> $GITHUB_ENV
-
-        #echo "::set-env name=ignore_tests::${{ github.event.client_payload.ignore_tests }}"
         echo "ignore_tests=${{ github.event.client_payload.ignore_tests }}" >> $GITHUB_ENV
-       
-        #echo "::set-env name=ignore_lint::${{ github.event.client_payload.ignore_lint }}"
         echo "ignore_lint=${{ github.event.client_payload.ignore_lint }}" >> $GITHUB_ENV
-       
-        #echo "::set-env name=PIP_TEST::${{ github.event.client_payload.pip }}"
         echo "PIP_TEST=${{ github.event.client_payload.pip }}" >> $GITHUB_ENV
 
     #===============================================#
@@ -125,7 +110,6 @@ jobs:
               echo "pip_test_result=False" >> $GITHUB_ENV
         elif [ ${{ steps.pip_deploy_test.conclusion }} = 'skipped' ]; then
               echo "pip_test_result=Package Not On PIP" >> $GITHUB_ENV
-
         fi     
     #===============================================#
     - name: validate-license-action
