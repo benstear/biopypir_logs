@@ -177,20 +177,23 @@ jobs:
         #===============================================#
         - name: GET REPO STATISTICS
           run:  ./biopypir_utils.sh "STATISTICS"
-        #===============================================# 
+        #===============================================#
+        - name: UPLOAD Badge Color as artifact
+          uses: actions/upload-artifact@v2-preview
+          with:  
+           name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
+           path: badge.json
+      #===============================================#
         - name: CLEAN UP
           run: ./biopypir_utils.sh "CLEAN UP"
        #===============================================# 
         - name: DELETE ARTIFACTS
-          uses: geekyeggo/delete-artifact@1-glob-support
-          with:
+          uses: geekyeggo/delete-artifact@1-glob-support    # need this again, after uploading badge SVG? 
+          with:                                             # or can we put it at the end once?
               name: biopypir-*
               useGlob: true 
-              
-        #- name: make commit test file
-        #  run: echo 'test' > commit_test_file.txt; ls
-        
-        - name: do git pull
+       #===============================================#   
+        - name: do git pull # need this everytime?
           run: |
             git config pull.rebase false
             git pull
@@ -203,7 +206,7 @@ jobs:
             author_name: GitHub Actions
             message: 'Commit ${{env.PACKAGE}} workflow run # ${{github.run_number}}  (${{env.biopypir_workflow_status}})'
             ref: 'logs_branch' 
-            force: true
+            #force: true
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
