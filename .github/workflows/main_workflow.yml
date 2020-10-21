@@ -184,7 +184,7 @@ jobs:
         #   path: badge.json
         #===============================================#
         - name: print env
-          run: print env
+          run: printenv
         
         - name: ${{ env.BADGE }}
           run: |
