@@ -190,6 +190,7 @@ jobs:
           run: |
             echo ${{env.GITHUB_RUN_ID}}
             (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/${GITHUB_RUN_ID}/jobs) > jobs.json
+            cat jobs.json
             badge_color=$(cat jobs.json | jq .jobs[3].steps[5].name);
             badge_color2=$(cat jobs.json | jq .jobs[3].steps[6].name);
             echo $badge_color
@@ -200,6 +201,13 @@ jobs:
             chmod +x generate_badge.sh
             ./generate_badge.sh
             pip install anybadge
+            anybadge --label=pipeline --value=passing --file=pipeline.svg passing=green failing=red
+            
+        - name: UPLOAD artifact
+          uses: actions/upload-artifact@v2-preview
+          with:  
+            name: badge
+            path: pipeline.svg
             
         
        #===============================================#
