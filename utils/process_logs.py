@@ -32,7 +32,7 @@ for i in range(0,len(all_logs)):
 
 df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0]) 
 
-df.to_csv('original_order.csv',sep='\t')
+#df.to_csv('original_order.csv',sep='\t')
 
 
 reordered_cols= ['Package','BADGE','Owner_Repo','Description','Workflow_Run_Date','date_created','last_commit',
@@ -44,7 +44,7 @@ df = df.reindex(reordered_cols, axis=1)
 df.to_csv('reordered.csv',sep='\t')
 
 
-df.to_csv('log_matrix.csv',index=False,sep='\t')
+#df.to_csv('log_matrix.csv',index=False,sep='\t')
 
 
 # Create and save markdown table of packages
