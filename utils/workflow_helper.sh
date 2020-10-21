@@ -220,10 +220,10 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #  fi 
   #fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json; 
-  jq -s add eval.json badge.json  > eval_2.json
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
-  cat eval_2.json
+  echo "BADGE=$badge" >> $GITHUB_ENV  
   
 elif [ "$1" = "STATISTICS" ]; then
 
