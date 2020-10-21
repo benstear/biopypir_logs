@@ -186,11 +186,17 @@ jobs:
         #===============================================#
         - name: ${{ env.BADGE }}
           run: |
-            (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/$GITHUB_RUN_ID/jobs) > jobs.json
+            echo ${{env.GITHUB_RUN_ID}}
+            (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/${{env.GITHUB_RUN_ID}}/jobs) > jobs.json
             badge_color=$(cat jobs.json | jq .jobs[3].steps[5].name);
             badge_color2=$(cat jobs.json | jq .jobs[3].steps[6].name);
             echo $badge_color
             echo $badge_color2
+        - name: Report badge image generation
+          run:  |
+            curl -L -o generate_badge.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/generate_badge_url.sh"      
+            chmod +x generate_badge.sh
+            ./generate_badge.sh
        #===============================================#
         - name: CLEAN UP
           run: ./biopypir_utils.sh "CLEAN UP"
