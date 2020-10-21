@@ -185,7 +185,12 @@ jobs:
         #   path: badge.json
         #===============================================#
         - name: ${{ env.BADGE }}
-          run: pwd
+          run: |
+            (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/$GITHUB_RUN_ID/jobs) > jobs.json
+            badge_color=$(cat jobs.json | jq .jobs[3].steps[5].name);
+            badge_color2=$(cat jobs.json | jq .jobs[3].steps[6].name);
+            echo $badge_color
+            echo $badge_color2
        #===============================================#
         - name: CLEAN UP
           run: ./biopypir_utils.sh "CLEAN UP"
