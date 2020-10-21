@@ -224,9 +224,11 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
+  badge_color='#cd7f32' #bronze
+  
   jq -n --arg  biopypir_badge "$badge"  \
         --arg biopypir_name "BIOPYPIR" \
-        --arg badge_color "orange"  \
+        --arg badge_color "$badge_color"  \
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
