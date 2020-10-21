@@ -183,6 +183,9 @@ jobs:
         #   name: badge.json
         #   path: badge.json
         #===============================================#
+        - name: print env
+          run: print env
+        
         - name: ${{ env.BADGE }}
           run: |
             echo ${{env.GITHUB_RUN_ID}}
