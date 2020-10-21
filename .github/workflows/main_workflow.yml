@@ -183,25 +183,28 @@ jobs:
         #   name: badge.json
         #   path: badge.json
         #===============================================#
-        - name: print env
-          run: printenv
+        #- name: print env
+        #  run: printenv
         
-        - name: ${{ env.BADGE }}
-          run: |
-            echo ${{env.GITHUB_RUN_ID}}
-            (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/${GITHUB_RUN_ID}/jobs) > jobs.json
-            cat jobs.json
-            badge_color=$(cat jobs.json | jq .jobs[3].steps[5].name);
-            badge_color2=$(cat jobs.json | jq .jobs[3].steps[6].name);
-            echo $badge_color
-            echo $badge_color2
+        #- name: ${{ env.BADGE }}
+        #  run: |
+        #    echo ${{env.GITHUB_RUN_ID}}
+        #    (curl -X GET -s https://api.github.com/repos/biopypir_logs/actions/runs/${GITHUB_RUN_ID}/jobs) > jobs.json
+        #    cat jobs.json
+        #    badge_color=$(cat jobs.json | jq .jobs[3].steps[5].name);
+        #    badge_color2=$(cat jobs.json | jq .jobs[3].steps[6].name);
+        #    echo $badge_color
+        #    echo $badge_color2
         - name:  Badge image generation
           run:  |
             curl -L -o generate_badge.sh "https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/generate_badge_url.sh"      
             chmod +x generate_badge.sh
             ./generate_badge.sh
+            
             pip install anybadge
-            anybadge --label=pipeline --value=passing --file=pipeline.svg passing=green failing=red
+            anybadge --label=pipeline --value=$BADGE --file=pipeline.svg gold=green silver=yellow bronze=red
+          
+        # just save in repo and have people link to there
             
         - name: UPLOAD artifact
           uses: actions/upload-artifact@v2-preview
