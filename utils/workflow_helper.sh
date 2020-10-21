@@ -100,7 +100,6 @@ elif [ "$1" = "EVALUATE" ]; then
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
-  cat API.json
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
   #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
    
@@ -108,9 +107,9 @@ elif [ "$1" = "EVALUATE" ]; then
   package_and_owner=$(cat API.json | jq .jobs[0].steps[5].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
-  echo "::set-env name=PACKAGE::$PACKAGE"; echo "::set-env name=OWNER::$OWNER"
   echo "OWNER=$OWNER" >> $GITHUB_ENV
-
+  echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
+  
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
   
@@ -225,6 +224,14 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
+  jq -n --arg  biopypir_badge "$BADGE" '{ schemaVersion: 1,
+                                          label: BIOPYPIR,
+                                          message: $biopypir_badge,
+                                          color: "orange"
+                                            }' >  "$PACKAGE"_badge.json
+  mv  "$PACKAGE"_badge.json badges
+
+  
 elif [ "$1" = "STATISTICS" ]; then
 
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
@@ -310,7 +317,6 @@ elif [ "$1" = "CLEAN UP" ]; then
           echo 'Incorrect number of parameters, exiting...'; exit 1;
      fi
      
-     echo '---------------------------------'
      cat "$PACKAGE"_"$GITHUB_RUN_ID".json
      
      # check if size of file is 0 (aka empty)
