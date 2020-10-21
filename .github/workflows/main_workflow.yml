@@ -178,12 +178,15 @@ jobs:
         - name: GET REPO STATISTICS
           run:  ./biopypir_utils.sh "STATISTICS"
         #===============================================#
-        - name: UPLOAD Badge Color as artifact
-          uses: actions/upload-artifact@v2-preview
-          with:  
-           name: badge.json
-           path: badge.json
-      #===============================================#
+        #- name: UPLOAD Badge Color as artifact
+        #  uses: actions/upload-artifact@v2-preview
+        #  with:  
+        #   name: badge.json
+        #   path: badge.json
+        #===============================================#
+        - name: ${{ env.BADGE }}
+          run: pwd
+       #===============================================#
         - name: CLEAN UP
           run: ./biopypir_utils.sh "CLEAN UP"
        #===============================================# 
