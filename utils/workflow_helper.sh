@@ -224,16 +224,16 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
-  jq -n --arg  biopypir_badge "$BADGE"  \
+  jq -n --arg  biopypir_badge "$badge"  \
         --arg biopypir_name "BIOPYPIR" \
         --arg badge_color "orange"  \
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
                               color: $badge_color
-                                }' >  "$PACKAGE"_badge.json
+                                }' >  "$PACKAGE"_badge_endpoint.json
                                 
-  mv  "$PACKAGE"_badge.json badges
+  mv  "$PACKAGE"_badge_endpoint.json badges
 
   
 elif [ "$1" = "STATISTICS" ]; then
