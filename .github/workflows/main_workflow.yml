@@ -102,7 +102,7 @@ jobs:
       with:
         packages: "${{ env.PACKAGE }}"
         
-    - name: Check Pip 
+    - name: Check Pip Test Result
       run: |
         if [ "${{ steps.pip_deploy_test.conclusion }}"  = "success" ]; then
               echo "pip_test_result=True" >> $GITHUB_ENV
@@ -120,7 +120,7 @@ jobs:
       with:
         args: 'MIT, ISC, BSD'
     #===============================================#
-    - name: Check License
+    - name: Check License Test Result
       run: |
         if [ "${{ steps.check_license.conclusion }}"  = "success" ]; then
               echo "License_result=True" >> $GITHUB_ENV
@@ -181,7 +181,7 @@ jobs:
         - name: UPLOAD Badge Color as artifact
           uses: actions/upload-artifact@v2-preview
           with:  
-           name: biopypir-${{matrix.os}}-py${{matrix.python-version}}
+           name: badge.json
            path: badge.json
       #===============================================#
         - name: CLEAN UP
