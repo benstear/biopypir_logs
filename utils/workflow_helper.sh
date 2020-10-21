@@ -100,6 +100,7 @@ elif [ "$1" = "EVALUATE" ]; then
   fi
 
   (curl -X GET -s https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs) > API.json
+  cat API.json
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
   #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
    
