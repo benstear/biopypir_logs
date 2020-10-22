@@ -3,7 +3,8 @@
   "label": "BIOPYPIR",
   "message": "BRONZE",
   "color": "#cd7f32",
-  "namedLogo": "Bitdefender",
-  "logoWidth": "50",
-  "logoColor": "white"
+  "namedLogo": "Auth0",
+  "logoWidth": "45",
+  "logoColor": "white",
+  "style": "for-the-badge"
 }
