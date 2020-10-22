@@ -208,18 +208,17 @@ elif [ "$1" = "EVALUATE" ]; then
     
 elif [ "$1" = "BADGING" ]; then
 
-   # ================= GET BADGE STATUS ======================== #
    badge='NONE'
    badge='BRONZE'
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
 
-  if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32'; 
-    if [ $pytest_score_final != 'NA' ]; then
-        if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  badge_color='#FFD700';
-        elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; badge_color='#C0C0C0';
+  if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32'; echo 'BRONZE BADGE';
+    #if [ $pytest_score_final != 'NA' ]; then
+        if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  badge_color='#FFD700'; echo 'SILVER BADGE';
+        elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; badge_color='#C0C0C0'; echo 'GOLD BADGE';
         fi 
-    fi 
+    #fi 
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
