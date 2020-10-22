@@ -232,7 +232,10 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
-                              color: $badge_color
+                              color: $badge_color,
+                              namedLogo: Bitdefender,
+                              logoWidth: 50,
+                              logoColor: white
                                 }' >  "$PACKAGE"_badge_endpoint.json
                                 
   mv  "$PACKAGE"_badge_endpoint.json badges
