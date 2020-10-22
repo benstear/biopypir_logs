@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "label": "BIOPYPIR",
   "message": "BRONZE",
-  "color": "#cd7f32",
+  "color": "",
   "namedLogo": "Auth0",
-  "logoWidth": "45",
+  "logoWidth": "40",
   "logoColor": "white",
   "style": "for-the-badge"
 }
