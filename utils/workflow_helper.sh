@@ -233,16 +233,18 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   jq -n --arg  biopypir_badge "$badge"  \
         --arg biopypir_name "BIOPYPIR" \
         --arg badge_color "$badge_color"  \
-        --arg logo  "Bitdefender" \
+        --arg logo  "Auth0" \
         --arg logoColor "white" \
-        --arg width 50 \
+        --arg width 45 \
+        --arg style "for-the-badge" \
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
                               color: $badge_color,
                               namedLogo: $logo,
                               logoWidth: $width,
-                              logoColor: $logoColor
+                              logoColor: $logoColor,
+                              style: $style,
                                 }' >  "$PACKAGE"_badge_endpoint.json
                                 
   mv  "$PACKAGE"_badge_endpoint.json badges
