@@ -211,10 +211,11 @@ elif [ "$1" = "EVALUATE" ]; then
    badge='BRONZE'
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
-  #if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE';
+
+  #if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32;' 
   #  if [ $pytest_score_final != 'NA' ]; then
-  #      if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  
-  #      elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; 
+  #      if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  badge_color='#FFD700'
+  #      elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; badge_color='#C0C0C0';
   #      fi 
   #  fi 
   #fi
@@ -225,6 +226,8 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
   badge_color='#cd7f32' #bronze
+  #badge_color='#C0C0C0'  # silver
+  #badge_color='#FFD700'  # gold  
   
   jq -n --arg  biopypir_badge "$badge"  \
         --arg biopypir_name "BIOPYPIR" \
@@ -233,9 +236,9 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
                               label: $biopypir_name,
                               message: $biopypir_badge,
                               color: $badge_color,
-                              namedLogo: Bitdefender,
+                              namedLogo: 'Bitdefender',
                               logoWidth: 50,
-                              logoColor: white
+                              logoColor: 'white'
                                 }' >  "$PACKAGE"_badge_endpoint.json
                                 
   mv  "$PACKAGE"_badge_endpoint.json badges
