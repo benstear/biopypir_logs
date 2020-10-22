@@ -229,16 +229,20 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #badge_color='#C0C0C0'  # silver
   #badge_color='#FFD700'  # gold  
   
+  # just do this with a >badge.json statement
   jq -n --arg  biopypir_badge "$badge"  \
         --arg biopypir_name "BIOPYPIR" \
         --arg badge_color "$badge_color"  \
+        --arg logo  "Bitdefender" \
+        --arg logoColor "white" \
+        --arg width 50 \
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
                               color: $badge_color,
-                              namedLogo: 'Bitdefender',
-                              logoWidth: 50,
-                              logoColor: 'white'
+                              namedLogo: $logo,
+                              logoWidth: $width,
+                              logoColor: $logoColor
                                 }' >  "$PACKAGE"_badge_endpoint.json
                                 
   mv  "$PACKAGE"_badge_endpoint.json badges
