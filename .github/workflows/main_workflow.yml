@@ -21,29 +21,6 @@ jobs:
         python-version: [3.6,3.7] 
         os: [ubuntu-latest] #,windows-latest, macOS-latest] 
     steps:
-   # - name: Create cache file
-   #   run: mkdir check-SHA; echo ${{ github.sha }} > github-sha.txt; cat github-sha.txt
-    #===============================================#
-   # - name: Check SHA
-   #   id: check_sha
-   #   uses: actions/cache@v1
-   #   with:
-   #     path: check-SHA
-   #     key: check-SHA-${{ github.sha }}
-    #===============================================#
-   # - name: Some subsequent steps
-   #   if: steps.check_sha.outputs.cache-hit == 'true'
-   #   run: echo "Cache hit not found...Execute the subsequent steps"; exit 1 # no way to exit nicely?
-    #===============================================#
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: Dump runner context
-      env:
-        RUNNER_CONTEXT: ${{ toJson(runner) }}
-      run: echo "$RUNNER_CONTEXT"
-    
     - name: set environment variables
       run: |     #echo "${{ github.event.client_payload.PACKAGE }}"
         echo "PACKAGE=${{ github.event.client_payload.PACKAGE }}" >> $GITHUB_ENV
@@ -99,7 +76,7 @@ jobs:
       uses: BSFishy/pip-action@v1
       with:
         packages: "${{ env.PACKAGE }}"
-        
+     #===============================================#  
     - name: Check Pip Test Result
       run: |
         if [ "${{ steps.pip_deploy_test.conclusion }}"  = "success" ]; then
