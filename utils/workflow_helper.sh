@@ -23,11 +23,12 @@ if [ "$1" = "SET ENV" ]; then
   echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
 
   elif [  "$1" = "LINT" ]; then
-
+  echo 'in linting  step'
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   #--disable=biopypir_utils.sh   # ignore_warnings=
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
+  echo pylint score: $pylintscore
   
  # pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
