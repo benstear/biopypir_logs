@@ -231,7 +231,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   #badge_color='#cd7f32' #bronze
   #badge_color='#C0C0C0'  # silver
-  #badge_color='#FFD700'  # gold  
+  badge_color='#FFD700'  # gold  
   
   # just do this with a >badge.json statement
   jq -n --arg  biopypir_badge "$badge"  \
