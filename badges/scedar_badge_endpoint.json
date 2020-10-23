@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "label": "BIOPYPIR",
   "message": "BRONZE",
-  "color": "",
+  "color": "#FFD700",
   "namedLogo": "Auth0",
   "logoWidth": "40",
   "logoColor": "white",
