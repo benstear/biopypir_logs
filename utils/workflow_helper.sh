@@ -72,15 +72,15 @@ elif [ "$1" = "BUILD" ]; then
   
 elif [ "$1" = "GATHER" ]; then
    
-   echo "$2";echo "$3"; echo "$4"; echo "$5"; echo "$6"; echo "$7"
+   #echo "$2";echo "$3"; echo "$4"; echo "$5"; echo "$6"; echo "$7"
    
    # Check if any variables are empty (indicating the result of one or more tests did not exit successfully)
-   [ -z "$2" ] && echo "Python version variable is empty" && exit 1;
-   [ -z "$3" ] && echo "OS variable is empty" && exit 1;
-   [ -z "$4" ] && echo "Pylint score variable is empty" && exit 1;
-   [ -z "$5" ] && echo "Pytest score variable is empty" && exit 1;
-   [ -z "$6" ] && echo "PIP variable is empty" && exit 1;
-   [ -z "$7" ] && echo "License variable is empty"  && exit 1;
+   [ -z "$2" ] && echo "Python version variable is empty." && exit 1;
+   [ -z "$3" ] && echo "OS variable is empty." && exit 1;
+   [ -z "$4" ] && echo "Pylint score variable is empty." && exit 1;
+   [ -z "$5" ] && echo "Pytest score variable is empty." && exit 1;
+   [ -z "$6" ] && echo "PIP variable is empty." && exit 1;
+   [ -z "$7" ] && echo "License variable is empty."  && exit 1;
    
    jq -n  --arg pyversion $2 \
           --arg os $3 \
