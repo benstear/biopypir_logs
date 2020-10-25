@@ -54,10 +54,14 @@ elif [ "$1" = "TEST" ]; then
     # Find test directory  and print it
     find ~ -type d -name "tests" -print
     
-    
     pytest_cov=$(pytest "$TEST_DIR" -ra --color=yes --cov-config .coveragerc --cov-branch --cov=$PACKAGE | \
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
+    
+  #if [[ "$pytest_cov" =~ .*"test not found".*  ]]; then
+  #  echo "TESTS DIRECTORY NOT FOUND"
+    
+    
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo "Pytest Coverage: $pytest_score"
     
@@ -65,8 +69,6 @@ elif [ "$1" = "TEST" ]; then
     pytestscore=0
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo 'pytest not enabled for this package'
-    #echo 'pytest score:  '
-    #echo $pytest_score
   fi
 
 elif [ "$1" = "BUILD" ]; then
@@ -79,12 +81,12 @@ elif [ "$1" = "GATHER" ]; then
    echo "$2";echo "$3"; echo "$4"; echo "$5"; echo "$6"; echo "$7"
    
    # Check if any variables are empty (indicating the result of one or more tests did not exit successfully)
-   [ -z "$2" ] && {echo "Python version variable is empty"; exit 1}
-   [ -z "$3" ] && {echo "OS variable is empty"; exit 1}
-   [ -z "$4" ] && {echo "Pylint score variable is empty"; exit 1}
-   [ -z "$5" ] && {echo "Pytest score variable is empty"; exit 1}
-   [ -z "$6" ] && {echo "PIP variable is empty"; exit 1}
-   [ -z "$7" ] && {echo "License variable is empty"; exit 1}
+   [ -z "$2" ] && {echo "Python version variable is empty"; exit 1;}
+   [ -z "$3" ] && {echo "OS variable is empty"; exit 1;}
+   [ -z "$4" ] && {echo "Pylint score variable is empty"; exit 1;}
+   [ -z "$5" ] && {echo "Pytest score variable is empty"; exit 1;}
+   [ -z "$6" ] && {echo "PIP variable is empty"; exit 1;}
+   [ -z "$7" ] && {echo "License variable is empty"; exit 1;}
    
    jq -n  --arg pyversion $2 \
           --arg os $3 \
