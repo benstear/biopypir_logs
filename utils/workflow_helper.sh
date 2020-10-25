@@ -26,7 +26,7 @@ if [ "$1" = "SET ENV" ]; then
   export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
   echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
 
-  elif [  "$1" = "LINT" ]; then
+elif [  "$1" = "LINT" ]; then
   echo 'in linting step'
   echo $PACKAGE
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
@@ -59,7 +59,7 @@ elif [ "$1" = "TEST" ]; then
     pytestscore=${pytest_cov%\%}
     
     #if [[ "$pytest_cov" =~ .*"test not found".*  ]]; then
-    #  echo "TESTS DIRECTORY NOT FOUND"
+    #  echo "TESTS DIRECTORY NOT FOUND" fi
  
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo "Pytest Coverage: $pytest_score"
