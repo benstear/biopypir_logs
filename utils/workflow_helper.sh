@@ -58,10 +58,9 @@ elif [ "$1" = "TEST" ]; then
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     
-  #if [[ "$pytest_cov" =~ .*"test not found".*  ]]; then
-  #  echo "TESTS DIRECTORY NOT FOUND"
-    
-    
+    #if [[ "$pytest_cov" =~ .*"test not found".*  ]]; then
+    #  echo "TESTS DIRECTORY NOT FOUND"
+ 
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo "Pytest Coverage: $pytest_score"
     
