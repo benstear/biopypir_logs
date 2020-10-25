@@ -34,19 +34,14 @@ elif [  "$1" = "LINT" ]; then
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo pylint score: $pylintscore
-  #pylint $PACKAGE 
   
-  if [[ "$pylintscore" =~ .*"No module named".*  ]]; then
-    echo "Pylint Error: Package Name not found"; exit 1;
-  fi
+  #if [[ "$pylintscore" =~ .*"No module named".*  ]]; then echo "Pylint Error: Package Name not found"; exit 1; fi
   
  # pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
   #| cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
  
   echo "::set-output name=pylint_score::$pylintscore"
-  echo "$pylintscore"
-  #pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y 
   
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
