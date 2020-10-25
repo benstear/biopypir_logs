@@ -34,7 +34,11 @@ elif [  "$1" = "LINT" ]; then
   pylintscore=$(pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}'\
   | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev)
   echo pylint score: $pylintscore
-  pylint $PACKAGE 
+  #pylint $PACKAGE 
+  
+  if [[ "$pylintscore" =~ .*"No module named".*  ]]; then
+    echo "Pylint Error: Package Name not found"; exit 1;
+  fi
   
  # pylint $PACKAGE  --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --exit-zero --reports=y >  pylint-report.txt
   #pylintscore=$(awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' pylint-report.txt \
@@ -42,7 +46,6 @@ elif [  "$1" = "LINT" ]; then
  
   echo "::set-output name=pylint_score::$pylintscore"
   echo "$pylintscore"
-  echo "$pylint_score" 
   #pylint $PACKAGE --exit-zero --disable=C0123,W0611,C0411 --ignore biopypir_utils.sh --reports=y 
   
 elif [ "$1" = "TEST" ]; then  
@@ -58,10 +61,6 @@ elif [ "$1" = "TEST" ]; then
     awk -F"\t" '/TOTAL/ {print $0}' | grep -o '[^ ]*%') 
     pytestscore=${pytest_cov%\%}
     
-    echo $pytest_cov
-    #if [[ "$pytest_cov" =~ .*"test not found".*  ]]; then
-    #  echo "TESTS DIRECTORY NOT FOUND" fi
- 
     echo "::set-output name=pytest_score::$pytestscore"; 
     echo "Pytest Coverage: $pytest_score"
     
