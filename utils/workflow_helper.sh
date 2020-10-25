@@ -80,10 +80,10 @@ elif [ "$1" = "GATHER" ]; then
    # Check if any variables are empty (indicating the result of one or more tests did not exit successfully)
    [ -z "$2" ] && echo "Python version variable is empty"; exit 1
    [ -z "$3" ] && echo "OS variable is empty"; exit 1
-   [ -z "$4" ] && echo "Pylint score variable is empty"; exit 1
-   [ -z "$5" ] && echo "Pytest score variable is empty"; exit 1
-   [ -z "$6" ] && echo "PIP variable is empty"; exit 1
-   [ -z "$7" ] && echo "License variable is empty"; exit 1
+   #[ -z "$4" ] && echo "Pylint score variable is empty"; exit 1
+   #[ -z "$5" ] && echo "Pytest score variable is empty"; exit 1
+   #[ -z "$6" ] && echo "PIP variable is empty"; exit 1
+   #[ -z "$7" ] && echo "License variable is empty"; exit 1
    
    
 
