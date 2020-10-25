@@ -2,6 +2,9 @@
 
 # This script was written to do the heavy lifting for the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
 
+# TODO:
+# put in checks to exit the workflow if variables in  the gather step == ""
+
 if [ "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
@@ -72,6 +75,14 @@ elif [ "$1" = "BUILD" ]; then
   
 elif [ "$1" = "GATHER" ]; then
    
+   # Check if any variables are empty (indicating the result of one or more tests did not exit successfully)
+   [ -z "$2" ] && echo "Python version variable is empty"; exit 1
+   [ -z "$3" ] && echo "OS variable is empty"; exit 1
+   [ -z "$4" ] && echo "Pylint score variable is empty"; exit 1
+   [ -z "$5" ] && echo "Pytest score variable is empty"; exit 1
+   [ -z "$6" ] && echo "PIP variable is empty"; exit 1
+   [ -z "$7" ] && echo "License variable is empty"; exit 1
+
    jq -n  --arg pyversion $2 \
           --arg os $3 \
           --arg pylintscore $4 \
