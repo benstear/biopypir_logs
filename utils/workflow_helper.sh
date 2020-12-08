@@ -280,9 +280,9 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  has_downloads: .has_downloads}" > stats.json
 
       # get names of contributors
-      print('here')
+      echo 'here'
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      print('here2')
+      echo 'here2'
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
