@@ -321,8 +321,8 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'Installing  python packages with pip...'
       
      pip install --upgrade pip 
-     pip install python-editor==1.0.4
-     pip install os_sys==2.1.4
+     #pip install python-editor==1.0.4
+     pip install os_sys==2.0.0 #2.1.4
      pip install requests 
      
      echo 'Calling get_issues.py script'
