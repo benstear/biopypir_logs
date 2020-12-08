@@ -321,10 +321,9 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'Installing  python packages with pip...'
       
      pip install --upgrade pip 
-     #python3 -m #
+     pip install python-editor==1.0.4
      pip install os_sys==2.1.4
      pip install requests 
-     #pip install sys==3.8
      
      echo 'Calling get_issues.py script'
      python3 utils/get_issues.py manubot/manubot
