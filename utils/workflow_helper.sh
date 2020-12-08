@@ -279,9 +279,12 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  open_issues: .open_issues_count,
                                                                  has_downloads: .has_downloads}" > stats.json
 
+      
       # get names of contributors
       echo 'here'
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > temp.json
+      cat temp.json
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       echo 'here2'
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
