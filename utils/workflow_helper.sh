@@ -281,7 +281,9 @@ elif [ "$1" = "STATISTICS" ]; then
 
       
       # get names of contributors
-      echo 'here'
+      echo 'here......\n'
+      echp "$OWNER"/"$PACKAGE"
+      
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > temp.json
       cat temp.json
       #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
@@ -317,7 +319,10 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'Installing  python packages with pip...'
       
      pip install --upgrade pip 
-     python3 -m pip install requests sys os
+     #python3 -m # os
+     pip install requests 
+     pip install sys==3.8
+     
      echo 'Calling get_issues.py script'
      python3 utils/get_issues.py manubot/manubot
      echo 'Done executing script.'
