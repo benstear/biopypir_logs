@@ -120,8 +120,10 @@ elif [ "$1" = "EVALUATE" ]; then
   package_and_owner=$(cat API.json | jq .jobs[0].steps[5].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
+  echo $OWNER, $PACKAGE
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
+  
   
   job_count=$(cat API.json |  jq ".total_count")  #echo "raw job count: $job_count"
   j=$(($job_count-2)) # dont want last job (job2) included, and its 0-indexed, so do - 2  #echo "adjusted jobcount: $j (0 indexed)"
@@ -320,7 +322,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
      pip install --upgrade pip 
      #python3 -m #
-     pip install os
+     pip install os-sys
      pip install requests 
      #pip install sys==3.8
      
