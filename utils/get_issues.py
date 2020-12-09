@@ -73,6 +73,6 @@ if __name__ == "__main__":
     find_issues(name_repo)
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
-     os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
+    os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             
