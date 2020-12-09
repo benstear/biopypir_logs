@@ -3,7 +3,6 @@ name: BIOPYPIR
 on: 
   repository_dispatch:
      types: [autorun]
-     
   #schedule:
   #  - cron: '0 0 * * 0' 
   #push: # remove when youre done testing workflow
