@@ -12,6 +12,8 @@ if [ "$1" = "SET ENV" ]; then
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   
+  echo $OWNER
+  
   TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); 
   TEST_SUITE=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_SUITE") # Remove quotes
   echo "TEST_SUITE=TEST_SUITE" >> $GITHUB_ENV
@@ -120,7 +122,9 @@ elif [ "$1" = "EVALUATE" ]; then
   package_and_owner=$(cat API.json | jq .jobs[0].steps[5].name); package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
-  echo $OWNER, $PACKAGE
+  echo 'package_and_owner:'
+  echo $package_and_owner
+  #echo $OWNER, $PACKAGE
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
   
