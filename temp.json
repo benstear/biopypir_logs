@@ -1,4 +1,44 @@
-{
-  "message": "Not Found",
-  "documentation_url": "https://docs.github.com/rest/reference/repos#list-repository-contributors"
-}
+[
+  {
+    "login": "logstar",
+    "id": 9595639,
+    "node_id": "MDQ6VXNlcjk1OTU2Mzk=",
+    "avatar_url": "https://avatars0.githubusercontent.com/u/9595639?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/logstar",
+    "html_url": "https://github.com/logstar",
+    "followers_url": "https://api.github.com/users/logstar/followers",
+    "following_url": "https://api.github.com/users/logstar/following{/other_user}",
+    "gists_url": "https://api.github.com/users/logstar/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/logstar/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/logstar/subscriptions",
+    "organizations_url": "https://api.github.com/users/logstar/orgs",
+    "repos_url": "https://api.github.com/users/logstar/repos",
+    "events_url": "https://api.github.com/users/logstar/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/logstar/received_events",
+    "type": "User",
+    "site_admin": false,
+    "contributions": 298
+  },
+  {
+    "login": "benstear",
+    "id": 37672093,
+    "node_id": "MDQ6VXNlcjM3NjcyMDkz",
+    "avatar_url": "https://avatars0.githubusercontent.com/u/37672093?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/benstear",
+    "html_url": "https://github.com/benstear",
+    "followers_url": "https://api.github.com/users/benstear/followers",
+    "following_url": "https://api.github.com/users/benstear/following{/other_user}",
+    "gists_url": "https://api.github.com/users/benstear/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/benstear/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/benstear/subscriptions",
+    "organizations_url": "https://api.github.com/users/benstear/orgs",
+    "repos_url": "https://api.github.com/users/benstear/repos",
+    "events_url": "https://api.github.com/users/benstear/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/benstear/received_events",
+    "type": "User",
+    "site_admin": false,
+    "contributions": 2
+  }
+]

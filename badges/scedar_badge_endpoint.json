@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "label": "BIOPYPIR",
-  "message": "GOLD",
-  "color": "#d4af37",
+  "message": "BRONZE",
+  "color": "#FFD700",
   "namedLogo": "Auth0",
   "logoWidth": "40",
   "logoColor": "white",
