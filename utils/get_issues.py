@@ -11,6 +11,7 @@ Created on Tue Dec  8 14:08:21 2020
 #import numpy as np
 import datetime
 import requests
+import subprocess
 import sys
 import os
 
@@ -70,4 +71,7 @@ def find_issues(name_repo):
     
 if __name__ == "__main__":
     find_issues(name_repo)
+    #print(f"::set-output name=myOUTPUT::{my_output}")
+    bashCommand = "MAGICVAR="42""
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             
