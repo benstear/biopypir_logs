@@ -74,5 +74,5 @@ if __name__ == "__main__":
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
     os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    #process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             
