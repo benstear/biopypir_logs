@@ -124,9 +124,9 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); 
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
-  echo 'package_and_owner:'
-  echo $package_and_owner
-  #echo $OWNER, $PACKAGE
+  #echo 'package_and_owner:'
+  #echo $package_and_owner
+  echo $OWNER, $PACKAGE
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
   
@@ -293,8 +293,8 @@ elif [ "$1" = "STATISTICS" ]; then
       echo "$OWNER"/"$PACKAGE"
       
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > temp.json
-      cat temp.json
-      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+      #cat temp.json
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       echo 'here2'
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
@@ -328,7 +328,8 @@ elif [ "$1" = "STATISTICS" ]; then
       
      pip install --upgrade pip 
      #pip install python-editor==1.0.4
-     pip install os_sys==2.0.0 #2.1.4
+     #pip install os_sys==2.0.0 #2.1.4
+     
      pip install requests 
      
      echo 'Calling get_issues.py script'
