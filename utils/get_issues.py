@@ -87,4 +87,6 @@ def a():
     if i==1:
         return 69 #'PYTHON_RETURN_VALUE'
     
-a()
+print(a())
+
+
