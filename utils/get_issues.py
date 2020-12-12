@@ -8,7 +8,7 @@ Created on Tue Dec  8 14:08:21 2020
 
 #import json
 #import pandas as pd
-#import numpy as np
+import numpy as np
 import datetime
 import requests
 #import subprocess
@@ -57,7 +57,7 @@ def find_issues(name_repo):
             
             return_dict = {"NUM_ISSUES": str(len(issues_obj)),
                           "NUM_OPEN_ISSUES":  str(num_open_issues),
-                          "AVE_RES" : str(sum(response_timeLs)/len(response_timeLs))}
+                          "AVE_RES" : np.round(str(sum(response_timeLs)/len(response_timeLs)),2) }
             
             print(return_dict)
             
