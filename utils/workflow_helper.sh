@@ -6,6 +6,7 @@
 # put in checks to exit the workflow if variables in  the gather step == ""
 # get evironment variable setting worked out, which file to do it in?
 
+
 if [ "$1" = "SET ENV" ]; then
 
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
