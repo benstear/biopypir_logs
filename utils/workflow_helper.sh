@@ -333,9 +333,11 @@ elif [ "$1" = "STATISTICS" ]; then
      python3 utils/get_issues.py manubot/manubot
      echo 'Done executing script.'
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-     printenv
+     #printenv
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-
+     echo $?
+     
+     
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
         jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
