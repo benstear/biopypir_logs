@@ -12,8 +12,6 @@ if [ "$1" = "SET ENV" ]; then
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   
-  echo $OWNER
-  
   TEST_SUITE=$(cat env_vars.json | jq .$PACKAGE | jq .test_suite); 
   TEST_SUITE=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_SUITE") # Remove quotes
   echo "TEST_SUITE=TEST_SUITE" >> $GITHUB_ENV
