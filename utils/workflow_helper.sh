@@ -317,19 +317,18 @@ elif [ "$1" = "STATISTICS" ]; then
 
       jq -s add stats.json run_info.json  > stats_2.json
       
-      
-     echo 'Installing  python packages with pip...'
-      
+            
      pip install --upgrade pip 
-     pip install requests #subprocess
+     pip install requests
      
      echo 'Calling get_issues.py script'
-     a=$(python3 utils/get_issues.py "manubot/manubot")   #a=`python python/pythonScript1.py "test"``
-     echo 'Done executing script.'
-     echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-     #printenv
-     #echo $?
+     a=$(python3 utils/get_issues.py "manubot/manubot") 
      echo $a
+     cat $a | jq ".NUM_ISSUES"
+     
+     echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
+
+
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
