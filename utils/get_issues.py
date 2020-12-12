@@ -67,7 +67,7 @@ def find_issues(name_repo):
             os.environ["AVE_RES"] = 'NA'
             
             
-    
+'''   
 if __name__ == "__main__":
     #os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
     #find_issues(name_repo)
@@ -80,4 +80,11 @@ if __name__ == "__main__":
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
     #process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-            
+'''
+
+def a():
+    i=1
+    if i==1:
+        return 69 #'PYTHON_RETURN_VALUE'
+    
+a()
