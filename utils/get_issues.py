@@ -74,8 +74,9 @@ if __name__ == "__main__":
     def a():
         i=1
         if i==1:
-            return 'PYTHON_RETURN_VALUE'
+            return 69 #'PYTHON_RETURN_VALUE'
     a()
+    
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
     #process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
