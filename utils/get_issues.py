@@ -21,8 +21,6 @@ import os
 #issues_url = os.path.join('https://api.github.com/repos/', sys.argv[1], '/issues')
 
 
-name_repo =  sys.argv[1]
-
 def find_issues(name_repo):
     
     try:    
@@ -53,40 +51,39 @@ def find_issues(name_repo):
                # elif i['state'] == 'closed':   closed_issues.append((i['number'],i['title']))    
                # else:    print(i['state'])
                                         
-            os.environ["NUM_ISSUES"] = str(len(issues_obj))
-            os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
-            os.environ["AVE_RES"] = str(sum(response_timeLs)/len(response_timeLs))
-            #print(str(sum(response_timeLs)/len(response_timeLs)))
+            #os.environ["NUM_ISSUES"] = str(len(issues_obj))
+            #os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
+            #os.environ["AVE_RES"] = str(sum(response_timeLs)/len(response_timeLs))
+            
+            return_dict = {"NUM_ISSUES": str(len(issues_obj)),
+                          "NUM_OPEN_ISSUES":  str(num_open_issues),
+                          "AVE_RES" : str(sum(response_timeLs)/len(response_timeLs))}
+            
+            print(return_dict)
             
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)
             
     else:
-            os.environ["NUM_ISSUES"] = '0'
-            os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
-            os.environ["AVE_RES"] = 'NA'
+            #os.environ["NUM_ISSUES"] = '0'
+            #os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
+            #os.environ["AVE_RES"] = 'NA'
             
+            return_dict = {"NUM_ISSUES": "0",
+                          "NUM_OPEN_ISSUES":  str(num_open_issues),
+                          "AVE_RES" : "NA"}
             
-'''   
+            print(return_dict)
+   
 if __name__ == "__main__":
     #os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
-    #find_issues(name_repo)
-    def a():
-        i=1
-        if i==1:
-            return 69 #'PYTHON_RETURN_VALUE'
-    a()
+    name_repo =  sys.argv[1]
     
+    find_issues(name_repo)
+
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
     #process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-'''
 
-def a():
-    i=1
-    if i==1:
-        return 69 #'PYTHON_RETURN_VALUE'
-    
-print(a())
 
 
