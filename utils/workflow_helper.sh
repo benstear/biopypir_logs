@@ -322,7 +322,7 @@ elif [ "$1" = "STATISTICS" ]; then
      pip install requests #subprocess
      
      echo 'Calling get_issues.py script'
-     a=`python3 utils/get_issues.py "manubot/manubot"`    #a=`python python/pythonScript1.py "test"``
+     a=$(python3 utils/get_issues.py "manubot/manubot")   #a=`python python/pythonScript1.py "test"``
      echo 'Done executing script.'
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
      #printenv
