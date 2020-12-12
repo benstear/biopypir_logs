@@ -319,7 +319,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
             
      pip install --upgrade pip 
-     pip install requests
+     pip install requests numpy
      
      echo 'Calling get_issues.py script'
      a=$(python3 utils/get_issues.py "manubot/manubot") 
