@@ -289,13 +289,13 @@ elif [ "$1" = "STATISTICS" ]; then
 
       
       # get names of contributors
-      echo 'here......'
+      #echo 'here......'
       echo "$OWNER"/"$PACKAGE"
       
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > temp.json
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > temp.json
       #cat temp.json
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      echo 'here2'
+      #echo 'here2'
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
@@ -327,7 +327,7 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'Installing  python packages with pip...'
       
      pip install --upgrade pip 
-     pip install requests subprocess
+     pip install requests #subprocess
      
      echo 'Calling get_issues.py script'
      python3 utils/get_issues.py manubot/manubot
