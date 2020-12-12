@@ -33,7 +33,6 @@ def find_issues(name_repo):
     except requests.exceptions.RequestException as e:  
         raise SystemExit(e)
     
-    
     if repo_obj['has_issues']:
         
         try:
@@ -70,8 +69,13 @@ def find_issues(name_repo):
             
     
 if __name__ == "__main__":
-    os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
-    find_issues(name_repo)
+    #os.environ["QQQQQQQ"] = "INPUT_QQQQQ"
+    #find_issues(name_repo)
+    def a():
+        i=1
+        if i==1:
+            return 'PYTHON_RETURN_VALUE'
+    a()
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
     #process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
