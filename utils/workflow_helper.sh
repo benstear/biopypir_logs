@@ -44,6 +44,7 @@ elif [  "$1" = "LINT" ]; then
  
   echo "::set-output name=pylint_score::$pylintscore"
   
+  
 elif [ "$1" = "TEST" ]; then  
   echo 'TEST_SUITE = ' "$test_suite" 
   
