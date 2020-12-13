@@ -329,14 +329,14 @@ elif [ "$1" = "STATISTICS" ]; then
      echo $NUM_ISSUES
      echo $NUM_OPEN_ISSUES
      echo $AVE_RES
+     echo '++++++++++++++++'
      
-      jq -n --arg num_issues "$NUM_ISSUES" \
-            --arg num_open_issues "$NUM_OPEN_ISSUES" \ 
-            --arg ave_res "$AVE_RES" \ 
-                      '{ Num_Issues: $num_issues,
+      jq -n --arg num_issues "$NUM_ISSUES" --arg num_open_issues "$NUM_OPEN_ISSUES" --arg ave_res "$AVE_RES" \ 
+                        '{ Num_Issues: $num_issues,
                          Num_Open_Issues: $num_open_issues,
                          Average_Response_Time}' > issue_metrics.json
-                      
+     echo '++++++++++++++++'
+           
      cat issue_metrics.json
      
      #jq -s add eval.json badge.json  > eval_2.json 
