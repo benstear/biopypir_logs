@@ -322,12 +322,15 @@ elif [ "$1" = "STATISTICS" ]; then
      
      echo 'Calling get_issues.py script'
      a=$(python3 utils/get_issues.py "manubot/manubot") 
-     echo $a
-     echo $a | jq ".NUM_ISSUES"
+     echo $a  >> issue.json
+     echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
+     echo $a | jq '.NUM_ISSUES'
      
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
 
-
+    cat issue.json | jq '.NUM_ISSUES'
+    echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
+    rm issue.json
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
