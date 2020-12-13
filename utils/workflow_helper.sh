@@ -2,6 +2,7 @@
 
 # This script was written to do the heavy lifting for the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
 
+
 # TODO:
 # put in checks to exit the workflow if variables in  the gather step == ""
 # get evironment variable setting worked out, which file to do it in?
