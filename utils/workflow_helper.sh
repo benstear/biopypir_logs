@@ -323,7 +323,7 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'Calling get_issues.py script'
      a=$(python3 utils/get_issues.py "manubot/manubot") 
      echo $a
-     cat $a | jq ".NUM_ISSUES"
+     echo $a | jq ".NUM_ISSUES"
      
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
 
