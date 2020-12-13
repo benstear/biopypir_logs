@@ -54,11 +54,11 @@ def find_issues(name_repo):
             #os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
             #os.environ["AVE_RES"] = str(sum(response_timeLs)/len(response_timeLs))
             
-            return_dict = {"NUM_ISSUES": str(len(issues_obj)),
+            return_dict = '''{"NUM_ISSUES": str(len(issues_obj)),
                           "NUM_OPEN_ISSUES":  str(num_open_issues),
-                          "AVE_RES" : str(np.round(sum(response_timeLs)/len(response_timeLs),2) ) }
+                          "AVE_RES" : str(np.round(sum(response_timeLs)/len(response_timeLs),2) ) }'''
             
-            print(return_dict)
+            print(return_dict)  #import json
             
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)
@@ -68,9 +68,9 @@ def find_issues(name_repo):
             #os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
             #os.environ["AVE_RES"] = 'NA'
             
-            return_dict = {"NUM_ISSUES": "0",
+            return_dict = '''{"NUM_ISSUES": "0",
                           "NUM_OPEN_ISSUES":  str(num_open_issues),
-                          "AVE_RES" : "NA"}
+                          "AVE_RES" : "NA"}'''
             
             print(return_dict)
    
