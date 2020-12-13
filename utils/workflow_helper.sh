@@ -317,12 +317,14 @@ elif [ "$1" = "STATISTICS" ]; then
 
       jq -s add stats.json run_info.json  > stats_2.json
       
+      
             
      pip install --upgrade pip 
-     pip install requests numpy
+     pip install requests numpy 
      
      echo 'Calling get_issues.py script'
      a=$(python3 utils/get_issues.py "manubot/manubot") 
+     
      echo $a  >> issue.json
      echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
      echo $a | jq '.NUM_ISSUES'
