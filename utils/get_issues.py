@@ -5,7 +5,7 @@ Created on Tue Dec  8 14:08:21 2020
 @author: stearb
 """
 
-#import json
+import json
 #import pandas as pd
 import numpy as np
 import datetime
@@ -54,11 +54,13 @@ def find_issues(name_repo):
             #os.environ["NUM_OPEN_ISSUES"] = str(num_open_issues)
             #os.environ["AVE_RES"] = str(sum(response_timeLs)/len(response_timeLs))
             
-            return_dict = '''{"NUM_ISSUES": str(len(issues_obj)),
+            return_dict = {"NUM_ISSUES": str(len(issues_obj)),
                           "NUM_OPEN_ISSUES":  str(num_open_issues),
-                          "AVE_RES" : str(np.round(sum(response_timeLs)/len(response_timeLs),2) ) }'''
+                          "AVE_RES" : str(np.round(sum(response_timeLs)/len(response_timeLs),2) ) }
             
-            print(return_dict)  #import json
+            y = json.dumps(return_dict)
+            
+            print(y)  #import json
             
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)
