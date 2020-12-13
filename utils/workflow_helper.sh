@@ -326,12 +326,16 @@ elif [ "$1" = "STATISTICS" ]; then
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $a | jq '.AVE_RES')
      
+     echo $NUM_ISSUES
+     echo $NUM_OPEN_ISSUES
+     echo $AVE_RES
+     
       jq -n --arg num_issues "$NUM_ISSUES" \
             --arg num_open_issues "$NUM_OPEN_ISSUES" \ 
             --arg ave_res "$AVE_RES" \ 
                       '{ Num_Issues: $num_issues,
-                      Num_Open_Issues: $num_open_issues,
-                      Average_Response_Time  }' > issue_metrics.json
+                         Num_Open_Issues: $num_open_issues,
+                         Average_Response_Time}' > issue_metrics.json
                       
      cat issue_metrics.json
      
