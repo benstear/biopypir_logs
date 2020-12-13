@@ -251,8 +251,8 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #badge_color='#C0C0C0'  # silver
   badge_color='#FFD700'  # gold  
   
-  # just do this with a >badge.json statement
-  jq -n --arg  biopypir_badge "$badge"  \
+  # Create Badge Endpoint 
+  jq -n --arg  biopypir_badge "$badge"  \ 
         --arg biopypir_name "BIOPYPIR" \
         --arg badge_color "$badge_color"  \
         --arg logo  "Auth0" \
@@ -293,11 +293,8 @@ elif [ "$1" = "STATISTICS" ]; then
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
-      
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
-      
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
       
       # specific OS version, just say linux on website
@@ -329,10 +326,16 @@ elif [ "$1" = "STATISTICS" ]; then
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $a | jq '.AVE_RES')
      
-     echo $NUM_ISSUES
-     echo $NUM_OPEN_ISSUES
-     echo $AVE_RES
+      jq -n --arg num_issues "$NUM_ISSUES" \
+            --arg num_open_issues "$NUM_OPEN_ISSUES" \ 
+            --arg ave_res "$AVE_RES" \ 
+                      '{ Num_Issues: $num_issues,
+                      Num_Open_Issues: $num_open_issues,
+                      Average_Response_Time  }' > issue_metrics.json
+                      
+     cat issue_metrics.json
      
+     #jq -s add eval.json badge.json  > eval_2.json 
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
@@ -351,7 +354,7 @@ elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt
+     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt issue_metrics.json
      rm -r parallel_runs      
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
