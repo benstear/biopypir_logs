@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec  8 14:08:21 2020
-
 @author: stearb
 """
 
@@ -57,7 +56,7 @@ def find_issues(name_repo):
             
             return_dict = {"NUM_ISSUES": str(len(issues_obj)),
                           "NUM_OPEN_ISSUES":  str(num_open_issues),
-                          "AVE_RES" : np.round(str(sum(response_timeLs)/len(response_timeLs)),2) }
+                          "AVE_RES" : str(np.round(sum(response_timeLs)/len(response_timeLs),2) ) }
             
             print(return_dict)
             
