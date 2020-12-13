@@ -315,25 +315,24 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
 
-      jq -s add stats.json run_info.json  > stats_2.json
-      
+     jq -s add stats.json run_info.json  > stats_2.json
       
             
      pip install --upgrade pip 
      pip install requests numpy 
      
      echo 'Calling get_issues.py script'
+     
      a=$(python3 utils/get_issues.py "manubot/manubot") 
+    
+     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
+     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
+     AVE_RES=$(echo $a | jq '.AVE_RES')
      
-     echo $a  >> issue.json
-     echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-     echo $a | jq '.NUM_ISSUES'
+     echo $NUM_ISSUES
+     echo $NUM_OPEN_ISSUES
+     echo $AVE_RES
      
-     echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-
-    cat issue.json | jq '.NUM_ISSUES'
-    echo '++++++++++++++++++++++++++++++++++++++++++++++++++'
-    rm issue.json
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
