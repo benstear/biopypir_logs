@@ -334,7 +334,13 @@ elif [ "$1" = "STATISTICS" ]; then
       jq -n --arg num_issues "$NUM_ISSUES" --arg num_open_issues "$NUM_OPEN_ISSUES" --arg ave_res "$AVE_RES" \ 
                         '{ Num_Issues: $num_issues,
                          Num_Open_Issues: $num_open_issues,
-                         Average_Response_Time}' > issue_metrics.json
+                         Average_Response_Time: $ave_res}' > issue_metrics.json
+                         
+                         
+        #                     '{ Num_Issues: $NUM_ISSUES,
+        #                 Num_Open_Issues: $NUM_OPEN_ISSUES,
+        #                 Average_Response_Time}' > issue_metrics.json                    
+                         
      echo '++++++++++++++++'
            
      cat issue_metrics.json
