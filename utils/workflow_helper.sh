@@ -2,7 +2,6 @@
 
 # This script was written to do the heavy lifting for the biopypir github actions workflow: benstear/biopypir_logs/.github/workflows/main_workflow.yml 
 
-
 # TODO:
 # get evironment variable setting worked out, which file to do it in?
 
