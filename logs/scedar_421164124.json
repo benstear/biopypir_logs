@@ -18,5 +18,19 @@
   "num_contributors": "2",
   "Num_Issues": "24",
   "Num_Open_Issues": "24",
-  "Average_Response_Time": "42.08"
+  "Average_Response_Time": "42.08",
+  "Workflow_Run_Date": "2020-12-14T16:07:37Z",
+  "Pylint_score": "6.94",
+  "Pytest_score": "1.00",
+  "Pip": "True",
+  "License": "True",
+  "Build": "True",
+  "Linux": "3.6,3.7",
+  "Mac": "",
+  "Windows": "",
+  "Linux_versions": "ubuntu-latest",
+  "Mac_versions": "",
+  "Windows_versions": "",
+  "Pip_url": "https://pypi.org/project/scedar/",
+  "BADGE": "BRONZE"
 }
