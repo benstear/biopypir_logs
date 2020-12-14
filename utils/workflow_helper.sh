@@ -351,12 +351,12 @@ elif [ "$1" = "STATISTICS" ]; then
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
-        jq -s add stats_2.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
+        jq -s add stats_3.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         #echo "::set-env name=biopypir_workflow_status::FAIL"
         echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
         echo run_status = "$run_status"        
-        jq -s add stats_2.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
+        jq -s add stats_3.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
         #echo "::set-env name=biopypir_workflow_status::SUCCESS" 
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
