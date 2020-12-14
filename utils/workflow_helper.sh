@@ -383,11 +383,11 @@ elif [ "$1" = "CLEAN UP" ]; then
      # done
      
      
-     if [ $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
+     if [ $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 34 ]; then
      echo 'correct number of parameters.'
      fi
      
-     if [ ! $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 31 ]; then
+     if [ ! $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 34 ]; then
           echo 'Incorrect number of parameters, exiting...'; exit 1;
      fi
      
