@@ -333,15 +333,21 @@ elif [ "$1" = "STATISTICS" ]; then
      echo '{ "Num_Issues": '  "$NUM_ISSUES"   ', "Num_Open_Issues": '   "$NUM_OPEN_ISSUES"   ', "Average_Response_Time": '   "$AVE_RES"   '}' > issue_metrics.json                                       
      echo '++++++++++++++++'  
      cat issue_metrics.json
-     echo '++++++++++++++++'
-     cat badge.json
-     #jq -s add eval.json badge.json  > eval_2.json 
-     echo '++++++++++++++++'
-     jq -s add issue_metrics.json badge.json > i2.json
-     echo '++++++++++++++++'
-     cat i2.json
-     rm i2.json
-     
+     #echo '++++++++++++++++'
+     #cat badge.json
+     #echo '++++++++++++++++'
+     #jq -s add issue_metrics.json badge.json > i2.json
+     #echo '++++++++++++++++'
+     #cat i2.json
+     #rm i2.json
+     echo '++++++++++++++'
+     cat stats_2.json
+     echo '+++++++++++++'
+     cat eval_2.json
+     echo '++++++++++++++'
+     jq -s add stats_2 issue_metrics.json  > stats_2.json
+     echo '+++++++++++++='
+     cat stats_2.json
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
