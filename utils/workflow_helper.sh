@@ -345,7 +345,7 @@ elif [ "$1" = "STATISTICS" ]; then
      echo '+++++++++++++'
      cat eval_2.json
      echo '++++++++++++++'
-     jq -s add stats_2 issue_metrics.json  > stats_2.json
+     jq -s add stats_2.json issue_metrics.json  > stats_2.json
      echo '+++++++++++++='
      cat stats_2.json
      
