@@ -30,6 +30,9 @@ for i in range(0,len(all_logs)):
             
     list_of_lists.append(list(data.values()))  # otherwise append each packages results to list_of_lists
 
+# if you add more, or get rid of columns (fields in .json file), you will get an error, 
+# when the script tries to read the old logs in because they will have the old number of columns.
+# Delete all old logs in logs/ and rerun new workflow.
 df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0]) 
 
 #df.to_csv('original_order.csv',sep='\t')
