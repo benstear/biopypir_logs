@@ -224,84 +224,12 @@ elif [ "$1" = "EVALUATE" ]; then
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
 
   
-elif [ "$1" = "STATISTICS" ]; then
-
-    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
-                                                                 Package: .name,
-                                                                 Description: .description,
-                                                                 date_created: .created_at, 
-                                                                 last_commit: .pushed_at, 
-                                                                 forks: .forks, 
-                                                                 watchers: .subscribers_count, 
-                                                                 stars: .stargazers_count,
-                                                                 homepage_url: .homepage,
-                                                                 has_wiki: .has_wiki, 
-                                                                 open_issues: .open_issues_count,
-                                                                 has_downloads: .has_downloads}" > stats.json
-
-      
-      # get names of contributors
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      
-      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
-      (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
-      sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
-      contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
-      
-      # specific OS version, just say linux on website
-      # license type
-      # size, is it a fork itself? 
-      
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
-            --arg run_id "$GITHUB_RUN_ID" \
-            --arg contributors_url "$contributors_url" \
-            --arg num_contributors "$n_cntrbtrs" \
-            --arg contributor_names "$(cat contributors2.txt)" \
-                                            '{ Github_event_name: $github_event,
-                                                Run_ID: $run_id,
-                                                contributor_names: $contributor_names, 
-                                                contributor_url: $contributors_url,
-                                                num_contributors: $num_contributors}' > run_info.json
-
-     jq -s add stats.json run_info.json  > stats_2.json
-      
-            
-     pip install --upgrade pip 
-     pip install requests numpy 
-          
-     a=$(python3 utils/get_issues.py "manubot/manubot") 
-    
-     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
-     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
-     AVE_RES=$(echo $a | jq '.AVE_RES')
-     
-     #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
-     #echo $NUM_OPEN_ISSUES
-     #echo $AVE_RES               
-     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": '   "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
-
-     jq -s add stats_2.json issue_metrics.json > stats_3.json
-     
-      if [ ! "$run_status" ]; then
-        echo run_status = "$run_status"
-        jq -s add stats_3.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
-        #echo "::set-env name=biopypir_workflow_status::FAIL"
-        echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
-      else
-        echo run_status = "$run_status"        
-        jq -s add stats_3.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
-        #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        #echo "::set-env name=biopypir_workflow_status::SUCCESS" 
-        echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
-      fi     
-      
-      
-    
-elif [ "$1" = "BADGING" ]; then
+elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
 
    badge='NONE'
    badge='BRONZE'
+
+#if  [[ $NUM_ISSUES != "0" ]]  && [[ int($AVE_RES) ]]...
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
 
@@ -343,6 +271,79 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   mv  "$PACKAGE"_badge_endpoint.json badges
 
 
+elif [ "$1" = "STATISTICS" ]; then
+
+    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
+                                                                 Package: .name,
+                                                                 Description: .description,
+                                                                 date_created: .created_at, 
+                                                                 last_commit: .pushed_at, 
+                                                                 forks: .forks, 
+                                                                 watchers: .subscribers_count, 
+                                                                 stars: .stargazers_count,
+                                                                 homepage_url: .homepage,
+                                                                 has_wiki: .has_wiki, 
+                                                                 open_issues: .open_issues_count,
+                                                                 has_downloads: .has_downloads}" > stats.json
+
+      
+      # get names of contributors
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
+      
+      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
+      (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
+      sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
+      contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
+      
+      # specific OS version, just say linux on website
+      # license type
+      # size, is it a fork itself? 
+      
+      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg contributors_url "$contributors_url" \
+            --arg num_contributors "$n_cntrbtrs" \
+            --arg contributor_names "$(cat contributors2.txt)" \
+                                            '{ Github_event_name: $github_event,
+                                                Run_ID: $run_id,
+                                                contributor_names: $contributor_names, 
+                                                contributor_url: $contributors_url,
+                                                num_contributors: $num_contributors}' > run_info.json
+
+     jq -s add stats.json run_info.json  > stats_2.json
+            
+     pip install --upgrade pip 
+     pip install requests numpy 
+          
+     a=$(python3 utils/get_issues.py "manubot/manubot") 
+    
+     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
+     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
+     AVE_RES=$(echo $a | jq '.AVE_RES')
+     
+     #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
+     #echo $NUM_OPEN_ISSUES
+     #echo $AVE_RES               
+     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": '   "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
+
+     jq -s add stats_2.json issue_metrics.json > stats_3.json
+     
+      if [ ! "$run_status" ]; then
+        echo run_status = "$run_status"
+        jq -s add stats_3.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
+        #echo "::set-env name=biopypir_workflow_status::FAIL"
+        echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
+      else
+        echo run_status = "$run_status"        
+        jq -s add stats_3.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
+        #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
+        #echo "::set-env name=biopypir_workflow_status::SUCCESS" 
+        echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
+      fi     
+      
+      
+  
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
