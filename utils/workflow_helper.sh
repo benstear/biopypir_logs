@@ -4,7 +4,6 @@
 
 
 # TODO:
-# put in checks to exit the workflow if variables in  the gather step == ""
 # get evironment variable setting worked out, which file to do it in?
 
 if [ "$1" = "SET ENV" ]; then
@@ -313,9 +312,7 @@ elif [ "$1" = "STATISTICS" ]; then
             
      pip install --upgrade pip 
      pip install requests numpy 
-     
-     echo 'Calling get_issues.py script'
-     
+          
      a=$(python3 utils/get_issues.py "manubot/manubot") 
     
      NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
@@ -333,13 +330,13 @@ elif [ "$1" = "STATISTICS" ]; then
     #                     Average_Response_Time: $ave_res}' > issue_metrics.json
                          
                          
-      echo '{ Num_Issues: $NUM_ISSUES, Num_Open_Issues: $NUM_OPEN_ISSUES, Average_Response_Time: $ave_res}' > issue_metrics.json                    
+      echo '{ "Num_Issues": "$NUM_ISSUES", "Num_Open_Issues": "$NUM_OPEN_ISSUES", "Average_Response_Time": "$ave_res"}' > issue_metrics.json                    
                          
      echo '++++++++++++++++'
            
      cat issue_metrics.json
      echo '++++++++++++++++'
-      cat badge.json
+     cat badge.json
      #jq -s add eval.json badge.json  > eval_2.json 
      
       if [ ! "$run_status" ]; then
