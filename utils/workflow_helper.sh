@@ -28,7 +28,6 @@ if [ "$1" = "SET ENV" ]; then
   echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
 
 elif [  "$1" = "LINT" ]; then
-  echo 'in linting step'
   echo $PACKAGE
   #if [[ "$api_os"  =~  .*"ubuntu".* ]] || [[ "$"  =~  .*"mac".* ]]; # if windows, use windows shell  
   #--disable=biopypir_utils.sh   # ignore_warnings=
@@ -118,14 +117,11 @@ elif [ "$1" = "EVALUATE" ]; then
    #step_names=$(cat API.json | jq .jobs[0].steps[].name); #echo $step_names
   #n=10  #for ((i=0;i<=$n;i++)); do #   if [[ "${step_names[$i]}" =~ "Checkout" ]] ; then  #   PACKAGE="${step_names[$i]}";fi; done   #echo $(echo $PACKAGE |  cut -d' ' -f 1)    #if step_names is 1 long string, split by ' ' and get string after 'Checkout'
    
-   
-  package_and_owner=$(cat API.json | jq .jobs[0].steps[3].name); 
+  package_and_owner=$(cat API.json | jq .jobs[0].steps[3].name); # get the step (step 3) that has the owner and repo as its name. automate this with regex in the line above this  one ^^^
   package_and_owner=$(sed -e 's/^"//' -e 's/"$//' <<<"$package_and_owner")
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); 
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
-  #echo 'package_and_owner:'
-  #echo $package_and_owner
   echo $OWNER, $PACKAGE
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
@@ -187,7 +183,7 @@ elif [ "$1" = "EVALUATE" ]; then
    k="$(($j+1))" ;    # Calculate pylint and pytest average scores
    pylint_score_final=$(bc -l <<< "scale=2; $pylint_score_cum/$k"); pytest_score_final=$(bc -l <<< "scale=2; $pytest_score_cum/$k")  
    
-  #   echo 'test suite = ' "$TEST_SUITE" # = pytest
+
   if [[ "$TEST_SUITE" == 'None' ]]; then pytest_score_final=$'NA'; fi  # fix
    
    date=$(cat API.json | jq ".jobs[0].completed_at");  date_clip=$(sed -e 's/^"//' -e 's/"$//' <<<"$date")
@@ -337,12 +333,13 @@ elif [ "$1" = "STATISTICS" ]; then
     #                     Average_Response_Time: $ave_res}' > issue_metrics.json
                          
                          
-      cat '{ Num_Issues: $NUM_ISSUES, Num_Open_Issues: $NUM_OPEN_ISSUES, Average_Response_Time: $ave_res}' > issue_metrics.json                    
+      echo '{ Num_Issues: $NUM_ISSUES, Num_Open_Issues: $NUM_OPEN_ISSUES, Average_Response_Time: $ave_res}' > issue_metrics.json                    
                          
      echo '++++++++++++++++'
            
      cat issue_metrics.json
-     
+     echo '++++++++++++++++'
+      cat badge.json
      #jq -s add eval.json badge.json  > eval_2.json 
      
       if [ ! "$run_status" ]; then
