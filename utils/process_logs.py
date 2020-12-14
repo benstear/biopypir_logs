@@ -38,7 +38,8 @@ df =pd.DataFrame(list_of_lists[1:],columns=list_of_lists[0])
 reordered_cols= ['Package','BADGE','Owner_Repo','Description','Workflow_Run_Date','date_created','last_commit',
                      'forks','watchers','stars','homepage_url','has_wiki','open_issues',
                      'has_downloads','Run_ID','Pylint_score','Pytest_score','Pip','Pip_url','License','Build','Linux',
-                     'Mac','Windows','Linux_versions','Mac_versions','Windows_versions','contributor_names','contributor_url','num_contributors','Github_event_name']
+                     'Mac','Windows','Linux_versions','Mac_versions','Windows_versions','contributor_names','contributor_url',
+                 'num_contributors','Github_event_name', 'Num_Issues', 'Num_Open_Issues', 'Average_Response_Time' ]
 
 df = df.reindex(reordered_cols, axis=1)
 #df.to_csv('reordered.csv',sep='\t')
