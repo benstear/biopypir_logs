@@ -4,6 +4,8 @@
 
 # TODO:
 # get evironment variable setting worked out, which file to do it in?
+# clean up alot of the formatting with python
+# put in variable type checks
 
 if [ "$1" = "SET ENV" ]; then
 
@@ -318,33 +320,14 @@ elif [ "$1" = "STATISTICS" ]; then
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $a | jq '.AVE_RES')
      
-     echo $NUM_ISSUES
-     echo $NUM_OPEN_ISSUES
-     echo $AVE_RES
-     echo '++++++++++++++++'
-     
-    #  jq -n --arg num_issues "$NUM_ISSUES" --arg num_open_issues "$NUM_OPEN_ISSUES" --arg ave_res "$AVE_RES" \ 
-    #                    '{ Num_Issues: $num_issues,
-    #                     Num_Open_Issues: $num_open_issues,
-    #                     Average_Response_Time: $ave_res}' > issue_metrics.json
-                         
-                         
-     echo '{ "Num_Issues": '  "$NUM_ISSUES"   ', "Num_Open_Issues": '   "$NUM_OPEN_ISSUES"   ', "Average_Response_Time": '   "$AVE_RES"   '}' > issue_metrics.json                                       
-     echo '++++++++++++++++'  
-     cat issue_metrics.json
+     #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
+     #echo $NUM_OPEN_ISSUES
+     #echo $AVE_RES
      #echo '++++++++++++++++'
-     #cat badge.json
-     #echo '++++++++++++++++'
-     #jq -s add issue_metrics.json badge.json > i2.json
-     #echo '++++++++++++++++'
-     #cat i2.json
-     #rm i2.json
-     #echo '++++++++++++++'
-     #cat stats_2.json
-     #echo '+++++++++++++'
-     #cat eval_2.json
-     #echo '++++++++++++++'
-     jq -s add  issue_metrics.json stats_2.json  > stats_3.json
+                 
+     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": '   "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
+
+     jq -s add stats_2.json issue_metrics.json > stats_3.json
      echo '+++++++++++++='
      cat stats_3.json
      
