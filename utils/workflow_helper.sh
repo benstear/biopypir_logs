@@ -340,14 +340,14 @@ elif [ "$1" = "STATISTICS" ]; then
      #echo '++++++++++++++++'
      #cat i2.json
      #rm i2.json
-     echo '++++++++++++++'
-     cat stats_2.json
-     echo '+++++++++++++'
-     cat eval_2.json
-     echo '++++++++++++++'
-     jq -s add stats_2.json issue_metrics.json  > stats_2.json
+     #echo '++++++++++++++'
+     #cat stats_2.json
+     #echo '+++++++++++++'
+     #cat eval_2.json
+     #echo '++++++++++++++'
+     jq -s add  issue_metrics.json stats_2.json  > stats_3.json
      echo '+++++++++++++='
-     cat stats_2.json
+     cat stats_3.json
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
