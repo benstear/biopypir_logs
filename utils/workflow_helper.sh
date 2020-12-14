@@ -222,50 +222,6 @@ elif [ "$1" = "EVALUATE" ]; then
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
-    
-elif [ "$1" = "BADGING" ]; then
-
-   badge='NONE'
-   badge='BRONZE'
-
-if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
-
-  if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32'; echo 'BRONZE BADGE';
-    #if [ $pytest_score_final != 'NA' ]; then
-        if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  badge_color='#FFD700'; echo 'SILVER BADGE';
-        elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; badge_color='#C0C0C0'; echo 'GOLD BADGE';
-        fi 
-    #fi 
-  fi
-  
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
-  jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
-  
-  echo "BADGE=$badge" >> $GITHUB_ENV  
-  
-  #badge_color='#cd7f32' #bronze
-  #badge_color='#C0C0C0'  # silver
-  badge_color='#FFD700'  # gold  
-  
-  # Create Badge Endpoint 
-  jq -n --arg  biopypir_badge "$badge"  \ 
-        --arg biopypir_name "BIOPYPIR" \
-        --arg badge_color "$badge_color"  \
-        --arg logo  "Auth0" \
-        --arg logoColor "white" \
-        --arg width 40 \
-        --arg style "for-the-badge" \
-                         '{ schemaVersion: 1,
-                              label: $biopypir_name,
-                              message: $biopypir_badge,
-                              color: $badge_color,
-                              namedLogo: $logo,
-                              logoWidth: $width,
-                              logoColor: $logoColor,
-                              style: $style,
-                                }' >  "$PACKAGE"_badge_endpoint.json
-                                
-  mv  "$PACKAGE"_badge_endpoint.json badges
 
   
 elif [ "$1" = "STATISTICS" ]; then
@@ -322,14 +278,10 @@ elif [ "$1" = "STATISTICS" ]; then
      
      #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
      #echo $NUM_OPEN_ISSUES
-     #echo $AVE_RES
-     #echo '++++++++++++++++'
-                 
+     #echo $AVE_RES               
      echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": '   "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
 
      jq -s add stats_2.json issue_metrics.json > stats_3.json
-     echo '+++++++++++++='
-     cat stats_3.json
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
@@ -344,6 +296,53 @@ elif [ "$1" = "STATISTICS" ]; then
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
       
+      
+    
+elif [ "$1" = "BADGING" ]; then
+
+   badge='NONE'
+   badge='BRONZE'
+
+if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
+
+  if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32'; echo 'BRONZE BADGE';
+    #if [ $pytest_score_final != 'NA' ]; then
+        if  (( $(echo "$pylint_score_final > 6.0" |bc -l) ))  && [ $pytest_score_final -gt 40 ]; then badge='GOLD';  badge_color='#FFD700'; echo 'SILVER BADGE';
+        elif (( $(echo "$pylint_score_final > 3.0" |bc -l) )) && [ $pytest_score_final -gt 20 ]; then badge='SILVER'; badge_color='#C0C0C0'; echo 'GOLD BADGE';
+        fi 
+    #fi 
+  fi
+  
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
+  
+  echo "BADGE=$badge" >> $GITHUB_ENV  
+  
+  #badge_color='#cd7f32' #bronze
+  #badge_color='#C0C0C0'  # silver
+  badge_color='#FFD700'  # gold  
+  
+  # Create Badge Endpoint 
+  jq -n --arg  biopypir_badge "$badge"  \ 
+        --arg biopypir_name "BIOPYPIR" \
+        --arg badge_color "$badge_color"  \
+        --arg logo  "Auth0" \
+        --arg logoColor "white" \
+        --arg width 40 \
+        --arg style "for-the-badge" \
+                         '{ schemaVersion: 1,
+                              label: $biopypir_name,
+                              message: $biopypir_badge,
+                              color: $badge_color,
+                              namedLogo: $logo,
+                              logoWidth: $width,
+                              logoColor: $logoColor,
+                              style: $style,
+                                }' >  "$PACKAGE"_badge_endpoint.json
+                                
+  mv  "$PACKAGE"_badge_endpoint.json badges
+
+
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
