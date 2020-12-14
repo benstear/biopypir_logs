@@ -330,7 +330,7 @@ elif [ "$1" = "STATISTICS" ]; then
     #                     Average_Response_Time: $ave_res}' > issue_metrics.json
                          
                          
-      echo '{ "Num_Issues": "$NUM_ISSUES", "Num_Open_Issues": "$NUM_OPEN_ISSUES", "Average_Response_Time": "$ave_res"}' > issue_metrics.json                    
+      echo '{ "Num_Issues": ' "$NUM_ISSUES"  ', "Num_Open_Issues": ' "$NUM_OPEN_ISSUES" ', "Average_Response_Time": ' "$ave_res" '}' > issue_metrics.json                    
                          
      echo '++++++++++++++++'
            
