@@ -348,7 +348,7 @@ elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
      rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt issue_metrics.json
+     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt issue_metrics.json stats_3.json
      rm -r parallel_runs      
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
