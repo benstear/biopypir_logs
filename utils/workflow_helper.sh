@@ -221,7 +221,7 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
-    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
+    echo (cat scores_and_matrix.json | jq 'del(.OS, .Python_version)') > eval.json
     cat eval.json
 
   
