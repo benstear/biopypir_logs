@@ -221,7 +221,7 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
-    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > scores_and_matrix #eval.json
+    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > scores_and_matrix.json #eval.json
     cat scores_and_matrix.json
 
   
@@ -245,7 +245,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
-  jq -s add scores_and_matrix.json '{BADGE : $badge}' > new_json.json
+  jq -s add scores_and_matrix.json badge.json > new_json.json
   cat new_json.json
 
   
