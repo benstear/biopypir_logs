@@ -242,7 +242,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
     #fi 
   fi
   
-  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
   jq -s add scores_and_matrix.json badge.json > new_json.json
@@ -316,6 +316,7 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
 
+    
      jq -s add stats.json run_info.json  > stats_2.json
             
      pip install --upgrade pip 
@@ -330,7 +331,8 @@ elif [ "$1" = "STATISTICS" ]; then
      #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
      #echo $NUM_OPEN_ISSUES
      #echo $AVE_RES               
-     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": '   "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
+     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
+     "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
 
      jq -s add stats_2.json issue_metrics.json > stats_3.json
      
