@@ -12,7 +12,6 @@ import requests
 import sys
 import os
 
-
 #print('Number of arguments:', len(sys.argv), 'arguments.')
 #print('Argument List:', str(sys.argv[1]))
 #issues_url = os.path.join('https://api.github.com/repos/', sys.argv[1], '/issues')
@@ -24,11 +23,9 @@ def find_issues(name_repo):
         repo_res = requests.get('https://api.github.com/repos/' + name_repo)
         repo_obj = repo_res.json()
         num_open_issues = repo_obj['open_issues_count']
-        
+ 
     except requests.exceptions.RequestException as e:  
         raise SystemExit(e)
-    
-    
     
     if repo_obj['has_issues']:
         
@@ -51,18 +48,25 @@ def find_issues(name_repo):
             
         except requests.exceptions.RequestException as e:  
             raise SystemExit(e)
-            
     else:
             return_dict = {"NUM_ISSUES": "0",  "NUM_OPEN_ISSUES":  str(num_open_issues),  "AVE_RES" : "NA"}
             print(json.dumps(return_dict)) # This outputs the variable in the bash environment
    
 
 
-if __name__ == "__main__":
 
-    name_repo =  sys.argv[1]
-    
-    find_issues(name_repo)
+
+def format_text(text):
+    print(text)
+
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == 'get issues':
+        name_repo =  sys.argv[1]
+        find_issues(name_repo)
+    elif sys.argv[1] == 'format':
+        
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
     #bashCommand = "MAGICVAR="42""
