@@ -243,6 +243,8 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  cat badge.json
+  echo '+++++++++++++++++++++++'
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
   jq -s add scores_and_matrix.json badge.json > new_json.json
