@@ -221,7 +221,8 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
-    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
+    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > scores_and_matrix #eval.json
+    cat scores_and_matrix.json
 
   
 elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
