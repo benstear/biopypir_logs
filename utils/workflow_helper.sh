@@ -221,8 +221,8 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
-    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > scores_and_matrix.json #eval.json
-    cat scores_and_matrix.json
+    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
+    cat eval.json
 
   
 elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
@@ -247,7 +247,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   echo '+++++++++++++++++++++++'
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
-  jq -s add scores_and_matrix.json badge.json > new_json.json
+  jq -s add eval.json badge.json > new_json.json
   cat new_json.json
 
   
