@@ -221,7 +221,8 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url }'  > scores_and_matrix.json
 
-    echo (cat scores_and_matrix.json | jq 'del(.OS, .Python_version)') > eval.json
+
+    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
     cat eval.json
 
   
@@ -247,9 +248,24 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   echo '+++++++++++++++++++++++'
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   
-  jq -s add eval.json badge.json > new_json.json
-  cat new_json.json
+  #jq -s add eval.json badge.json > new_json.json
+  #cat new_json.json
 
+  
+  
+  
+    cp  eval.json  eval.json.tmp &&
+    jq  -s add eval.json.tmp badge.json > eval.json &&
+    rm config.json.tmp
+  echo '+++++++++++++++++++++++'
+
+    cat eval.json
+  
+  
+  
+  
+  
+  
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
