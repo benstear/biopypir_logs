@@ -242,8 +242,12 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
     #fi 
   fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
-  jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
+  #jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
+  
+  jq -s add scores_and_matrix.json '{BADGE : $badge}' > new_json.json
+  cat new_json.json
+
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
@@ -348,9 +352,14 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm eval.json eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
+     rm  eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt issue_metrics.json stats_3.json
      rm -r parallel_runs      
+     
+     
+     # eval.json
+     
+     
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
       echo "files exist";  mv logs/"$PACKAGE"*.json archived_logs
