@@ -294,13 +294,13 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       
-      # """"""""  put in python script
+
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
-      # """"""""
+
       # specific OS version, just say linux on website
       # license type
       # size, is it a fork itself? 
@@ -355,7 +355,7 @@ elif [ "$1" = "STATISTICS" ]; then
         echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
         echo run_status = "$run_status"        
-        jq -s add stats_3.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
+        jq -s add stats_3.json  eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
       
@@ -364,12 +364,12 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm   stats.json  badge.json run_info.json contributors.txt contributors2.txt \
+     rm   stats.json  badge.json  contributors.txt contributors2.txt \
      scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  stats_3.json
      rm -r parallel_runs      
      
      
-     # eval.json stats_2.json eval_2.json issue_metrics.json
+     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json
      
      
      
