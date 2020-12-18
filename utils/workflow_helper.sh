@@ -246,7 +246,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   cp  eval.json  eval.json.tmp && jq  -s add eval.json.tmp badge.json > eval.json && rm eval.json.tmp
-  cat eval.json
+  #cat eval.json
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
@@ -255,9 +255,9 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   badge_color='#FFD700'  # gold  
   
   # Create Badge Endpoint 
-  jq -n --arg  biopypir_badge "$badge"  \ 
+  jq -n --arg  biopypir_badge "$badge" \ 
         --arg biopypir_name "BIOPYPIR" \
-        --arg badge_color "$badge_color"  \
+        --arg badge_color "$badge_color" \
         --arg logo  "Auth0" \
         --arg logoColor "white" \
         --arg width 40 \
@@ -290,19 +290,21 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  open_issues: .open_issues_count,
                                                                  has_downloads: .has_downloads}" > stats.json
 
-      
+     
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       
+      # """"""""  put in python script
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
-      
+      # """"""""
       # specific OS version, just say linux on website
       # license type
       # size, is it a fork itself? 
+      
       
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
@@ -317,6 +319,14 @@ elif [ "$1" = "STATISTICS" ]; then
 
     
      jq -s add stats.json run_info.json  > stats_2.json
+     cat stats_2.json
+     echo '+++++++++++++++++='
+     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp
+     cat stats.json
+       
+     # Change log
+     # stats.json -> stats_2.json
+     # eval.json -> eval_2.json
             
      pip install --upgrade pip 
      pip install requests numpy 
