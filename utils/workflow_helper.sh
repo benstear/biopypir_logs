@@ -220,14 +220,14 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Linux_versions: $linux_vers,
                                                 Mac_versions: $mac_vers,
                                                 Windows_versions: $windows_vers,
-                                                 Pip_url       : $pip_url }'  > scores_and_matrix.json
+                                                 Pip_url       : $pip_url }'  > eval.json
 
 
-    cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
-    cat eval.json
+    #cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
+    #cat eval.json
     echo '++++++++++++++++++++++'
     
-    cp scores_and_matrix.json eval.json
+    #cp scores_and_matrix.json eval.json
     
     
     cp  eval.json  eval.json.tmp && 
