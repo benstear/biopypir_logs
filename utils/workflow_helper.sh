@@ -318,16 +318,15 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 num_contributors: $num_contributors}' > run_info.json
 
     
-     jq -s add stats.json run_info.json  > stats_2.json
-     cat stats_2.json
-     echo '+++++++++++++++++='
-     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp
-     cat stats.json
+     #jq -s add stats.json run_info.json  > stats_2.json
+     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
+
        
      # Change log
      # stats.json -> stats_2.json
      # eval.json -> eval_2.json
-            
+     # stats_2 --> stats_3.json
+     
      pip install --upgrade pip 
      pip install requests numpy 
           
@@ -343,18 +342,20 @@ elif [ "$1" = "STATISTICS" ]; then
      echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
      "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
 
-     jq -s add stats_2.json issue_metrics.json > stats_3.json
+     jq -s add stats.json issue_metrics.json > stats_3.json
+     cat stats_3.json
+     echo '+++++++++++++++++++++'
+     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
+     cat stats.json
+     
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
         jq -s add stats_3.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
-        #echo "::set-env name=biopypir_workflow_status::FAIL"
         echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
         echo run_status = "$run_status"        
         jq -s add stats_3.json  eval_2.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
-        #echo "empty log" > "$PACKAGE"_"$GITHUB_RUN_ID".json
-        #echo "::set-env name=biopypir_workflow_status::SUCCESS" 
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
       
@@ -363,12 +364,12 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm  eval_2.json stats.json stats_2.json badge.json run_info.json contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt issue_metrics.json stats_3.json
+     rm   stats.json  badge.json run_info.json contributors.txt contributors2.txt \
+     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  stats_3.json
      rm -r parallel_runs      
      
      
-     # eval.json
+     # eval.json stats_2.json eval_2.json issue_metrics.json
      
      
      
