@@ -63,7 +63,7 @@ def find_issues(name_repo):
 
 if __name__ == "__main__":
     if sys.argv[1] == 'ISSUES':
-        name_repo =  sys.argv[1]
+        name_repo =  sys.argv[2]
         find_issues(name_repo)
         
     elif sys.argv[1] == 'format':
