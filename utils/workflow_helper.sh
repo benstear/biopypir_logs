@@ -195,6 +195,22 @@ elif [ "$1" = "EVALUATE" ]; then
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
     IFS=$' \t\n';
     
+     ################################
+     pip install --upgrade pip 
+     pip install requests numpy 
+     a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
+
+     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
+     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
+     AVE_RES=$(echo $a | jq '.AVE_RES')
+
+     #echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
+     #"$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
+     #jq -s add stats.json issue_metrics.json > stats_3.json
+     #cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
+     #######################
+      
+    
    ######## Put Everything we just calculated (and formatted) into eval.json file ###################
    jq -n --arg Workflow_Run_Date "$date_clip" \
              --arg lint_score "$pylint_score_final" \
@@ -220,23 +236,15 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Linux_versions: $linux_vers,
                                                 Mac_versions: $mac_vers,
                                                 Windows_versions: $windows_vers,
-                                                 Pip_url       : $pip_url }'  > eval.json
+                                                 Pip_url       : $pip_url,
+                                                 Num_Issues:   "$(echo $a | jq '.NUM_ISSUES')", 
+                                                 Num_Open_Issues:  "$(echo $a | jq '.NUM_OPEN_ISSUES')" ,
+                                                 Average_Response_Time: "$(echo $a | jq '.AVE_RES')"     }'  > eval.json
 
 
     #cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
-    #cat eval.json
-    echo '++++++++++++++++++++++'
+    cp  eval.json  eval.json.tmp && cat eval.json.tmp | jq 'del(.OS, .Python_version)' > eval.json && rm eval.json.tmp
     
-    #cp scores_and_matrix.json eval.json
-    
-    
-    cp  eval.json  eval.json.tmp && 
-    cat eval.json.tmp | jq 'del(.OS, .Python_version)' > eval.json
-    rm eval.json.tmp
-
-   #cat eval.json.temp | jq 'del(.OS, .Python_version)' > eval.json
-    cat eval.json
-    exit 1;
     
 elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
 
@@ -257,7 +265,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
   #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
-  cp  eval.json  eval.json.tmp && jq  -s add eval.json.tmp badge.json > eval.json && rm eval.json.tmp
+  cp  eval.json  eval.json.tmp && jq  -s add eval.json.tmp badge.json > eval.json && rm eval.json.tmp badge.json
   #cat eval.json
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
@@ -305,7 +313,7 @@ elif [ "$1" = "STATISTICS" ]; then
      
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      #cat contrib_logins.txt
+      cat contrib_logins.txt
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
@@ -328,31 +336,13 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
 
-    
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
-    ################################
-     pip install --upgrade pip 
-     pip install requests numpy 
-     a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
 
-     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
-     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
-     AVE_RES=$(echo $a | jq '.AVE_RES')
-     
-     #echo $NUM_ISSUES    # put in checks that these are either numeric, or 'NA'
-     #echo $NUM_OPEN_ISSUES
-     #echo $AVE_RES    
-     
-     echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
-     "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
-      #######################
-      
-      
-     #jq -s add stats.json issue_metrics.json > stats_3.json
-     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
-     cat stats.json
+     ###################
+     # get issues old spot
+     ###################
      
      
       if [ ! "$run_status" ]; then
@@ -370,12 +360,12 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm   stats.json  badge.json  contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  
+     rm   stats.json  contributors.txt contributors2.txt \
+      API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  
      rm -r parallel_runs      
      
      
-     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json
+     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json   badge.json   scores_and_matrix.json
      
      
      
