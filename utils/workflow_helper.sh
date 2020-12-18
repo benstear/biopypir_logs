@@ -224,9 +224,9 @@ elif [ "$1" = "EVALUATE" ]; then
               --arg mac_vers "${mac_unq[*]}" \
               --arg windows_vers "${windows_unq[*]}" \
               --arg pip_url "$pip_url" \
-              --arg Num_Issues "$NUM_ISSUES" \
-              --arg Num_Open_Issues "$NUM_OPEN_ISSUES" \
-              --arg Average_Response_Time "$AVE_RES" '{  Workflow_Run_Date :  $Workflow_Run_Date,
+              --argjson Num_Issues "$NUM_ISSUES" \
+              --argjson Num_Open_Issues "$NUM_OPEN_ISSUES" \
+              --argjson Average_Response_Time "$AVE_RES" '{  Workflow_Run_Date :  $Workflow_Run_Date,
                                                   Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
                                                 Pip           : $PIP,   
