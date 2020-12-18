@@ -226,8 +226,7 @@ elif [ "$1" = "EVALUATE" ]; then
               --arg pip_url "$pip_url" \
               --arg Num_Issues "$NUM_ISSUES" \
               --arg Num_Open_Issues "$NUM_OPEN_ISSUES" \
-              --arg Average_Response_Time "$AVE_RES" \ 
-                                              '{  Workflow_Run_Date :  $Workflow_Run_Date,
+              --arg Average_Response_Time "$AVE_RES" '{  Workflow_Run_Date :  $Workflow_Run_Date,
                                                   Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
                                                 Pip           : $PIP,   
