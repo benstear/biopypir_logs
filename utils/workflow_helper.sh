@@ -330,7 +330,7 @@ elif [ "$1" = "STATISTICS" ]; then
      pip install --upgrade pip 
      pip install requests numpy 
           
-     a=$(python3 utils/get_issues.py "manubot/manubot") 
+     a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
     
      NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
