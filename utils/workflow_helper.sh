@@ -225,8 +225,19 @@ elif [ "$1" = "EVALUATE" ]; then
 
     cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
     cat eval.json
+    echo '++++++++++++++++++++++'
+    
+    cp scores_and_matrix.json eval.json
+    
+    
+    cp  eval.json  eval.json.tmp && 
+    cat eval.json.temp | jq 'del(.OS, .Python_version)' > eval.json
+    rm eval.json.tmp
 
-  
+   #cat eval.json.temp | jq 'del(.OS, .Python_version)' > eval.json
+    cat eval.json
+    exit 1;
+    
 elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
 
    badge='NONE'
