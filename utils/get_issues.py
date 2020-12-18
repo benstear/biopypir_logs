@@ -56,15 +56,16 @@ def find_issues(name_repo):
 
 
 
-def format_text(text):
-    print(text)
+#def format_text(text):
+#    print(text)
 
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == 'get issues':
+    if sys.argv[1] == 'ISSUES':
         name_repo =  sys.argv[1]
         find_issues(name_repo)
+        
     elif sys.argv[1] == 'format':
         
 
