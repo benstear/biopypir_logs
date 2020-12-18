@@ -224,6 +224,9 @@ elif [ "$1" = "EVALUATE" ]; then
               --arg mac_vers "${mac_unq[*]}" \
               --arg windows_vers "${windows_unq[*]}" \
               --arg pip_url "$pip_url" \
+              --arg Num_Issues "$NUM_ISSUES" \
+              --arg Num_Open_Issues "$NUM_OPEN_ISSUES" \
+              --arg Average_Response_Time "$AVE_RES" \ 
                                               '{  Workflow_Run_Date :  $Workflow_Run_Date,
                                                   Pylint_score  :  $lint_score,  
                                                 Pytest_score  :  $coverage_score,
@@ -237,9 +240,9 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Mac_versions: $mac_vers,
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url,
-                                                 Num_Issues:   "$(echo $issues | jq '.NUM_ISSUES')", 
-                                                 Num_Open_Issues:  "$(echo $issues | jq '.NUM_OPEN_ISSUES')" ,
-                                                 Average_Response_Time: "$(echo $issues | jq '.AVE_RES')"     }'  > eval.json
+                                                 Num_Issues:   $Num_Issues, 
+                                                 Num_Open_Issues:  $Num_Open_Issues,
+                                                 Average_Response_Time: $Average_Response_Time  }'  > eval.json
 
 
     #cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
@@ -274,12 +277,10 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #badge_color='#cd7f32' #bronze
   #badge_color='#C0C0C0'  # silver
   badge_color='#FFD700'  # gold  
-  echo '------------------'
-  echo 'badge:  ' $badge
+
+  
   # Create Badge Endpoint 
-  jq -n --arg  biopypir_badge "$badge" \ 
-        --arg biopypir_name "BIOPYPIR" \
-        --arg badge_color "$badge_color" \
+  jq -n --arg biopypir_badge "$badge" --arg biopypir_name "BIOPYPIR" --arg badge_color "$badge_color" \
         --arg logo  "Auth0" \
         --arg logoColor "white" \
         --arg width 40 \
