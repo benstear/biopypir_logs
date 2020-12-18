@@ -198,11 +198,11 @@ elif [ "$1" = "EVALUATE" ]; then
      ################################
      pip install --upgrade pip 
      pip install requests numpy 
-     a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
+     issues=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
 
-     NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
-     NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
-     AVE_RES=$(echo $a | jq '.AVE_RES')
+     NUM_ISSUES=$(echo $issues | jq '.NUM_ISSUES')
+     NUM_OPEN_ISSUES=$(echo $issues | jq '.NUM_OPEN_ISSUES')
+     AVE_RES=$(echo $issues | jq '.AVE_RES')
 
      #echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
      #"$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
@@ -237,13 +237,14 @@ elif [ "$1" = "EVALUATE" ]; then
                                                 Mac_versions: $mac_vers,
                                                 Windows_versions: $windows_vers,
                                                  Pip_url       : $pip_url,
-                                                 Num_Issues:   "$(echo $a | jq '.NUM_ISSUES')", 
-                                                 Num_Open_Issues:  "$(echo $a | jq '.NUM_OPEN_ISSUES')" ,
-                                                 Average_Response_Time: "$(echo $a | jq '.AVE_RES')"     }'  > eval.json
+                                                 Num_Issues:   "$(echo $issues | jq '.NUM_ISSUES')", 
+                                                 Num_Open_Issues:  "$(echo $issues | jq '.NUM_OPEN_ISSUES')" ,
+                                                 Average_Response_Time: "$(echo $issues | jq '.AVE_RES')"     }'  > eval.json
 
 
     #cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
     cp  eval.json  eval.json.tmp && cat eval.json.tmp | jq 'del(.OS, .Python_version)' > eval.json && rm eval.json.tmp
+    cat eval.json
     
     
 elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
@@ -251,7 +252,7 @@ elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STA
    badge='NONE'
    badge='BRONZE'
 
-#if  [[ $NUM_ISSUES != "0" ]]  && [[ int($AVE_RES) ]]...
+#if  [[ $NUM_ISSUES != "0" ]]  && [[ $(echo $issues | jq '.AVE_RES') ]]
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
 
@@ -273,7 +274,8 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   #badge_color='#cd7f32' #bronze
   #badge_color='#C0C0C0'  # silver
   badge_color='#FFD700'  # gold  
-  
+  echo '------------------'
+  echo 'badge:  ' $badge
   # Create Badge Endpoint 
   jq -n --arg  biopypir_badge "$badge" \ 
         --arg biopypir_name "BIOPYPIR" \
