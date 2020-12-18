@@ -320,8 +320,8 @@ elif [ "$1" = "STATISTICS" ]; then
     
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
-
-       
+      cat  stats.json
+      echo '------------------------------'
      # Change log
      # stats.json -> stats_2.json
      # eval.json -> eval_2.json
@@ -329,24 +329,29 @@ elif [ "$1" = "STATISTICS" ]; then
      
      pip install --upgrade pip 
      pip install requests numpy 
-          
+     echo '------------starting get_issues.py script---------'
      a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
-    
+     echo '------------FINISHED get_issues.py script---------'
+
      NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $a | jq '.AVE_RES')
      
-     #echo $NUM_ISSUES     put in checks that these are either numeric, or 'NA'
-     #echo $NUM_OPEN_ISSUES
-     #echo $AVE_RES               
+     echo 'printing issues variables'
+     echo $NUM_ISSUES    # put in checks that these are either numeric, or 'NA'
+     echo $NUM_OPEN_ISSUES
+     echo $AVE_RES    
+     echo 'end of issues variables'
+     
+     
      echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
      "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
 
-     jq -s add stats.json issue_metrics.json > stats_3.json
-     cat stats_3.json
-     echo '+++++++++++++++++++++'
-     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
-     cat stats.json
+     #jq -s add stats.json issue_metrics.json > stats_3.json
+     #cat stats_3.json
+     #echo '+++++++++++++++++++++'
+     #cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
+     #cat stats.json
      
      
       if [ ! "$run_status" ]; then
