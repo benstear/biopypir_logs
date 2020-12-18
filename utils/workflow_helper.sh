@@ -306,7 +306,6 @@ elif [ "$1" = "STATISTICS" ]; then
       # license type
       # size, is it a fork itself? 
  
-      
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
             --arg contributors_url "$contributors_url" \
@@ -321,46 +320,37 @@ elif [ "$1" = "STATISTICS" ]; then
     
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
-
-     # Change log
-     # stats.json -> stats_2.json
-     # eval.json -> eval_2.json
-     # stats_2 --> stats_3.json
      
+    ################################
      pip install --upgrade pip 
      pip install requests numpy 
-     echo '------------starting get_issues.py script---------'
      a=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
-     echo '------------FINISHED get_issues.py script---------'
 
      NUM_ISSUES=$(echo $a | jq '.NUM_ISSUES')
      NUM_OPEN_ISSUES=$(echo $a | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $a | jq '.AVE_RES')
      
-     echo 'printing issues variables'
-     echo $NUM_ISSUES    # put in checks that these are either numeric, or 'NA'
-     echo $NUM_OPEN_ISSUES
-     echo $AVE_RES    
-     echo 'end of issues variables'
-     
+     #echo $NUM_ISSUES    # put in checks that these are either numeric, or 'NA'
+     #echo $NUM_OPEN_ISSUES
+     #echo $AVE_RES    
      
      echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
      "$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
-
-     jq -s add stats.json issue_metrics.json > stats_3.json
-     cat stats_3.json
-     echo '+++++++++++++++++++++'
+      #######################
+      
+      
+     #jq -s add stats.json issue_metrics.json > stats_3.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
      cat stats.json
      
      
       if [ ! "$run_status" ]; then
         echo run_status = "$run_status"
-        jq -s add stats_3.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
+        jq -s add stats.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
         echo run_status = "$run_status"        
-        jq -s add stats_3.json  eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
+        jq -s add stats.json  eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
       
@@ -370,11 +360,11 @@ elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
      rm   stats.json  badge.json  contributors.txt contributors2.txt \
-     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  stats_3.json
+     scores_and_matrix.json API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  
      rm -r parallel_runs      
      
      
-     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json
+     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json
      
      
      
