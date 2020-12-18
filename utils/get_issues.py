@@ -67,6 +67,7 @@ if __name__ == "__main__":
         find_issues(name_repo)
         
     elif sys.argv[1] == 'format':
+        pass
         
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
