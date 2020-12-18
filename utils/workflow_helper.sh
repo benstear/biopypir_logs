@@ -293,7 +293,7 @@ elif [ "$1" = "STATISTICS" ]; then
      
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      
+      #cat contrib_logins.txt
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
@@ -304,7 +304,7 @@ elif [ "$1" = "STATISTICS" ]; then
       # specific OS version, just say linux on website
       # license type
       # size, is it a fork itself? 
-      
+ 
       
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
