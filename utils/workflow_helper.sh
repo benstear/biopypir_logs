@@ -231,7 +231,7 @@ elif [ "$1" = "EVALUATE" ]; then
     
     
     cp  eval.json  eval.json.tmp && 
-    cat eval.json.temp | jq 'del(.OS, .Python_version)' > eval.json
+    cat eval.json.tmp | jq 'del(.OS, .Python_version)' > eval.json
     rm eval.json.tmp
 
    #cat eval.json.temp | jq 'del(.OS, .Python_version)' > eval.json
