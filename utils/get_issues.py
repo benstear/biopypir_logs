@@ -57,7 +57,7 @@ def find_issues(name_repo):
 
 def format_contributors(text):
     split_text = text.split(' ')
-    strip_text = [i.strip() for i in split_text]
+    strip_text = [i.strip(' "') for i in split_text]
     
     formatted = ['https://github.com/' + i for i  in strip_text]
     
