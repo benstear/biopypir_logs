@@ -17,7 +17,7 @@ import os
 #issues_url = os.path.join('https://api.github.com/repos/', sys.argv[1], '/issues')
 
 
-def find_issues(name_repo):
+def get_issues(name_repo):
     
     try:    
         repo_res = requests.get('https://api.github.com/repos/' + name_repo)
@@ -55,24 +55,32 @@ def find_issues(name_repo):
 
 
 
-def format_contributors(text):
+def get_contributors(name_repo):
+     cont_response = requests.get(f'https://api.github.com/repos/{name_repo}/contributors')
+     cont_obj = cont_response.json()
+     gh_names = cont_obj['login']
+     print(gh_names)
+    
+    '''
     split_text = text.split(' ')
     strip_text = [i.strip(' "') for i in split_text]
     
     formatted = ['https://github.com/' + i for i  in strip_text]
     
-    print(formatted)
+    print(formatted)'''
 
 
     
 
 if __name__ == "__main__":
+    
+    name_repo =  sys.argv[2]
+    
     if sys.argv[1] == 'ISSUES':
-        name_repo =  sys.argv[2]
-        find_issues(name_repo)
+        get_issues(name_repo)
         
     elif sys.argv[1] == 'CONTRIBUTORS':
-        format_contributors(sys.argv[2])
+        get_contributors(name_repo)
         
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
