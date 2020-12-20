@@ -55,19 +55,24 @@ def find_issues(name_repo):
 
 
 
+def format_contributors(text):
+    split_text = text.split(' ')
+    strip_text = [i.strip() for i in split_text]
+    
+    formatted = ['https://github.com/' + i for i  in strip_text]
+    
+    print(formatted)
 
-#def format_text(text):
-#    print(text)
 
-
+    
 
 if __name__ == "__main__":
     if sys.argv[1] == 'ISSUES':
         name_repo =  sys.argv[2]
         find_issues(name_repo)
         
-    elif sys.argv[1] == 'format':
-        pass
+    elif sys.argv[1] == 'CONTRIBUTORS':
+        format_contributors(sys.argv[2])
         
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
