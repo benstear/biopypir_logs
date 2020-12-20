@@ -195,25 +195,15 @@ elif [ "$1" = "EVALUATE" ]; then
      ################################
      pip install --upgrade pip 
      pip install requests numpy 
-     issues=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
-
-     #NUM_ISSUES=$(echo $issues | jq '.NUM_ISSUES')
+     issues=$(python3 utils/py_helper.py "ISSUES" "manubot/manubot") 
      
      NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_ISSUES'))
-     NUM_OPEN_ISSUES=$(echo $issues | jq '.NUM_OPEN_ISSUES')
-     AVE_RES=$(echo $issues | jq '.AVE_RES')
+     NUM_OPEN_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_OPEN_ISSUES'))
+     AVE_RES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.AVE_RES'))
      
      echo "NUM_ISSUES=$NUM_ISSUES" >> $GITHUB_ENV
      echo "NUM_OPEN_ISSUES=$NUM_OPEN_ISSUES" >> $GITHUB_ENV
      echo "AVE_RES=$AVE_RES" >> $GITHUB_ENV
-     
-
-     #echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
-     #"$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
-     #jq -s add stats.json issue_metrics.json > stats_3.json
-     #cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp issue_metrics.json > stats.json && rm stats.json.tmp issue_metrics.json
-     #######################
-      
     
    ######## Put Everything we just calculated (and formatted) into eval.json file ###################
    jq -n --arg Workflow_Run_Date "$date_clip" \
@@ -261,8 +251,6 @@ elif [ "$1" = "BADGING" ]; then
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
 
 
-echo $NUM_ISSUES
-#echo $AVE_RES
 echo '-------evaluation: ----------- '
 
 if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
@@ -292,10 +280,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   
   # Create Badge Endpoint 
   jq -n --arg biopypir_badge "$badge" --arg biopypir_name "BIOPYPIR" --arg badge_color "$badge_color" \
-        --arg logo  "Auth0" \
-        --arg logoColor "white" \
-        --arg width 40 \
-        --arg style "for-the-badge" \
+        --arg logo  "Auth0"  --arg logoColor "white"  --arg width 40 --arg style "for-the-badge" \
                          '{ schemaVersion: 1,
                               label: $biopypir_name,
                               message: $biopypir_badge,
@@ -330,15 +315,15 @@ elif [ "$1" = "STATISTICS" ]; then
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       #cat contrib_logins.txt
       
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > del.txt
-      cat del.txt
-      rm del.txt
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > del.txt
+      #cat del.txt
+      #rm del.txt
       
       echo '------------    calling  py script....    ----------------'
       
       
-      echo "$OWNER/$REPO"
-      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" "$OWNER/$REPO") 
+      echo "$OWNER/$PACKAGE"
+      contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       echo $contributors
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
