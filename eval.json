@@ -1,5 +1,5 @@
 {
-  "Workflow_Run_Date": "2020-12-18T18:56:45Z",
+  "Workflow_Run_Date": "2020-12-20T00:52:15Z",
   "Pylint_score": "6.94",
   "Pytest_score": "1.00",
   "Pip": "True",
@@ -14,6 +14,6 @@
   "Pip_url": "https://pypi.org/project/scedar/",
   "Num_Issues": "24",
   "Num_Open_Issues": "24",
-  "Average_Response_Time": "42.08",
+  "Average_Response_Time": "42.04",
   "BADGE": "BRONZE"
 }
