@@ -336,7 +336,7 @@ elif [ "$1" = "STATISTICS" ]; then
       
       echo '------------    calling  py script....    ----------------'
       
-      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" $(cat contrib_logins.txt)) 
+      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" $OWNER/$REPO) 
       echo $contributors
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
