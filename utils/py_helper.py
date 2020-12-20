@@ -62,16 +62,16 @@ def get_contributors(name_repo):
      print(cont_obj)
         
      contributors = []
-     #for i in cont_obj:
-     #       contributors.append(i['login'])
+     for i in cont_obj:
+            contributors.append(i['login'])
     
      #gh_names = cont_obj['login']
      #print(contributors)
      #split_text = text.split(' ')
         
-     #strip_text = [i.strip(' "') for i in contributors]
-     #formatted = ['https://github.com/' + i for i  in strip_text]
-     #print(formatted)
+     strip_text = [i.strip(' "') for i in contributors]
+     formatted = ['https://github.com/' + i for i  in strip_text]
+     print(formatted)
 
 
 
