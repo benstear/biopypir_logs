@@ -318,9 +318,9 @@ elif [ "$1" = "STATISTICS" ]; then
      
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      cat contrib_logins.txt
+      #cat contrib_logins.txt
       
-      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" "$OWNER/REPO") 
+      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" contrib_logins.txt) 
       echo $contributors
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
@@ -329,10 +329,7 @@ elif [ "$1" = "STATISTICS" ]; then
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
-      # specific OS version, just say linux on website
-      # license type
-      # size, is it a fork itself? 
- 
+
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
             --arg contributors_url "$contributors_url" \
