@@ -9,8 +9,8 @@
 
 
 if [ "$1" = "SET ENV" ]; then
-
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
+  
   OWNER=$(cat env_vars.json | jq .$PACKAGE | jq .OWNER)   
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   
@@ -22,10 +22,8 @@ if [ "$1" = "SET ENV" ]; then
   TEST_DIR=$(sed -e 's/^"//' -e 's/"$//' <<<"$TEST_DIR") # Remove quotes
   echo "TEST_DIR=$TEST_DIR" >> $GITHUB_ENV
 
-  export IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)
   echo "IGNORE_TESTS=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_tests)" >> $GITHUB_ENV
   
-  export IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)
   echo "IGNORE_LINT=$(cat env_vars.json | jq .$PACKAGE | jq .ignore_lint)" >> $GITHUB_ENV
 
 elif [  "$1" = "LINT" ]; then
@@ -249,12 +247,16 @@ elif [ "$1" = "EVALUATE" ]; then
     cat eval.json
     
     
-elif [ "$1" = "BADGING" ]; then #  MOVE (AND CALL FROM MAIN WORKFLOW) BELOW 'STATS', must change file names to  reflect this though
+elif [ "$1" = "BADGING" ]; then
 
    badge='NONE'
    badge='BRONZE'
 
-#if  [[ $NUM_ISSUES != "0" ]]  && [[ $(echo $issues | jq '.AVE_RES') ]]
+#if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
+echo $NUM_ISSUES
+echo $AVE_RES
+if ((  $(echo "$NUM_ISSUES != 0" |bc -l)  ));  then echo 'nonzero'; fi
+
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
 
@@ -297,6 +299,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   mv  "$PACKAGE"_badge_endpoint.json badges
 
 
+
 elif [ "$1" = "STATISTICS" ]; then
 
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
@@ -337,11 +340,12 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 contributor_names: $contributor_names, 
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
-
+                                                
+     cat run_info.json
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
-
+      
      ###################
      # get issues old spot
      ###################
@@ -362,14 +366,11 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm   stats.json  contributors.txt contributors2.txt \
-      API.json biopypir_utils.sh RUN_STATUS.json contrib_logins.txt contributors_gh.txt  
+     rm  eval.json stats.json  contributors.txt contributors2.txt contrib_logins.txt contributors_gh.txt  
+     rm API.json biopypir_utils.sh RUN_STATUS.json 
      rm -r parallel_runs      
      
-     
-     # eval.json   stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json   badge.json   scores_and_matrix.json
-     
-     
+     # NO NEED TO DELETE THESE ANYMORE:    stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json   badge.json   scores_and_matrix.json
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
       echo "files exist";  mv logs/"$PACKAGE"*.json archived_logs
