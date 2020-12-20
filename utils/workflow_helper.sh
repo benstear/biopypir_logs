@@ -258,6 +258,7 @@ elif [ "$1" = "BADGING" ]; then
 
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
 
+NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$NUM_ISSUES)
 echo $NUM_ISSUES
 echo $AVE_RES
 echo 'evaluation:  '
@@ -327,6 +328,9 @@ elif [ "$1" = "STATISTICS" ]; then
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       cat contrib_logins.txt
       
+      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > del.txt
+      cat del.txt
+      rm del.txt
       
       echo '------------    calling  py script....    ----------------'
       
