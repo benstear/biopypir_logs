@@ -197,7 +197,9 @@ elif [ "$1" = "EVALUATE" ]; then
      pip install requests numpy 
      issues=$(python3 utils/get_issues.py "ISSUES" "manubot/manubot") 
 
-     NUM_ISSUES=$(echo $issues | jq '.NUM_ISSUES')
+     #NUM_ISSUES=$(echo $issues | jq '.NUM_ISSUES')
+     
+     NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_ISSUES'))
      NUM_OPEN_ISSUES=$(echo $issues | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $issues | jq '.AVE_RES')
      
@@ -258,10 +260,10 @@ elif [ "$1" = "BADGING" ]; then
 
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
 
-NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$NUM_ISSUES)
+
 echo $NUM_ISSUES
-echo $AVE_RES
-echo 'evaluation:  '
+#echo $AVE_RES
+echo '-------evaluation: ----------- '
 
 if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
 
