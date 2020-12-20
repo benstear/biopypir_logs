@@ -326,7 +326,7 @@ elif [ "$1" = "STATISTICS" ]; then
      
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      cat contrib_logins.txt
+      #cat contrib_logins.txt
       
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > del.txt
       cat del.txt
