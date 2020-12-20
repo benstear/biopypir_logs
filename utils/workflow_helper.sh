@@ -121,7 +121,6 @@ elif [ "$1" = "EVALUATE" ]; then
   PACKAGE=$(echo $package_and_owner |  cut -d' ' -f 3); 
   OWNER=$(echo $package_and_owner |  cut -d' ' -f 2)
 
-  echo $OWNER, $PACKAGE
   echo "OWNER=$OWNER" >> $GITHUB_ENV
   echo "PACKAGE=$PACKAGE" >> $GITHUB_ENV
   
@@ -201,6 +200,11 @@ elif [ "$1" = "EVALUATE" ]; then
      NUM_ISSUES=$(echo $issues | jq '.NUM_ISSUES')
      NUM_OPEN_ISSUES=$(echo $issues | jq '.NUM_OPEN_ISSUES')
      AVE_RES=$(echo $issues | jq '.AVE_RES')
+     
+     echo "NUM_ISSUES=$NUM_ISSUES" >> $GITHUB_ENV
+     echo "NUM_OPEN_ISSUES=$NUM_OPEN_ISSUES" >> $GITHUB_ENV
+     echo "AVE_RES=$AVE_RES" >> $GITHUB_ENV
+     
 
      #echo '{ "Num_Issues": '  "$(echo $a | jq '.NUM_ISSUES')"   ', "Num_Open_Issues": ' \
      #"$(echo $a | jq '.NUM_OPEN_ISSUES')"   ', "Average_Response_Time": '   "$(echo $a | jq '.AVE_RES')"   '}' > issue_metrics.json                                       
@@ -253,8 +257,11 @@ elif [ "$1" = "BADGING" ]; then
    badge='BRONZE'
 
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
+
 echo $NUM_ISSUES
 echo $AVE_RES
+echo 'evaluation:  '
+
 if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
 
 
@@ -318,7 +325,10 @@ elif [ "$1" = "STATISTICS" ]; then
      
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      #cat contrib_logins.txt
+      cat contrib_logins.txt
+      
+      
+      echo '------------    calling  py script....    ----------------'
       
       contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" $(cat contrib_logins.txt)) 
       echo $contributors
