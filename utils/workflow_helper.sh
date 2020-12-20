@@ -255,7 +255,7 @@ elif [ "$1" = "BADGING" ]; then
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
 echo $NUM_ISSUES
 echo $AVE_RES
-if [ "$NUM_ISSUES" -gt "0" ];  then echo 'nonzero'; fi
+if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
 
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
