@@ -255,7 +255,7 @@ elif [ "$1" = "BADGING" ]; then
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
 echo $NUM_ISSUES
 echo $AVE_RES
-if ((  $(echo "$NUM_ISSUES != 0" |bc -l)  ));  then echo 'nonzero'; fi
+if ((  $(echo "$NUM_ISSUES > 0" |bc -l)  ));  then echo 'nonzero'; fi
 
 
 if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
@@ -319,6 +319,9 @@ elif [ "$1" = "STATISTICS" ]; then
       # get names of contributors
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       cat contrib_logins.txt
+      
+      contributors=$(python3 utils/get_issues.py "CONTRIBUTORS" "$OWNER/REPO") 
+      echo $contributors
 
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
