@@ -58,8 +58,8 @@ def get_issues(name_repo):
 def get_contributors(name_repo):
      cont_response = requests.get(f'https://api.github.com/repos/{name_repo}/contributors')
      cont_obj = cont_response.json()
-     print(name_repo)
-     print(cont_obj)
+     #print(name_repo)
+     #print(cont_obj)
         
      contributors = []
      for i in cont_obj:
@@ -84,6 +84,8 @@ if __name__ == "__main__":
         
     elif sys.argv[1] == 'CONTRIBUTORS':
         get_contributors(name_repo)
+        
+    elif  sys.argv[1] == 'PROCESS LOGS':
         
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
