@@ -315,17 +315,17 @@ elif [ "$1" = "STATISTICS" ]; then
       curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
       #cat contrib_logins.txt
       
-      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors > del.txt
-      #cat del.txt
-      #rm del.txt
-      
+
       echo '------------    calling  py script....    ----------------'
       
       
       echo "$OWNER/$PACKAGE"
       contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      
+      echo 'contributors:'
       echo $contributors
-
+      echo '_____________________'
+      
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
@@ -344,7 +344,7 @@ elif [ "$1" = "STATISTICS" ]; then
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
                                                 
-     cat run_info.json
+     #cat run_info.json
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
