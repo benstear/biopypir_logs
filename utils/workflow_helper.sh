@@ -316,12 +316,24 @@ elif [ "$1" = "STATISTICS" ]; then
       echo '------------    calling  py script....    ----------------'
 
       
-      contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      #contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       
-      echo 'contributors:  '
-      echo $contributors
+      array=()
+      while read line ; do
+        array+=($line)
+      done < <(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+     echo 'whole  array: '
+     echo ${array[@]}
+     echo 'element 1: '
+     echo ${array[1]}
+      
+      #echo 'contributors:  '
+      #echo $contributors
       echo '_____________________'
       
+      
+      
+
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
