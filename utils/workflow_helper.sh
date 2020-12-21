@@ -322,6 +322,7 @@ elif [ "$1" = "STATISTICS" ]; then
       echo $contributors
       echo '_____________________'
       
+      
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
