@@ -84,11 +84,11 @@ if __name__ == "__main__":
     name_repo =  sys.argv[2]
     
     if sys.argv[1] == 'ISSUES':
-        
-        print('"{}" "{}" "{}"'.format(*get_issues(name_repo)))
+        get_issues(name_repo)
         
     elif sys.argv[1] == 'CONTRIBUTORS':
-        get_contributors(name_repo)
+        #get_contributors(name_repo)
+        print('"{}" "{}" "{}"'.format(*get_contributors(name_repo)))
         
     elif  sys.argv[1] == 'PROCESS LOGS':
         pass
