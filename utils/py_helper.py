@@ -69,14 +69,16 @@ def get_contributors(name_repo):
      #print(contributors)
      #split_text = text.split(' ')
         
-     contributors_stripped = [i.strip(' "') for i in contributors]
-     formatted = ['https://github.com/' + i for i  in contributors_stripped]
+     logins = [i.strip(' "') for i in contributors]
+     formatted = ['https://github.com/' + i for i  in logins]
         
-     #print(contributors_stripped,formatted,len(formatted))
-     #print(formatted)
-     #print(len(formatted))
-     return (contributors_stripped,formatted,len(formatted))
+     #print(logins,formatted,len(formatted))
 
+     c = ' '.join(logins)
+     c2 = ' '.join(formatted) 
+     c3 = str(len(formatted))
+        
+     print(c,c2,c3)
 
 
 if __name__ == "__main__":
@@ -87,11 +89,11 @@ if __name__ == "__main__":
         get_issues(name_repo)
         
     elif sys.argv[1] == 'CONTRIBUTORS':
-        #get_contributors(name_repo)
+        get_contributors(name_repo)
         #print('"{}" "{}" "{}"'.format(*get_contributors(name_repo)))
         
-        res = get_contributors(name_repo)
-        print(('"{}" '*len(res)).format(*res))
+        #res = get_contributors(name_repo)
+        #print(('"{}" '*len(res)).format(*res))
         
     elif  sys.argv[1] == 'PROCESS LOGS':
         pass
