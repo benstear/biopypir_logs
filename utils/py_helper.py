@@ -86,6 +86,7 @@ if __name__ == "__main__":
         get_contributors(name_repo)
         
     elif  sys.argv[1] == 'PROCESS LOGS':
+        pass
         
 
     #print(f"::set-output name=myOUTPUT::{my_output}")
