@@ -322,14 +322,25 @@ elif [ "$1" = "STATISTICS" ]; then
       while read line ; do
         array+=($line)
       done < <(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      
      echo 'whole  array: '
      echo ${array[@]}
+     echo '_____________________'
+     echo 'element 0: '
+     echo ${array[0]}
+     echo '_____________________'
      echo 'element 1: '
      echo ${array[1]}
-      
-      #echo 'contributors:  '
-      #echo $contributors
-      echo '_____________________'
+     echo '_____________________'
+     echo 'element 2: '
+     echo ${array[2]}
+     echo '_____________________'
+     #echo 'element 3: '
+     #echo ${array[0]}
+     #echo '_____________________'
+     #echo 'contributors:  '
+     #echo $contributors
+
       
       
       
