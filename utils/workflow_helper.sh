@@ -311,13 +311,10 @@ elif [ "$1" = "STATISTICS" ]; then
 
      
       # get names of contributors
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt
-      #cat contrib_logins.txt
-      
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
 
       echo '------------    calling  py script....    ----------------'
-      
-      echo 'owner/package = '"$OWNER/$PACKAGE"
+
       
       contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       
@@ -331,19 +328,19 @@ elif [ "$1" = "STATISTICS" ]; then
       contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
       n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
-
+      # "$(cat contributors2.txt)"
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
             --arg contributors_url "$contributors_url" \
             --arg num_contributors "$n_cntrbtrs" \
-            --arg contributor_names "$(cat contributors2.txt)" \
+            --arg contributor_names "$contributors" \
                                             '{ Github_event_name: $github_event,
                                                 Run_ID: $run_id,
                                                 contributor_names: $contributor_names, 
                                                 contributor_url: $contributors_url,
                                                 num_contributors: $num_contributors}' > run_info.json
                                                 
-     #cat run_info.json
+     cat run_info.json
      #jq -s add stats.json run_info.json  > stats_2.json
      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
