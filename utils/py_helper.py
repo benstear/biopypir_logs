@@ -88,7 +88,10 @@ if __name__ == "__main__":
         
     elif sys.argv[1] == 'CONTRIBUTORS':
         #get_contributors(name_repo)
-        print('"{}" "{}" "{}"'.format(*get_contributors(name_repo)))
+        #print('"{}" "{}" "{}"'.format(*get_contributors(name_repo)))
+        
+        res = get_contributors(name_repo)
+        print(('"{}" '*len(res)).format(*res))
         
     elif  sys.argv[1] == 'PROCESS LOGS':
         pass
