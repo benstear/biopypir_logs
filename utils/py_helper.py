@@ -72,9 +72,10 @@ def get_contributors(name_repo):
      contributors_stripped = [i.strip(' "') for i in contributors]
      formatted = ['https://github.com/' + i for i  in contributors_stripped]
         
-     print(contributors_stripped,formatted,len(formatted))
+     #print(contributors_stripped,formatted,len(formatted))
      #print(formatted)
      #print(len(formatted))
+     return (contributors_stripped,formatted,len(formatted))
 
 
 
@@ -83,7 +84,8 @@ if __name__ == "__main__":
     name_repo =  sys.argv[2]
     
     if sys.argv[1] == 'ISSUES':
-        get_issues(name_repo)
+        
+        print('"{}" "{}" "{}"'.format(*get_issues(name_repo))
         
     elif sys.argv[1] == 'CONTRIBUTORS':
         get_contributors(name_repo)
