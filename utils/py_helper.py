@@ -85,7 +85,7 @@ if __name__ == "__main__":
     
     if sys.argv[1] == 'ISSUES':
         
-        print('"{}" "{}" "{}"'.format(*get_issues(name_repo))
+        print('"{}" "{}" "{}"'.format(*get_issues(name_repo)))
         
     elif sys.argv[1] == 'CONTRIBUTORS':
         get_contributors(name_repo)
