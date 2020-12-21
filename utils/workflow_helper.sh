@@ -317,11 +317,11 @@ elif [ "$1" = "STATISTICS" ]; then
 
       echo '------------    calling  py script....    ----------------'
       
+      echo 'owner/package = '"$OWNER/$PACKAGE"
       
-      echo "$OWNER/$PACKAGE"
       contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       
-      echo 'contributors:'
+      echo 'contributors:  '
       echo $contributors
       echo '_____________________'
       
@@ -354,11 +354,11 @@ elif [ "$1" = "STATISTICS" ]; then
      
      
       if [ ! "$run_status" ]; then
-        echo run_status = "$run_status"
+        #echo run_status = "$run_status"
         jq -s add stats.json RUN_STATUS.json > "$PACKAGE"_"$GITHUB_RUN_ID".json; 
         echo "biopypir_workflow_status=FAIL" >> $GITHUB_ENV
       else
-        echo run_status = "$run_status"        
+        #echo run_status = "$run_status"        
         jq -s add stats.json  eval.json > "$PACKAGE"_"$GITHUB_RUN_ID".json # RUN_STATUS.json
         echo "biopypir_workflow_status=SUCCESS"   >> $GITHUB_ENV
       fi     
