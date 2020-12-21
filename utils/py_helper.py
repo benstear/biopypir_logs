@@ -69,9 +69,12 @@ def get_contributors(name_repo):
      #print(contributors)
      #split_text = text.split(' ')
         
-     strip_text = [i.strip(' "') for i in contributors]
-     formatted = ['https://github.com/' + i for i  in strip_text]
+     contributors_stripped = [i.strip(' "') for i in contributors]
+     formatted = ['https://github.com/' + i for i  in contributors_stripped]
+        
+     print(contributors_stripped)
      print(formatted)
+     print(len(formatted))
 
 
 
