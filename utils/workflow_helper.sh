@@ -8,6 +8,7 @@
 # put in variable type checks
 
 
+
 if [ "$1" = "SET ENV" ]; then
   curl -L -o env_vars.json https://raw.githubusercontent.com/benstear/biopypir_logs/master/utils/package_params.json
   
