@@ -78,7 +78,11 @@ def get_contributors(name_repo):
      c2 = ' '.join(formatted) 
      c3 = str(len(formatted))
         
-     print(c,c2,c3)
+     print(c)
+     print('\n')
+     print(c2)
+     print('\n')
+     print(c3)
 
 
 if __name__ == "__main__":
