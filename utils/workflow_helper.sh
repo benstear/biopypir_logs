@@ -328,14 +328,14 @@ elif [ "$1" = "STATISTICS" ]; then
      echo 'whole  array: '
      echo ${array[@]}
      echo '_____________________'
-     echo 'element 0: '
-     echo ${array[0]}
+     echo 'element 0,1: '
+     echo "${array[0]} ${array[1]}"
      echo '_____________________'
-     echo 'element 1: '
-     echo ${array[1]}
+     echo 'element 2,3: '
+     echo ${array[2]} ${array[3]}
      echo '_____________________'
-     echo 'element 2: '
-     echo ${array[2]}
+     echo 'element 4: '
+     echo ${array[4]}
      echo '_____________________'
      #echo 'element 3: '
      #echo ${array[0]}
@@ -345,8 +345,7 @@ elif [ "$1" = "STATISTICS" ]; then
 
       
       
-      
-
+  
       
       tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
@@ -357,9 +356,9 @@ elif [ "$1" = "STATISTICS" ]; then
       # "$(cat contributors2.txt)"
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
             --arg run_id "$GITHUB_RUN_ID" \
-            --arg contributors_url "$contributors_url" \
-            --arg num_contributors "$n_cntrbtrs" \
-            --arg contributor_names "$contributors" \
+            --arg contributors_url "${array[2]} ${array[3]}" \
+            --arg num_contributors "${array[4]}" \
+            --arg contributor_names "${array[0]} ${array[1]}" \
                                             '{ Github_event_name: $github_event,
                                                 Run_ID: $run_id,
                                                 contributor_names: $contributor_names, 
