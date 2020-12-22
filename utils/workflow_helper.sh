@@ -193,10 +193,9 @@ elif [ "$1" = "EVALUATE" ]; then
     if [ ! -z "{$windows_arr[*]}" ]; then windows_arr_=$(echo "${windows_arr[*]}");  else windows_arr_=$('NA'); fi
     IFS=$' \t\n';
     
-     ################################
      pip install --upgrade pip 
      pip install requests numpy 
-     issues=$(python3 utils/py_helper.py "ISSUES" "manubot/manubot") 
+     issues=$(python3 utils/py_helper.py "ISSUES" "$OWNER/$PACKAGE") 
      
      NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_ISSUES'))
      NUM_OPEN_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_OPEN_ISSUES'))
@@ -238,10 +237,7 @@ elif [ "$1" = "EVALUATE" ]; then
                                                  Num_Open_Issues:  $Num_Open_Issues,
                                                  Average_Response_Time: $Average_Response_Time  }'  > eval.json
 
-
-    #cat scores_and_matrix.json | jq 'del(.OS, .Python_version)' > eval.json
     cp  eval.json  eval.json.tmp && cat eval.json.tmp | jq 'del(.OS, .Python_version)' > eval.json && rm eval.json.tmp
-    cat eval.json
     
     
 elif [ "$1" = "BADGING" ]; then
@@ -250,10 +246,6 @@ elif [ "$1" = "BADGING" ]; then
    badge='BRONZE'
 
 #if  [[ $NUM_ISSUES != "0" ]]   && [[ $(echo $issues | jq '.AVE_RES') ]]
-
-
-echo '-------evaluation: ----------- '
-
 if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
 
 
@@ -268,16 +260,12 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
   fi
   
   jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
-  #jq -s add eval.json badge.json  > eval_2.json                # dont need this ?
   cp  eval.json  eval.json.tmp && jq  -s add eval.json.tmp badge.json > eval.json && rm eval.json.tmp badge.json
-  #cat eval.json
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
   
-  #badge_color='#cd7f32' #bronze
-  #badge_color='#C0C0C0'  # silver
+  #badge_color='#cd7f32' #bronze #badge_color='#C0C0C0'  # silver
   badge_color='#FFD700'  # gold  
-
   
   # Create Badge Endpoint 
   jq -n --arg biopypir_badge "$badge" --arg biopypir_name "BIOPYPIR" --arg badge_color "$badge_color" \
@@ -299,63 +287,27 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
 elif [ "$1" = "STATISTICS" ]; then
 
 
-    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
-                                                                 Package: .name,
-                                                                 Description: .description,
-                                                                 date_created: .created_at, 
-                                                                 last_commit: .pushed_at, 
-                                                                 forks: .forks, 
-                                                                 watchers: .subscribers_count, 
-                                                                 stars: .stargazers_count,
-                                                                 homepage_url: .homepage,
-                                                                 has_wiki: .has_wiki, 
-                                                                 open_issues: .open_issues_count,
-                                                                 has_downloads: .has_downloads}" | jq --arg github_event_name $GITHUB_EVENT_NAME \
-                         --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats.json
-                                                                 
-                                                                 
+    curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | \
+        jq "{Owner_Repo: .full_name, 
+       Package: .name,
+       Description: .description,
+       date_created: .created_at, 
+       last_commit: .pushed_at, 
+       forks: .forks, 
+       watchers: .subscribers_count, 
+       stars: .stargazers_count,
+       homepage_url: .homepage,
+       has_wiki: .has_wiki, 
+       open_issues: .open_issues_count,
+       has_downloads: .has_downloads}" | \
+          jq --arg github_event_name $GITHUB_EVENT_NAME \
+             --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats.json
 
-    # cat stats.json | jq --arg github_event_name $GITHUB_EVENT_NAME \
-    #                     --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats.json
-      cat stats.json
-      
-      exit 1;
-      
-      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
-      cp  stats.json  stats.json.tmp && 
-      jq  -s add stats.json.tmp contributors.json > stats.json &&
-      rm stats.json.tmp contributors.json
-      
-        
-      # get names of contributors
-      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
-      #tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
-      #(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
-      #sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
-      #contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      #n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
-      # "$(cat contributors2.txt)"
-      #jq -n --arg github_event "$GITHUB_EVENT_NAME" \
-      #      --arg run_id "$GITHUB_RUN_ID" \
-      #      --arg contributors_url "${array[2]} ${array[3]}" \
-      #      --arg num_contributors "${array[4]}" \
-      #      --arg contributor_names "${array[0]} ${array[1]}" \
-      #                                      '{ Github_event_name: $github_event,
-      #                                          Run_ID: $run_id,
-      #                                          contributor_names: $contributor_names, 
-      #                                          contributor_url: $contributors_url,
-      #                                          num_contributors: $num_contributors}' > run_info.json
-                                                
-     cat run_info.json
-     #jq -s add stats.json run_info.json  > stats_2.json
-     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
-     
-      
-     ###################
-     # get issues old spot
-     ###################
-     
+    python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
+    
+    cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp contributors.json > stats.json && rm stats.json.tmp contributors.json                         
+    #cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
       if [ ! "$run_status" ]; then
         #echo run_status = "$run_status"
@@ -372,11 +324,9 @@ elif [ "$1" = "STATISTICS" ]; then
 elif [ "$1" = "CLEAN UP" ]; then
    
      # Remove all files we dont want to push to the biopypir logs repository
-     rm  eval.json stats.json  contributors.txt contributors2.txt contrib_logins.txt contributors_gh.txt  
-     rm API.json biopypir_utils.sh RUN_STATUS.json 
+     rm  eval.json stats.json API.json biopypir_utils.sh RUN_STATUS.json 
      rm -r parallel_runs      
      
-     # NO NEED TO DELETE THESE ANYMORE:    stats_2.json   eval_2.json   issue_metrics.json   run_info.json   stats_3.json   badge.json   scores_and_matrix.json
      
       if ls logs/"$PACKAGE"*.json 1> /dev/null 2>&1; then   # just do mv logs/"$PACKAGE"*, 
       echo "files exist";  mv logs/"$PACKAGE"*.json archived_logs
@@ -399,17 +349,34 @@ elif [ "$1" = "CLEAN UP" ]; then
      if [ ! $(cat "$PACKAGE"_"$GITHUB_RUN_ID".json | jq length) -eq 34 ]; then
           echo 'Incorrect number of parameters, exiting...'; exit 1;
      fi
-     
-     cat "$PACKAGE"_"$GITHUB_RUN_ID".json
-     
-     # check if size of file is 0 (aka empty)
-     #if [ -s "$PACKAGE"_"$GITHUB_RUN_ID".json ]; then echo 'Log File is Empty!'; exit 1;
-     #else mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
-     #fi
+          
      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
      
-     pip install --upgrade pip 
      python3 -m pip install pandas numpy tabulate
      python3 utils/process_logs.py
+     # python3 utils/py_helper.py
     
-fi 
+fi
+
+
+        
+      # get names of contributors
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
+      #tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
+      #(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
+      #sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
+      #contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      #n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
+
+      # "$(cat contributors2.txt)"
+      #jq -n --arg github_event "$GITHUB_EVENT_NAME" \
+      #      --arg run_id "$GITHUB_RUN_ID" \
+      #      --arg contributors_url "${array[2]} ${array[3]}" \
+      #      --arg num_contributors "${array[4]}" \
+      #      --arg contributor_names "${array[0]} ${array[1]}" \
+      #                                      '{ Github_event_name: $github_event,
+      #                                          Run_ID: $run_id,
+      #                                          contributor_names: $contributor_names, 
+      #                                          contributor_url: $contributors_url,
+      #                                          num_contributors: $num_contributors}' > run_info.json
+          
