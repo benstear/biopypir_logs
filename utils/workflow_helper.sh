@@ -298,6 +298,8 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
 
 elif [ "$1" = "STATISTICS" ]; then
 
+           # --arg github_event "$GITHUB_EVENT_NAME" \
+           # --arg run_id "$GITHUB_RUN_ID" \
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
                                                                  Package: .name,
                                                                  Description: .description,
@@ -312,21 +314,15 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  has_downloads: .has_downloads}" > stats.json
 
      
-      # get names of contributors
-      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
 
       echo '------------    calling  py script....    ----------------'
 
-      
-      #echo 'as variable'
-      #contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
-      #echo $contributors
-      
+
       echo 'as file: '
       python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
       cat contributors.json
       
-      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp cont.json > stats.json && rm stats.json.tmp contributors.json
+      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp contributors.json > stats.json && rm stats.json.tmp contributors.json
       
       
       echo '--------------'
@@ -339,7 +335,9 @@ elif [ "$1" = "STATISTICS" ]; then
       
       
   
-      
+      # get names of contributors
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
+
       #tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       #(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       #sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
