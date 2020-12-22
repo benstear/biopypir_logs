@@ -66,7 +66,7 @@ def get_contributors(name_repo):
      logins = [i.strip(' "') for i in contributors]
      formatted_urls = ['https://github.com/' + i for i  in logins]
         
-     return_dict = {"contributor_names": str(logins), "contributors_url":  str(formatted_urls),"num_contributors" : len(logins) }
+     return_dict = {"contributor_names": logins, "contributors_url": formatted_urls,"num_contributors" : len(logins) }
      print(json.dumps(return_dict)) 
             
 
