@@ -326,7 +326,7 @@ elif [ "$1" = "STATISTICS" ]; then
       #python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
       #cat cont.json
       
-      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp $contributors > stats.json && rm stats.json.tmp #badge.json
+      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp (echo $contributors) > stats.json && rm stats.json.tmp #badge.json
       
       
       echo '--------------'
