@@ -313,20 +313,20 @@ elif [ "$1" = "STATISTICS" ]; then
 
      
       # get names of contributors
-      curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
+      #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
 
       echo '------------    calling  py script....    ----------------'
 
       
-      echo 'as variable'
-      contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
-      echo $contributors
+      #echo 'as variable'
+      #contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      #echo $contributors
       
       echo 'as file: '
-      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
-      cat cont.json
+      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
+      cat contributors.json
       
-      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp cont.json > stats.json && rm stats.json.tmp cont.json
+      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp cont.json > stats.json && rm stats.json.tmp contributors.json
       
       
       echo '--------------'
@@ -340,11 +340,11 @@ elif [ "$1" = "STATISTICS" ]; then
       
   
       
-      tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
-      (tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
-      sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
-      contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
-      n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
+      #tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
+      #(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
+      #sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
+      #contributors_url=$(tr '\n' ' ' < contributors_gh.txt) # replace \n with ' '   #cntrbtrs=$(paste -sd, contributors.txt) # add commas
+      #n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
       # "$(cat contributors2.txt)"
       jq -n --arg github_event "$GITHUB_EVENT_NAME" \
