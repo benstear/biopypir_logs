@@ -322,11 +322,11 @@ elif [ "$1" = "STATISTICS" ]; then
       contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       echo $contributors
       
-      #echo 'as file: '
-      #python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
-      #cat cont.json
+      echo 'as file: '
+      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
+      cat cont.json
       
-      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp (echo $contributors) > stats.json && rm stats.json.tmp #badge.json
+      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp cont.json > stats.json && rm stats.json.tmp cont.json
       
       
       echo '--------------'
