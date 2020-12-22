@@ -195,7 +195,7 @@ elif [ "$1" = "EVALUATE" ]; then
     IFS=$' \t\n';
     
      pip install --upgrade pip 
-     pip install requests numpy 
+     pip install requests numpy pandas
      issues=$(python3 utils/py_helper.py "ISSUES" "$OWNER/$PACKAGE") 
      
      NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_ISSUES'))
