@@ -310,12 +310,13 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  homepage_url: .homepage,
                                                                  has_wiki: .has_wiki, 
                                                                  open_issues: .open_issues_count,
-                                                                 has_downloads: .has_downloads}" > stats.json
+                                                                 has_downloads: .has_downloads}" | jq --arg github_event_name $GITHUB_EVENT_NAME \
+                         --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats.json
                                                                  
                                                                  
 
-     cat stats.json | jq --arg github_event_name $GITHUB_EVENT_NAME \
-                         --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' #> stats2.json
+    # cat stats.json | jq --arg github_event_name $GITHUB_EVENT_NAME \
+    #                     --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats.json
       cat stats.json
       
       exit 1;
