@@ -311,33 +311,21 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  homepage_url: .homepage,
                                                                  has_wiki: .has_wiki, 
                                                                  open_issues: .open_issues_count,
-                                                                 has_downloads: .has_downloads}" > stats.json
+                                                                 has_downloads: .has_downloads,
+                                                                 github_event_name: $GITHUB_EVENT_NAME }" > stats.json
 
      
-
-      echo '------------    calling  py script....    ----------------'
-
-
-      echo 'as file: '
-      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
-      cat contributors.json
-      
-      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp contributors.json > stats.json && rm stats.json.tmp contributors.json
-      
-      
-      echo '--------------'
       cat stats.json
       
       exit 1;
+      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
+      cp  stats.json  stats.json.tmp && 
+      jq  -s add stats.json.tmp contributors.json > stats.json &&
+      rm stats.json.tmp contributors.json
       
-      
-
-      
-      
-  
+        
       # get names of contributors
       #curl https://api.github.com/repos/"$OWNER"/"$PACKAGE"/contributors | jq ".[].login"  > contrib_logins.txt      
-
       #tr -d '"' <contrib_logins.txt > contributors.txt # delete quotes from file     
       #(tr '\n' ' ' < contributors.txt) > contributors2.txt  # replace \n with ' '
       #sed -e  's#^#https://github.com/#' contributors.txt > contributors_gh.txt    # add github url to login names
@@ -345,16 +333,16 @@ elif [ "$1" = "STATISTICS" ]; then
       #n_cntrbtrs="$(wc -l contributors.txt |  cut -d ' ' -f1)"  
 
       # "$(cat contributors2.txt)"
-      jq -n --arg github_event "$GITHUB_EVENT_NAME" \
-            --arg run_id "$GITHUB_RUN_ID" \
-            --arg contributors_url "${array[2]} ${array[3]}" \
-            --arg num_contributors "${array[4]}" \
-            --arg contributor_names "${array[0]} ${array[1]}" \
-                                            '{ Github_event_name: $github_event,
-                                                Run_ID: $run_id,
-                                                contributor_names: $contributor_names, 
-                                                contributor_url: $contributors_url,
-                                                num_contributors: $num_contributors}' > run_info.json
+      #jq -n --arg github_event "$GITHUB_EVENT_NAME" \
+      #      --arg run_id "$GITHUB_RUN_ID" \
+      #      --arg contributors_url "${array[2]} ${array[3]}" \
+      #      --arg num_contributors "${array[4]}" \
+      #      --arg contributor_names "${array[0]} ${array[1]}" \
+      #                                      '{ Github_event_name: $github_event,
+      #                                          Run_ID: $run_id,
+      #                                          contributor_names: $contributor_names, 
+      #                                          contributor_url: $contributors_url,
+      #                                          num_contributors: $num_contributors}' > run_info.json
                                                 
      cat run_info.json
      #jq -s add stats.json run_info.json  > stats_2.json
