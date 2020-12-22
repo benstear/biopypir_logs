@@ -6,6 +6,8 @@ Created on Tue Dec  8 14:08:21 2020
 """
 
 import json
+import pandas as pd
+import glob
 import numpy as np
 import datetime
 import requests
