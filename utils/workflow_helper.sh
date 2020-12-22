@@ -298,8 +298,7 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
 
 elif [ "$1" = "STATISTICS" ]; then
 
-           # --arg github_event "$GITHUB_EVENT_NAME" \
-           # --arg run_id "$GITHUB_RUN_ID" \
+
     curl https://api.github.com/repos/"$OWNER"/"$PACKAGE" | jq "{Owner_Repo: .full_name, 
                                                                  Package: .name,
                                                                  Description: .description,
@@ -316,8 +315,8 @@ elif [ "$1" = "STATISTICS" ]; then
                                                                  
 
      cat stats.json | jq --arg github_event_name $GITHUB_EVENT_NAME \
-                         --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' > stats2.json
-      cat stats2.json
+                         --arg run_id $GITHUB_RUN_ID '. + {github_event_name: $github_event_name, run_id:  $run_id }' #> stats2.json
+      cat stats.json
       
       exit 1;
       
