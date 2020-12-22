@@ -322,35 +322,19 @@ elif [ "$1" = "STATISTICS" ]; then
       contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
       echo $contributors
       
-      echo 'as file: '
-      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
-      cat cont.json
+      #echo 'as file: '
+      #python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
+      #cat cont.json
+      
+      cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp $contributors > stats.json && rm stats.json.tmp #badge.json
+      
+      
       echo '--------------'
+      cat stats.json
+      
       exit 1;
       
       
-      array=()
-      while read line ; do
-        array+=($line)
-      done < <(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
-      
-     echo 'whole  array: '
-     echo ${array[@]}
-     echo '_____________________'
-     echo 'element 0,1: '
-     echo "${array[0]} ${array[1]}"
-     echo '_____________________'
-     echo 'element 2,3: '
-     echo ${array[2]} ${array[3]}
-     echo '_____________________'
-     echo 'element 4: '
-     echo ${array[4]}
-     echo '_____________________'
-     #echo 'element 3: '
-     #echo ${array[0]}
-     #echo '_____________________'
-     #echo 'contributors:  '
-     #echo $contributors
 
       
       
