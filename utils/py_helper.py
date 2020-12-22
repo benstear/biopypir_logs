@@ -58,33 +58,21 @@ def get_issues(name_repo):
 def get_contributors(name_repo):
      cont_response = requests.get(f'https://api.github.com/repos/{name_repo}/contributors')
      cont_obj = cont_response.json()
-     #print(name_repo)
-     #print(cont_obj)
-        
+    
      contributors = []
      for i in cont_obj:
             contributors.append(i['login'])
-    
-     #gh_names = cont_obj['login']
-     #print(contributors)
-     #split_text = text.split(' ')
-        
+
      logins = [i.strip(' "') for i in contributors]
-     formatted = ['https://github.com/' + i for i  in logins]
+     formatted_urls = ['https://github.com/' + i for i  in logins]
         
-     #print(logins,formatted,len(formatted))
+     return_dict = {"contributor_names": str(logins), "contributors_url":  str(formatted_urls),"num_contributors" : len(logins) ) }
+     print(json.dumps(return_dict)) 
+            
 
-     c = ' '.join(logins)
-     c2 = ' '.join(formatted) 
-     c3 = str(len(formatted))
-        
-     print(c)
-     print('\n')
-     print(c2)
-     print('\n')
-     print(c3)
-
-
+       
+            
+               
 if __name__ == "__main__":
     
     name_repo =  sys.argv[2]
