@@ -317,7 +317,16 @@ elif [ "$1" = "STATISTICS" ]; then
       echo '------------    calling  py script....    ----------------'
 
       
-      #contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      echo 'as variable'
+      contributors=$(python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE") 
+      echo $contributors
+      
+      echo 'as file: '
+      python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > cont.json
+      cat cont.json
+      echo '--------------'
+      exit 1;
+      
       
       array=()
       while read line ; do
