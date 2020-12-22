@@ -353,8 +353,9 @@ elif [ "$1" = "CLEAN UP" ]; then
      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
      
      python3 -m pip install pandas numpy tabulate
-     python3 utils/process_logs.py
-     # python3 utils/py_helper.py
+     #python3 utils/process_logs.py
+     python3 utils/py_helper.py "PROCESS LOGS"
+     
     
 fi
 
