@@ -250,7 +250,7 @@ elif [ "$1" = "BADGING" ]; then
 if [ "$NUM_ISSUES" -gt 0 ];  then echo 'nonzero'; fi
 
 
-if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  
+if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' -e 's/"$//' <<<$pytest_score_final); fi  # Remove quotes  if pytest_score_final is a number
 
   if [ "$license_result" ] && [ "$build_result" ] && [ "$pip_result" ]; then badge='BRONZE'; badge_color='#cd7f32'; echo 'BRONZE BADGE';
     #if [ $pytest_score_final != 'NA' ]; then
@@ -308,7 +308,6 @@ elif [ "$1" = "STATISTICS" ]; then
     python3 utils/py_helper.py "CONTRIBUTORS" "$OWNER/$PACKAGE" > contributors.json
     
     cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp contributors.json > stats.json && rm stats.json.tmp contributors.json                         
-    #cp  stats.json  stats.json.tmp && jq  -s add stats.json.tmp run_info.json > stats.json && rm stats.json.tmp run_info.json
      
       if [ ! "$run_status" ]; then
         #echo run_status = "$run_status"
@@ -353,8 +352,7 @@ elif [ "$1" = "CLEAN UP" ]; then
           
      mv "$PACKAGE"_"$GITHUB_RUN_ID".json logs/  
      
-     python3 -m pip install pandas numpy tabulate
-     #python3 utils/process_logs.py
+     #python3 -m pip install pandas numpy tabulate
      python3 utils/py_helper.py "PROCESS LOGS"
      
     
