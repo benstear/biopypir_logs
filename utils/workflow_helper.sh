@@ -195,7 +195,7 @@ elif [ "$1" = "EVALUATE" ]; then
     IFS=$' \t\n';
     
      pip install --upgrade pip 
-     pip install requests numpy pandas
+     pip install requests numpy pandas tabulate
      issues=$(python3 utils/py_helper.py "ISSUES" "$OWNER/$PACKAGE") 
      
      NUM_ISSUES=$(sed -e 's/^"//' -e 's/"$//' <<<$(echo $issues | jq '.NUM_ISSUES'))
@@ -260,7 +260,17 @@ if [[ $pytest_score_final != "NA" ]]; then pytest_score_final=$(sed -e 's/^"//' 
     #fi 
   fi
   
-  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  # dont need this ?
+  echo '+++++++++++++++++++++++++++++++++++++'
+  echo 'NUM_ISSUES: ' $NUM_ISSUES
+  echo 'AVE_RES: ' '"$AVE_RES"
+  echo 'pytest_score_final: ' $pytest_score_final
+  echo 'license_result: ' $license_result
+  echo 'build_result: ' $build_result
+  echo 'pip_result: ' $pip_result
+  echo 'pylint_score_final: ' $pylint_score_final
+  echo '+++++++++++++++++++++++++++++++++++++'
+
+  jq -n --arg badge "$badge" '{BADGE : $badge}' > badge.json;  
   cp  eval.json  eval.json.tmp && jq  -s add eval.json.tmp badge.json > eval.json && rm eval.json.tmp badge.json
   
   echo "BADGE=$badge" >> $GITHUB_ENV  
